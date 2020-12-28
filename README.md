@@ -102,7 +102,7 @@ Center, Left and Right are used for Horizontal and Middle, Top and Bottom for
 Vertical aligning of the given items. A Vertical and a horizontal alignment can
 be combined by passing them with a bitwise or '|' like DirectBoxSizer.A_Left|DirectBoxSizer.A_Top
 
-<b>autoUpdateFrameSize : Boolean
+<b>autoUpdateFrameSize</b> : Boolean
 If set to True, the frame size of the box sizer will be updated to the maximum
 extend of all the items it contains. If set to False, the sizer will keep the
 frameSize it was initially set to.
