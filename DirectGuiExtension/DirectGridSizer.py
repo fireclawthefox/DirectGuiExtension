@@ -108,8 +108,8 @@ class DirectGridSizer(DirectFrame):
 
                 for item in self["items"]:
                     if item.rowIndex == r and item.columnIndex == c:
-                        rowHeights[r] = max(rowHeights[r], DGH.getRealHeight(item.element) + margin_bottom + margin_top)
-                        columnWidths[c] = max(columnWidths[c], DGH.getRealWidth(item.element) + margin_left + margin_right)
+                        rowHeights[r] = max(rowHeights[r], DGH.getRealHeight(item.element) / item.heightInRows + margin_bottom + margin_top)
+                        columnWidths[c] = max(columnWidths[c], DGH.getRealWidth(item.element) / item.widthInColumns + margin_left + margin_right)
                         break
 
         for item in self["items"]:
