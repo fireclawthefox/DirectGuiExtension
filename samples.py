@@ -15,6 +15,7 @@ from DirectGuiExtension.DirectSpinBox import DirectSpinBox
 from DirectGuiExtension.DirectDiagram import DirectDiagram
 from DirectGuiExtension.DirectDatePicker import DirectDatePicker
 from DirectGuiExtension.DirectAutoSizer import DirectAutoSizer
+from DirectGuiExtension.DirectSplitFrame import DirectSplitFrame
 from DirectGuiExtension import DirectGuiHelper as DGH
 
 from DirectFolderBrowser.DirectFolderBrowser import DirectFolderBrowser
@@ -79,17 +80,25 @@ boxSizer.addItem(viewMenu)
 
 mainBox.addItem(boxSizer)
 
+# Split frame
+splitSizer = DirectSplitFrame(frameSize=(base.a2dLeft,base.a2dRight,-0.5,0.5), orientation=DGG.HORIZONTAL)
+leftBox = DirectBoxSizer(
+    parent=splitSizer.firstFrame,
+    orientation=DGG.VERTICAL)
+splitterAutoSizer = DirectAutoSizer(extendVertical=False, child=splitSizer, childUpdateSizeFunc=splitSizer.refresh)
+mainBox.addItem(splitterAutoSizer)
+
 
 # GRID SIZER
-gridSizer = DirectGridSizer(numRows=4, numColumns=5, autoUpdateFrameSize=True, itemMargin=[0.01, 0.01, 0.01, 0.01])
+gridSizer = DirectGridSizer(numRows=4, numColumns=5, itemMargin=[0.01, 0.01, 0.01, 0.01])
 
-def createButton(txt):
+def createButton(txt, right=0.1):
     btn = DirectButton(
         text=txt,
         text_scale=0.1,
         borderWidth=(0.01, 0.01),
         frameColor=(0.7,0.7,0.7,1),
-        frameSize=(-0.1,0.1,-0.07,0.125),
+        frameSize=(-0.1,right,-0.07,0.125),
         command=base.messenger.send,
         extraArgs=["updateEntry", [txt]],
         )
@@ -108,28 +117,13 @@ gridSizer.addItem(createButton("0"), 3,1)
 gridSizer.addItem(createButton("*"), 0,3)
 gridSizer.addItem(createButton("-"), 1,3)
 gridSizer.addItem(createButton("+"), 2,3)
-gridSizer.addItem(createButton("="), 3,3)
+gridSizer.addItem(createButton("=",0.33), 3,3,2)
 gridSizer.addItem(createButton("/"), 0,4)
 gridSizer.addItem(createButton("CE"), 1,4)
 gridSizer.addItem(createButton("c"), 2,4)
 
-gridBox = DirectBoxSizer(
-    autoUpdateFrameSize=False,
-    frameSize=(0,0,-DGH.getRealHeight(gridSizer)/2,DGH.getRealHeight(gridSizer)/2),
-    itemAlign=DirectBoxSizer.A_Center
-    )
-gridBox.addItem(gridSizer)
-gridAutoSizer = DirectAutoSizer(extendVertical=False, child=gridBox, childUpdateSizeFunc=gridBox.refresh)
-
 entry = DirectEntry(scale=.1, text_align=TextNode.ARight, relief=DGG.SUNKEN, overflow=False)
 entry["state"] = DGG.DISABLED
-entryBox = DirectBoxSizer(
-    autoUpdateFrameSize=False,
-    frameSize=(0,0,-DGH.getRealHeight(entry)/2,DGH.getRealHeight(entry)/2),
-    itemAlign=DirectBoxSizer.A_Center
-    )
-entryBox.addItem(entry)
-entryAutoSizer = DirectAutoSizer(extendVertical=False, child=entryBox, childUpdateSizeFunc=entryBox.refresh)
 
 def updateEntry(arg):
     if arg == "=":
@@ -143,8 +137,10 @@ def updateEntry(arg):
 
 app.accept("updateEntry", updateEntry)
 
-mainBox.addItem(entryAutoSizer)
-mainBox.addItem(gridAutoSizer)
+leftBox.addItem(entry)
+leftBox.addItem(gridSizer)
+leftBox.setX(-DGH.getRealWidth(leftBox)/2)
+leftBox.setZ(DGH.getRealHeight(leftBox)/2)
 
 
 # SPINNER
