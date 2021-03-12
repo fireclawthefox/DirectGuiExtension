@@ -8,6 +8,7 @@ Simple layout system
 - DirectAutoSizer
 - DirectBoxSizer
 - DirectGridSizer
+- DirectSplitFrame
 
 Widgets
 - DirectDatePicker
