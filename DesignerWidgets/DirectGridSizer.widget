@@ -1,0 +1,43 @@
+{
+    "name":"DirectGridSizer",
+    "moduleName":"DirectGridSizer",
+    "displayName":"Grid Sizer",
+    "className":"DirectGridSizer",
+    "classfilePath":"DirectGuiExtension.DirectGridSizer",
+    "enabledProperties":[""],
+    "customProperties":[
+        {
+            "displayName":"Refresh position",
+            "propertyName":"refresh",
+            "propertyType":"command",
+            "customCommandName":"refresh"
+        },
+        {
+            "displayName":"Item Margin",
+            "propertyName":"itemMargin",
+            "propertyType":"vbase4"
+        },
+        {
+            "displayName":"Number of Rows",
+            "propertyName":"numRows",
+            "propertyType":"int"
+        },
+        {
+            "displayName":"Number of Columns",
+            "propertyName":"numColumns",
+            "propertyType":"int"
+        },
+        {
+            "displayName":"Update Framesize with items",
+            "propertyName":"autoUpdateFrameSize",
+            "propertyType":"bool"
+        },
+        {
+            "displayName":"Align ",
+            "propertyName":"boxAlign",
+            "propertyType":"align"
+        }],
+    "addItemFunctionName":"addItem",
+    "removeItemFunctionName":"removeItem",
+    "importPath":"from customWidgetSample.DirectGridSizer import DirectGridSizer"
+}

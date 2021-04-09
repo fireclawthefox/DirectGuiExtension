@@ -1,0 +1,39 @@
+{
+    "name":"DirectScrolledWindowFrame",
+    "moduleName":"DirectScrolledWindowFrame",
+    "displayName":"Scrolled Window Frame",
+    "className":"DirectScrolledWindowFrame",
+    "classfilePath":"DirectGuiExtension.DirectScrolledWindowFrame",
+    "enabledProperties":[""],
+    "customProperties":[
+        {
+            "displayName":"Drag Aea Height",
+            "propertyName":"dragAreaHeight",
+            "propertyType":"float"
+        },
+        {
+            "displayName":"Resort z-order on drag",
+            "propertyName":"resortOnDrag",
+            "propertyType":"bool"
+        },
+        {
+            "displayName":"Show Close Button",
+            "propertyName":"showClose",
+            "propertyType":"bool"
+        },
+        {
+            "displayName":"Close Button Position",
+            "propertyName":"closeButtonPosition",
+            "propertyType":"selection",
+            "customSelectionDict":{"Left":"Left", "Right":"Right"}
+
+        },
+        {
+            "displayName":"Close Button scale",
+            "propertyName":"closeButtonScale",
+            "propertyType":"float"
+        }],
+    "addItemFunctionName":"",
+    "removeItemFunctionName":"",
+    "importPath":"from DirectGuiExtension.DirectScrolledWindowFrame import DirectScrolledWindowFrame"
+}

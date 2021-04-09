@@ -1,0 +1,34 @@
+{
+    "name":"DirectBoxSizer",
+    "moduleName":"DirectBoxSizer",
+    "displayName":"Box Sizer",
+    "className":"DirectBoxSizer",
+    "classfilePath":"DirectGuiExtension.DirectBoxSizer",
+    "enabledProperties":["orientation"],
+    "customProperties":[
+        {
+            "displayName":"Refresh position",
+            "propertyName":"refresh",
+            "propertyType":"command",
+            "customCommandName":"refresh"
+        },
+        {
+            "displayName":"Item Margin",
+            "propertyName":"itemMargin",
+            "propertyType":"vbase4"
+        },
+        {
+            "displayName":"Item Alignment",
+            "propertyName":"itemAlign",
+            "propertyType":"selection",
+            "customSelectionDict":{"Center":1, "Left":2, "Right":4, "Middle":8, "Top":16, "Bottom":32, "Center/Middle":9, "Center/Top":17, "Center/Bottom":33, "Left/Middle":10, "Left/Top":18, "Left/Bottom":34, "Right/Middle":12, "Right/Top":20, "Right/Bottom":36}
+        },
+        {
+            "displayName":"Update Framesize with items",
+            "propertyName":"autoUpdateFrameSize",
+            "propertyType":"bool"
+        }],
+    "addItemFunctionName":"addItem",
+    "removeItemFunctionName":"removeItem",
+    "importPath":"from customWidgetSample.DirectBoxSizer import DirectBoxSizer"
+}

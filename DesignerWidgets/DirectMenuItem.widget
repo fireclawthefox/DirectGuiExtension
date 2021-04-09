@@ -1,0 +1,23 @@
+{
+    "name":"DirectMenuItem",
+    "moduleName":"DirectMenuItem",
+    "displayName":"Menu Item",
+    "className":"DirectMenuItem",
+    "classfilePath":"DirectGuiExtension.DirectMenuItem",
+    "enabledProperties":["text"],
+    "customProperties":[
+        {
+            "displayName":"Popup Location",
+            "propertyName":"popupMenuLocation",
+            "propertyType":"selection",
+            "customSelectionDict":{"Left":"left", "Right":"right", "Above":"above", "Below":"below"}
+        },
+        {
+            "displayName":"Highlight Color",
+            "propertyName":"highlightColor",
+            "propertyType":"vbase4"
+        }],
+    "addItemFunctionName":"",
+    "removeItemFunctionName":"",
+    "importPath":"from DirectGuiExtension.DirectMenuItem import DirectMenuItem"
+}

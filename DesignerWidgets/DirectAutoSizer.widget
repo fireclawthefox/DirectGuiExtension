@@ -1,0 +1,48 @@
+{
+    "name":"DirectAutoSizer",
+    "moduleName":"DirectAutoSizer",
+    "displayName":"Auto Sizer",
+    "className":"DirectAutoSizer",
+    "classfilePath":"DirectGuiExtension.DirectAutoSizer",
+    "enabledProperties":[""],
+    "customProperties":[
+        {
+            "displayName":"Refresh sizer",
+            "propertyName":"refresh",
+            "propertyType":"command",
+            "customCommandName":"refresh"
+        },
+        {
+            "displayName":"Extend Horizontal",
+            "propertyName":"extendHorizontal",
+            "propertyType":"bool"
+        },
+        {
+            "displayName":"Extend Vertical",
+            "propertyName":"extendVertical",
+            "propertyType":"bool"
+        },
+        {
+            "displayName":"Update on window resize",
+            "propertyName":"updateOnWindowResize",
+            "propertyType":"bool"
+        },
+        {
+            "displayName":"Minimum size",
+            "propertyName":"minSize",
+            "propertyType":"vbase4"
+        },
+        {
+            "displayName":"Maximum size",
+            "propertyName":"maxSize",
+            "propertyType":"vbase4"
+        },
+        {
+            "displayName":"Child size update function",
+            "propertyName":"childUpdateSizeFunc",
+            "propertyType":"commandProperty"
+        }],
+    "addItemFunctionName":"setChild",
+    "removeItemFunctionName":"removeChild",
+    "importPath":"from DirectGuiExtension.DirectAutoSizer import DirectAutoSizer"
+}

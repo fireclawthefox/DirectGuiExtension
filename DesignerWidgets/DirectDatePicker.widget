@@ -1,0 +1,27 @@
+{
+    "name":"DirectDatePicker",
+    "moduleName":"DirectDatePicker",
+    "displayName":"Calendar",
+    "className":"DirectDatePicker",
+    "classfilePath":"DirectGuiExtension.DirectDatePicker",
+    "enabledProperties":[],
+    "customProperties":[
+        {
+            "displayName":"Year",
+            "propertyName":"year",
+            "propertyType":"int"
+        },
+        {
+            "displayName":"Month",
+            "propertyName":"month",
+            "propertyType":"int"
+        },
+        {
+            "displayName":"Day",
+            "propertyName":"day",
+            "propertyType":"int"
+        }],
+    "addItemFunctionName":"",
+    "removeItemFunctionName":"",
+    "importPath":"from DirectGuiExtension.DirectDatePicker import DirectDatePicker"
+}
