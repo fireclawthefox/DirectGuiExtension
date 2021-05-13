@@ -14,6 +14,9 @@ setuptools.setup(
     url="https://github.com/fireclawthefox/DirectGuiExtension",
     packages=setuptools.find_packages(),
     include_package_data=True,
+    project_urls = {
+        "Documentation": "https://github.com/fireclawthefox/DirectGuiExtension/wiki"
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: BSD License",
