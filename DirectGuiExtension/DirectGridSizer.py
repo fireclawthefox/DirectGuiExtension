@@ -35,6 +35,8 @@ class DirectGridSizer(DirectFrame):
             ('numColumns',     4,           self.refresh),
             ('autoUpdateFrameSize', True,   None),
             ('boxAlign',    TextNode.ALeft, self.refresh),
+
+            ('suppressMouse',  0,           None),
             )
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)

@@ -43,6 +43,10 @@ class DirectSplitFrame(DirectFrame):
             ('state',          DGG.NORMAL,  None),
             ('borderWidth',    (0, 0),      self.setBorderWidth),
             ('orientation', DGG.HORIZONTAL, self.refresh),
+            ('framesize',      (-1,1,-1,1), None),
+
+            # TODO: Change this. This only works for certain circumstances
+            ('pixel2d',        False,       self.refresh),
 
             ('showSplitter',   True,        self.setSplitter),
             ('splitterPos',    0,           self.refresh),
@@ -53,7 +57,9 @@ class DirectSplitFrame(DirectFrame):
             ('firstFrameUpdateSizeFunc', None,  None),
             ('secondFrameUpdateSizeFunc', None, None),
             ('firstFrameMinSize', None,     None),
-            ('secondFrameMinSize', None,    None)
+            ('secondFrameMinSize', None,    None),
+
+            ('suppressMouse',  0,           None),
             )
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
@@ -117,13 +123,23 @@ class DirectSplitFrame(DirectFrame):
         # sanity check so we don't get here to early
         if not hasattr(self, "bounds"): return
 
-        fs = self["frameSize"]
         width = DGH.getRealWidth(self)
         height = DGH.getRealHeight(self)
 
         if self["orientation"] == DGG.HORIZONTAL:
-            leftWidth = (width / 2) + self["splitterPos"] - (self["splitterWidth"] / 2)
-            rightWidth = (width / 2) - self["splitterPos"] - (self["splitterWidth"] / 2)
+
+            #TODO: BETTER CALCULATION NEEDED.
+            # This should respect the frame size in every direction. pixel2d has 0 at left with 0 to +x but could also differ while aspect usually has 0 at the center ranging -x to +x
+            # So we have to take the left and right edge of the actual frame into account. This may also need to be respected at the moving part, though this might already work since it's
+            # respective to the frame as it is its parent.
+            # maybe we can also implement multi splits
+            if self["pixel2d"]:
+                splitterPosInPercent = 1 - self["splitterPos"]/width
+                leftWidth = width * (1-splitterPosInPercent) - (self["splitterWidth"] / 2)
+                rightWidth = width * splitterPosInPercent - (self["splitterWidth"] / 2)
+            else:
+                leftWidth = (width / 2) + self["splitterPos"] - (self["splitterWidth"] / 2)
+                rightWidth = (width / 2) - self["splitterPos"] - (self["splitterWidth"] / 2)
 
             self.firstFrame["frameSize"] = (-leftWidth/2, leftWidth/2, self["frameSize"][2], self["frameSize"][3])
             self.firstFrame.setX((-leftWidth / 2) - (self["splitterWidth"] / 2) + self["splitterPos"])
@@ -133,11 +149,17 @@ class DirectSplitFrame(DirectFrame):
             self.secondFrame.setZ(0)
 
             self.splitter["frameSize"] = (-self["splitterWidth"]/2, self["splitterWidth"]/2, self["frameSize"][2], self["frameSize"][3])
+            self.splitter.setX(self["splitterPos"])
             self.splitter["text_roll"] = 0
 
         elif self["orientation"] == DGG.VERTICAL:
-            topHeight = (height / 2) - self["splitterPos"] - (self["splitterWidth"] / 2)
-            bottomHeight = (height / 2) + self["splitterPos"] - (self["splitterWidth"] / 2)
+            if self["pixel2d"]:
+                splitterPosInPercent = 1 - self["splitterPos"]/height
+                topHeight = height * splitterPosInPercent - (self["splitterWidth"] / 2)
+                bottomHeight = height * (1-splitterPosInPercent) - (self["splitterWidth"] / 2)
+            else:
+                topHeight = (height / 2) - self["splitterPos"] - (self["splitterWidth"] / 2)
+                bottomHeight = (height / 2) + self["splitterPos"] - (self["splitterWidth"] / 2)
 
             self.firstFrame["frameSize"] = (self["frameSize"][0], self["frameSize"][1], -topHeight/2, topHeight/2)
             self.firstFrame.setX(0)
@@ -147,6 +169,7 @@ class DirectSplitFrame(DirectFrame):
             self.secondFrame.setZ((-bottomHeight / 2) - (self["splitterWidth"] / 2) + self["splitterPos"])
 
             self.splitter["frameSize"] = (self["frameSize"][0], self["frameSize"][1], -self["splitterWidth"]/2, self["splitterWidth"]/2)
+            self.splitter.setZ(self["splitterPos"])
             self.splitter["text_roll"] = 90
 
 

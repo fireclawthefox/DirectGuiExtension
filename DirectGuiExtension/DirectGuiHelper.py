@@ -23,6 +23,8 @@ def getBounds(guiItem):
         if guiItem['frameSize'] is not None:
             return guiItem['frameSize']
         else:
+            if guiItem.guiItem.getFrame() is not None:
+                return guiItem.guiItem.getFrame()
             # well... seems like this element just has no size.
             return guiItem.getBounds()
     return guiItem.getBounds()

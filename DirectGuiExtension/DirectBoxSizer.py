@@ -51,6 +51,8 @@ class DirectBoxSizer(DirectFrame):
             ('itemMargin',     (0,0,0,0),   self.refresh),
             ('itemAlign',  self.A_Left|self.A_Top, self.refresh),
             ('autoUpdateFrameSize', True,   None),
+
+            ('suppressMouse',  0,           None),
             )
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)

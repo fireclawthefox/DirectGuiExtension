@@ -41,6 +41,16 @@
             "displayName":"Child size update function",
             "propertyName":"childUpdateSizeFunc",
             "propertyType":"commandProperty"
+        },
+        {
+            "displayName":"Function returning the size of the parent",
+            "propertyName":"parentGetSizeFunction",
+            "propertyType":"commandProperty"
+        },
+        {
+            "displayName":"Extra arguments for the function returning the size of the parent",
+            "propertyName":"parentGetSizeExtraArgs",
+            "propertyType":"commandProperty"
         }],
     "addItemFunctionName":"setChild",
     "removeItemFunctionName":"removeChild",
