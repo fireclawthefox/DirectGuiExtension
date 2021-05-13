@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="DirectGuiExtension",
-    version="20.12",
+    version="21.05",
     author="Fireclaw",
     author_email="fireclawthefox@gmail.com",
     description="A set of extensions for the DirectGUI system of the Panda3D engine",
