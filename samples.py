@@ -156,8 +156,7 @@ spinBoxSizer = DirectBoxSizer(
 spinerInfo = DirectLabel(text="Change diagram value range: ", scale=0.1)
 spinBoxSizer.addItem(spinerInfo)
 spinBoxSizer.addItem(spinBox)
-spinAutoSizer = DirectAutoSizer(extendVertical=False, child=spinBoxSizer, childUpdateSizeFunc=spinBoxSizer.refresh)
-mainBox.addItem(spinAutoSizer)
+spinAutoSizer = DirectAutoSizer(splitSizer.secondFrame, extendVertical=False, child=spinBoxSizer, childUpdateSizeFunc=spinBoxSizer.refresh)
 
 
 # DIAGRAM
