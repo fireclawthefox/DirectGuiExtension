@@ -23,7 +23,7 @@ class DirectAutoSizer(DirectFrame):
             ('updateOnWindowResize', True,  self.setUpdateOnWindowResize),
             ('childUpdateSizeFunc', None,   None),
             ('parentGetSizeFunction', None, None),
-            ('parentGetSizeExtraArgs', None, None),
+            ('parentGetSizeExtraArgs', [], None),
 
             ('suppressMouse',  0,           None),
             )
@@ -143,8 +143,8 @@ class DirectAutoSizer(DirectFrame):
             r = childSize[1] * childScale.getX()
 
         if not self['extendVertical']:
-            b = childSize[2] * childScale.getY()
-            t = childSize[3] * childScale.getY()
+            b = childSize[2] * childScale.getZ()
+            t = childSize[3] * childScale.getZ()
 
         #TODO: Better check for positive/negative numbers
         if l > self['minSize'][0]: l = self['minSize'][0]
@@ -165,7 +165,7 @@ class DirectAutoSizer(DirectFrame):
         t += self.child.getZ()
 
         # actual resizing of our child element
-        self.child["frameSize"] = [l/childScale.getX(),r/childScale.getX(),b/childScale.getY(),t/childScale.getY()]
+        self.child["frameSize"] = [l/childScale.getX(),r/childScale.getX(),b/childScale.getZ(),t/childScale.getZ()]
         self["frameSize"] = self.child["frameSize"]
 
         base.messenger.send(self.uniqueName("update-size"))
