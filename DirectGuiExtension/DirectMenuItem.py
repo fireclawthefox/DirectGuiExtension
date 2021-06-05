@@ -8,6 +8,7 @@ from direct.gui.DirectButton import *
 from direct.gui.DirectLabel import *
 from direct.gui.DirectFrame import *
 from .DirectBoxSizer import DirectBoxSizer
+from . import DirectGuiHelper as DGH
 
 DGG.MWUP = PGButton.getPressPrefix() + MouseButton.wheel_up().getName() + '-'
 DGG.MWDOWN = PGButton.getPressPrefix() + MouseButton.wheel_down().getName() + '-'
@@ -26,6 +27,11 @@ class DirectMenuItemSubMenu:
     def __init__(self, text, items):
         self.text = text
         self.items = items
+
+class DirectMenuSeparator:
+    def __init__(self, height=0.05, padding=(0, 0.1)):
+        self.height = height
+        self.padding = padding
 
 class DirectMenuItem(DirectButton):
     def __init__(self, parent = None, **kw):
@@ -46,6 +52,8 @@ class DirectMenuItem(DirectButton):
             ('pressEffect',     0,          DGG.INITOPT),
             ('isSubMenu',       False,      None),
             ('parentMenu',      None,       None),
+            # color of the separator line
+            ('separatorFrameColor', (.2, .2, .2, 1),   None),
            )
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
@@ -110,16 +118,25 @@ class DirectMenuItem(DirectButton):
                     item_relief = self["item_relief"],
                     isSubMenu=True,
                     parentMenu=self)
+            elif type(item) is DirectMenuSeparator:
+                c = self.createcomponent(
+                    'separator%d' % itemIndex, (), 'separator',
+                    DirectFrame,
+                    (self.popupMenu,),
+                    frameColor=self["separatorFrameColor"] if self["separatorFrameColor"] else self["frameColor"],
+                    frameSize=(-1, 1, -item.height/2, item.height/2),
+                    pad=item.padding,
+                    )
             else:
                 c = self.createcomponent(
                     'item%d' % itemIndex, (), 'item',
                     DirectButton,
                     (self.popupMenu,),
-                    text = item.text,
-                    text_align = TextNode.ALeft,
-                    command = item.command,
-                    extraArgs = item.extraArgs,
-                    frameColor = self["itemFrameColor"] if self["itemFrameColor"] else self["frameColor"])
+                    text=item.text,
+                    text_align=TextNode.ALeft,
+                    command=item.command,
+                    extraArgs=item.extraArgs,
+                    frameColor=self["itemFrameColor"] if self["itemFrameColor"] else self["frameColor"])
 
                 c.bind(DGG.B1RELEASE, self.hidePopupMenu, extraArgs=[True])
             bounds = c.getBounds()
@@ -133,15 +150,17 @@ class DirectMenuItem(DirectButton):
 
             self.popupMenu.addItem(c)
 
-            # Highlight background when mouse is in item
-            c.bind(DGG.WITHIN,
-                      lambda x, item=c: self._highlightItem(item))
-            # Restore specified color upon exiting
-            fc = self['itemFrameColor'] if self['itemFrameColor'] else c['frameColor']
-            c.bind(DGG.WITHOUT,
-                      lambda x, item=c, fc=fc: self._unhighlightItem(item, fc))
-            c.bind(DGG.MWDOWN, self.scrollPopUpMenu, [-1])
-            c.bind(DGG.MWUP, self.scrollPopUpMenu, [1])
+            # accept events only for actual selectable elements
+            if type(item) is not DirectMenuSeparator:
+                # Highlight background when mouse is in item
+                c.bind(DGG.WITHIN,
+                          lambda x, item=c: self._highlightItem(item))
+                # Restore specified color upon exiting
+                fc = self['itemFrameColor'] if self['itemFrameColor'] else c['frameColor']
+                c.bind(DGG.WITHOUT,
+                          lambda x, item=c, fc=fc: self._unhighlightItem(item, fc))
+                c.bind(DGG.MWDOWN, self.scrollPopUpMenu, [-1])
+                c.bind(DGG.MWUP, self.scrollPopUpMenu, [1])
 
             itemIndex += 1
 
@@ -152,8 +171,12 @@ class DirectMenuItem(DirectButton):
         for i in self.popupMenu["items"]:
             item = i.element
 
-            # make all entries the same size
-            item['frameSize'] = (self.minX, self.maxX, self.minZ, self.maxZ)
+            if type(item) is DirectFrame:
+                fs = item["frameSize"]
+                item['frameSize'] = (self.minX, self.maxX, fs[2], fs[3])
+            else:
+                # make all entries the same size
+                item['frameSize'] = (self.minX, self.maxX, self.minZ, self.maxZ)
 
 
         # HACK: Set the user defined popup menu relief here so we don't
