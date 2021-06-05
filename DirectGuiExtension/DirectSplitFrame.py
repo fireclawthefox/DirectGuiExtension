@@ -73,6 +73,7 @@ class DirectSplitFrame(DirectFrame):
         self.resetFrameSize()
 
         self.dragDropTask = None
+        self.ignoreMinSizeCheck = False
 
         self.firstFrame = self.createcomponent(
             'firstFrame', (), None,
@@ -127,12 +128,9 @@ class DirectSplitFrame(DirectFrame):
         height = DGH.getRealHeight(self)
 
         if self["orientation"] == DGG.HORIZONTAL:
+            self.splitter.setX(self["splitterPos"])
+            self.checkMinSIze()
 
-            #TODO: BETTER CALCULATION NEEDED.
-            # This should respect the frame size in every direction. pixel2d has 0 at left with 0 to +x but could also differ while aspect usually has 0 at the center ranging -x to +x
-            # So we have to take the left and right edge of the actual frame into account. This may also need to be respected at the moving part, though this might already work since it's
-            # respective to the frame as it is its parent.
-            # maybe we can also implement multi splits
             if self["pixel2d"]:
                 splitterPosInPercent = 1 - self["splitterPos"]/width
                 leftWidth = width * (1-splitterPosInPercent) - (self["splitterWidth"] / 2)
@@ -149,10 +147,12 @@ class DirectSplitFrame(DirectFrame):
             self.secondFrame.setZ(0)
 
             self.splitter["frameSize"] = (-self["splitterWidth"]/2, self["splitterWidth"]/2, self["frameSize"][2], self["frameSize"][3])
-            self.splitter.setX(self["splitterPos"])
             self.splitter["text_roll"] = 0
 
         elif self["orientation"] == DGG.VERTICAL:
+            self.splitter.setZ(self["splitterPos"])
+            self.checkMinSIze()
+
             if self["pixel2d"]:
                 splitterPosInPercent = 1 - self["splitterPos"]/height
                 topHeight = height * splitterPosInPercent - (self["splitterWidth"] / 2)
@@ -169,7 +169,6 @@ class DirectSplitFrame(DirectFrame):
             self.secondFrame.setZ((-bottomHeight / 2) - (self["splitterWidth"] / 2) + self["splitterPos"])
 
             self.splitter["frameSize"] = (self["frameSize"][0], self["frameSize"][1], -self["splitterWidth"]/2, self["splitterWidth"]/2)
-            self.splitter.setZ(self["splitterPos"])
             self.splitter["text_roll"] = 90
 
 
@@ -178,6 +177,31 @@ class DirectSplitFrame(DirectFrame):
             self['firstFrameUpdateSizeFunc']()
         if self['secondFrameUpdateSizeFunc'] is not None:
             self['secondFrameUpdateSizeFunc']()
+
+    def checkMinSIze(self):
+        if self.ignoreMinSizeCheck: return
+        # ignore further minimum size checks until we are done
+        self.ignoreMinSizeCheck = True
+
+        if self["orientation"] == DGG.HORIZONTAL:
+            minLeft = self['firstFrameMinSize'] if self['firstFrameMinSize'] is not None else 0
+            minRight = self['secondFrameMinSize'] if self['secondFrameMinSize'] is not None else 0
+            if self.splitter.getX() - self["splitterWidth"] / 2 < self["frameSize"][0] + minLeft:
+                self.splitter.setX(self["frameSize"][0] + self["splitterWidth"] / 2 + minLeft)
+            elif self.splitter.getX() + self["splitterWidth"] / 2 > self["frameSize"][1] - minRight:
+                self.splitter.setX(self["frameSize"][1] - self["splitterWidth"] / 2 - minRight)
+            self["splitterPos"] = self.splitter.getX()
+
+        elif self["orientation"] == DGG.VERTICAL:
+            minTop = self['firstFrameMinSize'] if self['firstFrameMinSize'] is not None else 0
+            minBottom = self['secondFrameMinSize'] if self['secondFrameMinSize'] is not None else 0
+            if self.splitter.getZ() - self["splitterWidth"] / 2 < self["frameSize"][2] + minTop:
+                self.splitter.setZ(self["frameSize"][2] + self["splitterWidth"] / 2 + minTop)
+            elif self.splitter.getZ() + self["splitterWidth"] / 2 > self["frameSize"][3] - minBottom:
+                self.splitter.setZ(self["frameSize"][3] - self["splitterWidth"] / 2 - minBottom)
+            self["splitterPos"] = self.splitter.getZ()
+
+        self.ignoreMinSizeCheck = False
 
     def enter(self, event):
         self.splitter["frameColor"] = self['splitterHighlightColor']
@@ -223,25 +247,13 @@ class DirectSplitFrame(DirectFrame):
                 newPos.setY(0)
                 newPos.setZ(self.splitter.getZ(render2d))
                 self.splitter.setPos(render2d, newPos)
-                minLeft = self['firstFrameMinSize'] if self['firstFrameMinSize'] is not None else 0
-                minRight = self['secondFrameMinSize'] if self['secondFrameMinSize'] is not None else 0
-                if self.splitter.getX() - self["splitterWidth"] / 2 < self["frameSize"][0] + minLeft:
-                    self.splitter.setX(self["frameSize"][0] + self["splitterWidth"] / 2 + minLeft)
-                elif self.splitter.getX() + self["splitterWidth"] / 2 > self["frameSize"][1] - minRight:
-                    self.splitter.setX(self["frameSize"][1] - self["splitterWidth"] / 2 - minRight)
-                self["splitterPos"] = self.splitter.getX()
+                self.checkMinSIze()
 
             elif self["orientation"] == DGG.VERTICAL:
                 newPos.setX(self.splitter.getX(render2d))
                 newPos.setY(0)
                 self.splitter.setPos(render2d, newPos)
-                minTop = self['firstFrameMinSize'] if self['firstFrameMinSize'] is not None else 0
-                minBottom = self['secondFrameMinSize'] if self['secondFrameMinSize'] is not None else 0
-                if self.splitter.getZ() - self["splitterWidth"] / 2 < self["frameSize"][2] + minTop:
-                    self.splitter.setZ(self["frameSize"][2] + self["splitterWidth"] / 2 + minTop)
-                elif self.splitter.getZ() + self["splitterWidth"] / 2 > self["frameSize"][3] - minBottom:
-                    self.splitter.setZ(self["frameSize"][3] - self["splitterWidth"] / 2 - minBottom)
-                self["splitterPos"] = self.splitter.getZ()
+                self.checkMinSIze()
             self.refresh()
             self.splitter["frameColor"] = self['splitterHighlightColor']
         return t.cont
