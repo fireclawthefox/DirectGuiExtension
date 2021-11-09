@@ -36,6 +36,7 @@ class DirectSplitFrame(DirectFrame):
     """
 
     def __init__(self, parent = None, **kw):
+        self.skipInitRefresh = True
         optiondefs = (
             # Define type of DirectGuiWidget
             ('pgFunc',         PGItem,      None),
@@ -104,6 +105,8 @@ class DirectSplitFrame(DirectFrame):
 
         self.setSplitter(self['splitterWidth'])
 
+        self.skipInitRefresh = False
+        # initialize once at the end
         self.refresh()
 
     def setSplitter(self, width=0.02):
@@ -121,7 +124,8 @@ class DirectSplitFrame(DirectFrame):
         Recalculate the position of every item in this panel and set the frame-
         size of the panel accordingly if auto update is enabled.
         """
-        # sanity check so we don't get here to early
+        # sanity checks so we don't get here to early
+        if self.skipInitRefresh: return
         if not hasattr(self, "bounds"): return
 
         width = DGH.getRealWidth(self)

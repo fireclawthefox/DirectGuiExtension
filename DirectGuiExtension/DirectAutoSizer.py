@@ -15,6 +15,7 @@ class DirectAutoSizer(DirectFrame):
     A frame to Automatically resize the given other DirectGui element
     """
     def __init__(self, parent = None, child = None, **kw):
+        self.skipInitRefresh = True
         optiondefs = (
             ('extendHorizontal', True,      None),
             ('extendVertical',   True,      None),
@@ -40,6 +41,10 @@ class DirectAutoSizer(DirectFrame):
 
         # Call option initialization functions
         self.initialiseoptions(DirectAutoSizer)
+
+        self.skipInitRefresh = False
+        # initialize once at the end
+        self.refresh()
 
     def setChild(self, child):
         if self.child is not None:
@@ -68,15 +73,14 @@ class DirectAutoSizer(DirectFrame):
             # This event isn't about our window.
             return
 
-        #if window is not None: # window is none if panda3d is not started
-        #    if self.screenSize == base.getSize():
-        #        return
-        #self.screenSize = base.getSize()
-        taskMgr.doMethodLater(0.25, self.refresh, "delayed sizer refresh", extraArgs=[])
-        #self.refresh()
+        if self.screenSize == base.getSize():
+            return
+        self.screenSize = base.getSize()
+        self.refresh()
 
     def refresh(self):
         """Resize the sizer and its child element"""
+        if self.skipInitRefresh: return
         if self.child is None:
             return
 
@@ -168,6 +172,9 @@ class DirectAutoSizer(DirectFrame):
         self.child["frameSize"] = [l/childScale.getX(),r/childScale.getX(),b/childScale.getZ(),t/childScale.getZ()]
         self["frameSize"] = self.child["frameSize"]
 
-        base.messenger.send(self.uniqueName("update-size"))
+        base.messenger.send(self.getUpdateSizeEvent())
         if self['childUpdateSizeFunc'] is not None:
             self['childUpdateSizeFunc']()
+
+    def getUpdateSizeEvent(self):
+        return self.uniqueName("update-size")

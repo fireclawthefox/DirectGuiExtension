@@ -14,13 +14,9 @@ DGG.HORIZONTAL_INVERTED = 'horizontal_inverted'
 class DirectItemContainer():
     def __init__(self, element, **kw):
         self.element = element
-        #if "stretch" in kw:
-        #    if kw.get("stretch"):
-        #        pass
-        #    del kw["stretch"]
-        #self.margin = VBase4(0,0,0,0)
-        #if "margin" in kw:
-        #    self.margin = kw.get("margin")
+        self.updateFunc = None
+        if "updateFunc" in kw:
+            self.updateFunc = kw.get("updateFunc")
 
 class DirectBoxSizer(DirectFrame):
     """
@@ -39,6 +35,7 @@ class DirectBoxSizer(DirectFrame):
     A_Bottom = 0b100000
 
     def __init__(self, parent = None, **kw):
+        self.skipInitRefresh = True
         optiondefs = (
             # Define type of DirectGuiWidget
             ('items',          [],          self.refresh),
@@ -68,6 +65,10 @@ class DirectBoxSizer(DirectFrame):
         self.itemsBottom = 0
         self.itemsTop = 0
 
+        self.skipInitRefresh = False
+        # initialize once at the end
+        self.refresh()
+
     def addItem(self, element, **kw):
         """
         Adds the given item to this panel stack
@@ -75,6 +76,8 @@ class DirectBoxSizer(DirectFrame):
         element.reparentTo(self)
         container = DirectItemContainer(element, **kw)
         self["items"].append(container)
+        if "skipRefresh" in kw:
+            return
         self.refresh()
 
     def removeItem(self, element):
@@ -93,10 +96,10 @@ class DirectBoxSizer(DirectFrame):
         Recalculate the position of every item in this panel and set the frame-
         size of the panel accordingly if auto update is enabled.
         """
+        if self.skipInitRefresh: return
         # sanity check so we don't get here to early
         if not hasattr(self, "bounds"): return
         if len(self["items"]) == 0: return
-
 
         for item in self["items"]:
             item.element.frameInitialiseFunc()
@@ -137,7 +140,7 @@ class DirectBoxSizer(DirectFrame):
                 # Vertical Alingment
                 if self["itemAlign"] & self.A_Middle:
                     # Items are alligned by their center
-                    y -= DGH.getRealHeight(curElem) / 2
+                    y -= DGH.getRealHeight(curElem) / 2 - sizer_pad[1]
 
                     # get the new top and bottom if we should resize the box
                     b_bottom = min(b_bottom, -DGH.getRealHeight(curElem) / 2)
@@ -176,7 +179,7 @@ class DirectBoxSizer(DirectFrame):
                 # Vertical Alingment
                 if self["itemAlign"] & self.A_Middle:
                     # Items are alligned by their center
-                    y -= DGH.getRealHeight(curElem) / 2
+                    y -= DGH.getRealHeight(curElem) / 2 + sizer_pad[1]
 
                     # get the new top and bottom if we should resize the box
                     b_bottom = min(b_bottom, -DGH.getRealHeight(curElem) / 2)
@@ -284,7 +287,7 @@ class DirectBoxSizer(DirectFrame):
             raise ValueError('Invalid value for orientation: %s' % (self['orientation']))
 
         if self["autoUpdateFrameSize"]:
-            self["frameSize"] = (b_left+sizer_pad[0], b_right+sizer_pad[0], b_bottom+sizer_pad[1], b_top+sizer_pad[1])
+            self["frameSize"] = (b_left+(-sizer_pad[0]), b_right+sizer_pad[0], b_bottom+(-sizer_pad[1]), b_top+sizer_pad[1])
         else:
             if self['orientation'] in [DGG.HORIZONTAL, DGG.HORIZONTAL_INVERTED]:
                 # update Horizontal Align for the whole item block
@@ -325,7 +328,10 @@ class DirectBoxSizer(DirectFrame):
 
         #TODO: Maybe the item index has to be changed for inverted positioning
         # store item block edges
-        self.itemsLeft = b_left+sizer_pad[0] + self.getX()
-        self.itemsRight = b_right+sizer_pad[0] + self.getX()
-        self.itemsBottom = b_bottom+sizer_pad[1]# + self.getZ()
-        self.itemsTop = b_top+sizer_pad[1]# + self.getZ()
+        self.itemsLeft = b_left + (-sizer_pad[0]) + self.getX()
+        self.itemsRight = b_right + sizer_pad[0] + self.getX()
+        self.itemsBottom = b_bottom + (-sizer_pad[1]) # + self.getZ()
+        self.itemsTop = b_top + sizer_pad[1] # + self.getZ()
+
+        if item.updateFunc is not None:
+            item.updateFunc()

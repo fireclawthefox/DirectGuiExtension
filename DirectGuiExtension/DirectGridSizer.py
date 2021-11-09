@@ -22,6 +22,7 @@ class DirectGridSizer(DirectFrame):
     automatically be placed stacked next to each other.
     """
     def __init__(self, parent = None, **kw):
+        self.skipInitRefresh = True
         optiondefs = (
             # Define type of DirectGuiWidget
             ('items',          [],          self.refresh),
@@ -46,6 +47,10 @@ class DirectGridSizer(DirectFrame):
 
         # Call option initialization functions
         self.initialiseoptions(DirectGridSizer)
+
+        self.skipInitRefresh = False
+        # initialize once at the end
+        self.refresh()
 
     def addItem(self, element, row, column, widthInColumns=1, heightInRows=1):
         """
@@ -77,8 +82,8 @@ class DirectGridSizer(DirectFrame):
         Recalculate the position of every item in this panel and set the frame-
         size of the panel accordingly if auto update is enabled.
         """
-        # sanity check so we don't get here to early
-
+        # sanity checks so we don't get here to early
+        if self.skipInitRefresh: return
         if not hasattr(self, "bounds"): return
 
         for item in self["items"]:
