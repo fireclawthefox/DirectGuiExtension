@@ -9,6 +9,7 @@ Simple layout system
 - DirectBoxSizer
 - DirectGridSizer
 - DirectSplitFrame
+- DirectCollapsibleFrame
 
 Widgets
 - DirectDatePicker
