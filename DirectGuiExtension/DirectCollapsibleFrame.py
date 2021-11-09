@@ -20,9 +20,6 @@ class DirectCollapsibleFrame(DirectFrame):
             ('headerheight',           0.1, None),
             ('collapsed',           False, self.setCollapsed),
 
-            ('extendedEvent',     'extended', None),
-            ('collapsedEvent', 'collapsed', None),
-
             ('collapseText',   'collapse >>', None),
             ('extendText',     'extend <<', None)
             )
