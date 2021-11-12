@@ -43,20 +43,20 @@ class DirectCollapsibleFrame(DirectFrame):
             text=self['extendText'] if self['collapsed'] else self['collapseText'],
             text_scale=0.05,
             text_align=TextNode.ALeft,
-            text_pos=(DGH.getRealLeft(self)+0.02, -0.01),
+            text_pos=(DGH.getRealLeft(self)+0.02, DGH.getRealTop(self)-self['headerheight']/2.0),
             borderWidth=(0.02, 0.02),
             relief=DGG.FLAT,
             pressEffect=False,
             frameSize = (
                 DGH.getRealLeft(self), DGH.getRealRight(self),
-                -self['headerheight']/2.0, self['headerheight']/2.0),
-            pos = (0, 0, DGH.getRealTop(self)+self['headerheight']/2.0),
+                DGH.getRealTop(self)-self['headerheight'], DGH.getRealTop(self)),
             command=self.toggleCollapsed)
 
     def updateFrameSize(self):
         self.toggleCollapseButton['frameSize'] = (
             DGH.getRealLeft(self), DGH.getRealRight(self),
-            -self['headerheight']/2.0, self['headerheight']/2.0)
+            DGH.getRealTop(self)-self['headerheight'], DGH.getRealTop(self))
+        self.originalFrameSize = self['frameSize']
 
     def toggleCollapsed(self):
         self['collapsed'] = not self['collapsed']
@@ -69,7 +69,7 @@ class DirectCollapsibleFrame(DirectFrame):
 
         if self['collapsed']:
             # collapse
-            self['frameSize'] = (fs[0],fs[1],fs[2],fs[2])
+            self['frameSize'] = (fs[0],fs[1],fs[3]-self['headerheight'],fs[3])
 
             # hide all children
             for child in self.getChildren():
