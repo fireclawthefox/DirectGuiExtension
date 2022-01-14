@@ -78,6 +78,9 @@ class DirectAutoSizer(DirectFrame):
         self.screenSize = base.getSize()
         self.refresh()
 
+        #TODO: for some reason, the first refresh doesn't always refresh everything correct, so we do it twice here
+        self.refresh()
+
     def refresh(self):
         """Resize the sizer and its child element"""
         if self.skipInitRefresh: return
