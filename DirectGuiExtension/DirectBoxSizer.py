@@ -333,5 +333,6 @@ class DirectBoxSizer(DirectFrame):
         self.itemsBottom = b_bottom + (-sizer_pad[1]) # + self.getZ()
         self.itemsTop = b_top + sizer_pad[1] # + self.getZ()
 
-        if item.updateFunc is not None:
-            item.updateFunc()
+        for item in self["items"]:
+            if item.updateFunc is not None:
+                item.updateFunc()
