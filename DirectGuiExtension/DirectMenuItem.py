@@ -55,6 +55,7 @@ class DirectMenuItem(DirectButton):
             # color of the separator line
             ('separatorFrameColor', (.2, .2, .2, 1),   None),
            )
+        self.kw_args_copy = kw.copy()
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
         # Initialize superclasses
@@ -108,16 +109,23 @@ class DirectMenuItem(DirectButton):
         self.minX = self.maxX = self.minZ = self.maxZ = None
         for item in self['items']:
             if type(item) is DirectMenuItemSubMenu:
+                subMenuKW = self.kw_args_copy.copy()
+                toRemove = ["text", "popupMenuLocation", "items", "isSubMenu", "parentMenu", "frameSize", "scale"]
+                for r in toRemove:
+                    if r in subMenuKW:
+                        del subMenuKW[r]
+
                 c = self.createcomponent(
                     'item%d' % itemIndex, (), 'item',
                     DirectMenuItem,
                     (self.popupMenu,),
-                    text = item.text,
+                    text=item.text,
                     popupMenuLocation=DGG.RIGHT,
                     items=item.items,
-                    item_relief = self["item_relief"],
                     isSubMenu=True,
-                    parentMenu=self)
+                    parentMenu=self,
+                    **subMenuKW,
+                    )
             elif type(item) is DirectMenuSeparator:
                 c = self.createcomponent(
                     'separator%d' % itemIndex, (), 'separator',
@@ -214,7 +222,7 @@ class DirectMenuItem(DirectButton):
         if self['popupMenuLocation'] == DGG.RIGHT:
             # This is the default to not break existing applications
             # Position menu at midpoint of button
-            xPos = (b[1] - b[0]) - fb[0]
+            xPos = ((b[1] - b[0]) - fb[0]) - self["item_pad"][0]*2
         elif self['popupMenuLocation'] == DGG.LEFT:
             # Position to the left
             xPos = b[0]
@@ -231,7 +239,7 @@ class DirectMenuItem(DirectButton):
         elif self['popupMenuLocation'] == DGG.BELOW:
             # Try to set height to line up selected item with button
             self.popupMenu.setZ(
-                self, self.minZ)
+                self, self.minZ+self["item_pad"][0]*2)
         else:
             # Try to set height to line up selected item with button
             self.popupMenu.setZ(
