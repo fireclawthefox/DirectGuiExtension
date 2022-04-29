@@ -19,20 +19,28 @@ def getBorderSize(guiItem):
 
 def getBounds(guiItem):
     #HACK: Sometimes getBounds returns 0s while a frameSize is actually given
-    if guiItem.getBounds() == [0,0,0,0] and guiItem['frameSize'] != (0,0,0,0):
+    if guiItem.bounds == [0,0,0,0] and guiItem['frameSize'] != (0,0,0,0):
         if guiItem['frameSize'] is not None:
             return guiItem['frameSize']
         else:
             if guiItem.guiItem.getFrame() is not None:
                 return guiItem.guiItem.getFrame()
             # well... seems like this element just has no size.
-            return guiItem.getBounds()
-    return guiItem.getBounds()
+            return guiItem.bounds
+    return guiItem.bounds
 
 def getRealWidth(guiItem):
+    width = guiItem.getWidth()
+    if width == 0 and guiItem["frameSize"] is not None:
+        width = abs(guiItem["frameSize"][0] - guiItem["frameSize"][1]) + 2 * getBorderSize(guiItem)[0]
+        return width
     return (guiItem.getWidth() + 2 * getBorderSize(guiItem)[0]) * guiItem.getScale()[0]
 
 def getRealHeight(guiItem):
+    height = guiItem.getHeight()
+    if height == 0 and guiItem["frameSize"] is not None:
+        height = abs(guiItem["frameSize"][2] - guiItem["frameSize"][3]) + 2 * getBorderSize(guiItem)[0]
+        return height
     return (guiItem.getHeight() + 2 * getBorderSize(guiItem)[1]) * guiItem.getScale()[1]
 
 def getRealLeft(guiItem):
