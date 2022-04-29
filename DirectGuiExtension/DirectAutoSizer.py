@@ -79,6 +79,7 @@ class DirectAutoSizer(DirectFrame):
         self.refresh()
 
         #TODO: for some reason, the first refresh doesn't always refresh everything correct, so we do it twice here
+        # E.g. if the window is maximized only this refresh actally updates the size right.
         self.refresh()
 
     def refresh(self):
@@ -120,7 +121,6 @@ class DirectAutoSizer(DirectFrame):
         else:
             # We are parented to something else, probably a nodepath
             self.parentObject.node().setBoundsType(BoundingVolume.BT_box)
-
             ll = LPoint3()
             ur = LPoint3()
 
@@ -133,7 +133,7 @@ class DirectAutoSizer(DirectFrame):
 
         childSize = self.child['frameSize']
         if childSize is None:
-            childSize = self.child.getBounds()
+            childSize = DGH.getBounds(self.child)
 
         if type(self.child["scale"]) == LVecBase3f:
             childScale = self.child["scale"]
@@ -181,3 +181,7 @@ class DirectAutoSizer(DirectFrame):
 
     def getUpdateSizeEvent(self):
         return self.uniqueName("update-size")
+
+    def destroy(self):
+        self.ignoreAll()
+        self.removeChild()
