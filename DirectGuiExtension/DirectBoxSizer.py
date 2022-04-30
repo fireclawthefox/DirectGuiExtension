@@ -60,11 +60,6 @@ class DirectBoxSizer(DirectFrame):
         # Call option initialization functions
         self.initialiseoptions(DirectBoxSizer)
 
-        self.itemsLeft = 0
-        self.itemsRight = 0
-        self.itemsBottom = 0
-        self.itemsTop = 0
-
         self.skipInitRefresh = False
         # initialize once at the end
         self.refresh()
@@ -104,235 +99,190 @@ class DirectBoxSizer(DirectFrame):
         for item in self["items"]:
             item.element.frameInitialiseFunc()
 
-        nextX = 0
-        nextY = 0
+        self.__refresh_frame_size()
 
-        sizer_pad = self["pad"]
-
-        b_top = 0
-        b_bottom = 0
-        b_left = 0
-        b_right = 0
-
-        margin_left = self["itemMargin"][0]
-        margin_right = self["itemMargin"][1]
-        margin_bottom = self["itemMargin"][2]
-        margin_top = self["itemMargin"][3]
-
-        if self["autoUpdateFrameSize"]:
-            # set the frame size to 0, we'll calculate the new size at the end
-            self["frameSize"] = (0, 0, 0, 0)
-
-        itemsWidth = 0
-        itemsHeight = 0
+        #
+        # Update Item Positions
+        #
         if self['orientation'] == DGG.HORIZONTAL:
             # Horizontal - Left to Right placement
-            if not self["autoUpdateFrameSize"]:
-                # get the left side of the box sizer frame
-                if self["frameSize"] != None:
-                    nextX = self["frameSize"][0]
-
-            # go through all items in the box and place them
-            for item in self["items"]:
-                curElem = item.element
-                y = -DGH.getRealBottom(curElem)
-
-                # Vertical Alingment
-                if self["itemAlign"] & self.A_Middle:
-                    # Items are alligned by their center
-                    y -= DGH.getRealHeight(curElem) / 2 - sizer_pad[1]
-
-                    # get the new top and bottom if we should resize the box
-                    b_bottom = min(b_bottom, -DGH.getRealHeight(curElem) / 2)
-                    b_top = max(b_top, DGH.getRealHeight(curElem) / 2)
-                elif self["itemAlign"] & self.A_Top:
-                    # Items are alligned by their upper edge
-                    y -= DGH.getRealHeight(curElem)
-                    # Vertical adjustment to the box' size
-                    y += self["frameSize"][3]
-
-                    # get the new top and bottom if we should resize the box
-                    b_bottom = min(b_bottom, -DGH.getRealHeight(curElem))
-                    b_top = 0
-                else:
-                    # Items are alligned by their lower edge
-                    b_top = max(b_top, DGH.getRealHeight(curElem))
-                    # Vertical adjustment to the box' size
-                    y += self["frameSize"][2]
-
-                # place the element and calculate the next x position
-                curElem.setPos(nextX - DGH.getRealLeft(curElem), 0, y)
-                itemWidth = (DGH.getRealWidth(curElem) + margin_left + margin_right)
-                nextX += itemWidth
-                b_right = nextX
-                itemsWidth += itemWidth
-
+            self.__refresh_horizontal_ltr()
         elif self['orientation'] == DGG.HORIZONTAL_INVERTED:
             # Horizontal - Right to Left
-            if not self["autoUpdateFrameSize"]:
-                if self["frameSize"] != None:
-                    nextX = self["frameSize"][1]
-            for item in self["items"]:
-                curElem = item.element
-                y = -DGH.getRealBottom(curElem)
-
-                # Vertical Alingment
-                if self["itemAlign"] & self.A_Middle:
-                    # Items are alligned by their center
-                    y -= DGH.getRealHeight(curElem) / 2 + sizer_pad[1]
-
-                    # get the new top and bottom if we should resize the box
-                    b_bottom = min(b_bottom, -DGH.getRealHeight(curElem) / 2)
-                    b_top = max(b_top, DGH.getRealHeight(curElem) / 2)
-                elif self["itemAlign"] & self.A_Top:
-                    # Items are alligned by their upper edge
-                    y -= DGH.getRealHeight(curElem)
-                    # Vertical adjustment to the box' size
-                    y += self["frameSize"][3]
-
-                    # get the new top and bottom if we should resize the box
-                    b_bottom = min(b_bottom, -DGH.getRealHeight(curElem))
-                    b_top = 0
-                else:
-                    # Items are alligned by their lower edge
-                    b_top = max(b_top, DGH.getRealHeight(curElem))
-                    # Vertical adjustment to the box' size
-                    y += self["frameSize"][2]
-
-                # place the element and calculate the next x position
-                curElem.setPos(nextX + DGH.getRealRight(curElem), 0, y)
-                itemWidth = (DGH.getRealWidth(curElem) + margin_left + margin_right)
-                nextX -= itemWidth
-                b_left = nextX
-                itemsWidth += itemWidth
-
+            self.__refresh_horizontal_rtl()
         elif self['orientation'] == DGG.VERTICAL:
             # Vertical - Top to Bottom
-            if not self["autoUpdateFrameSize"]:
-                if self["frameSize"] != None:
-                    nextY = self["frameSize"][3]
-            for item in self["items"]:
-                curElem = item.element
-                x = sizer_pad[0]
-
-                # Horizontal Alingment
-                if self["itemAlign"] & self.A_Left:
-                    # Items are alligned by their Left edge
-                    x -= DGH.getRealLeft(curElem)
-                    # Horizontal adjustment to the box' size
-                    x += self["frameSize"][0]
-
-                    # get the new left and right if we should resize the box
-                    b_left = 0
-                    b_right = max(b_right, DGH.getRealWidth(curElem))
-                elif self["itemAlign"] & self.A_Right:
-                    # Items are alligned by their Right edge
-                    x -= DGH.getRealRight(curElem)
-                    # Horizontal adjustment to the box' size
-                    x += self["frameSize"][1]
-
-                    # get the new left and right if we should resize the box
-                    b_left = min(b_left, -DGH.getRealWidth(curElem))
-                    b_right = 0
-                else:
-                    # Items are alligned by their Center
-                    b_left = min(b_left, DGH.getRealLeft(curElem))
-                    b_right = max(b_right, DGH.getRealRight(curElem))
-
-                # place the element and calculate the next y position
-                curElem.setPos(x, 0, nextY - DGH.getRealTop(curElem))
-                itemHeight = (DGH.getRealHeight(curElem) + margin_top + margin_bottom)
-                nextY -= itemHeight
-                b_bottom = nextY
-                itemsHeight += itemHeight
-
+            self.__refresh_vertical_ttb()
         elif self['orientation'] == DGG.VERTICAL_INVERTED:
             # Vertical - Bottom to Top
-            if not self["autoUpdateFrameSize"]:
-                if self["frameSize"] != None:
-                    nextY = self["frameSize"][2]
-            for item in self["items"]:
-                curElem = item.element
-                x = sizer_pad[0]
-                if self["itemAlign"] & self.A_Left:
-                    # Items are alligned by their Left edge
-                    x -= DGH.getRealLeft(curElem)
-                    # Horizontal adjustment to the box' size
-                    x += self["frameSize"][0]
-
-                    # get the new left and right if we should resize the box
-                    b_left = 0
-                    b_right = max(b_right, DGH.getRealWidth(curElem))
-                elif self["itemAlign"] & self.A_Right:
-                    x -= DGH.getRealRight(curElem)
-                    # Horizontal adjustment to the box' size
-                    x += self["frameSize"][1]
-
-                    # get the new left and right if we should resize the box
-                    b_left = min(b_left, -DGH.getRealWidth(curElem))
-                    b_right = 0
-                else:
-                    # Items are alligned by their Center
-                    b_left = min(b_left, DGH.getRealLeft(curElem))
-                    b_right = max(b_right, DGH.getRealRight(curElem))
-
-                # place the element and calculate the next y position
-                curElem.setPos(x, 0, nextY - DGH.getRealBottom(curElem))
-                itemHeight = (DGH.getRealHeight(curElem) + margin_top + margin_bottom)
-                nextY += itemHeight
-                b_bottom = nextY
-                itemsHeight += itemHeight
-
+            self.__refresh_vertical_btt()
         else:
             raise ValueError('Invalid value for orientation: %s' % (self['orientation']))
-
-        if self["autoUpdateFrameSize"]:
-            self["frameSize"] = (b_left+(-sizer_pad[0]), b_right+sizer_pad[0], b_bottom+(-sizer_pad[1]), b_top+sizer_pad[1])
-        else:
-            if self['orientation'] in [DGG.HORIZONTAL, DGG.HORIZONTAL_INVERTED]:
-                # update Horizontal Align for the whole item block
-                if self["itemAlign"] & self.A_Center:
-                    if self['orientation'] == DGG.HORIZONTAL_INVERTED:
-                        xShift = DGH.getRealWidth(self)/2 - itemsWidth/2
-                    else:
-                        xShift = DGH.getRealWidth(self)/2 - itemsWidth/2
-                    for item in self["items"]:
-                        if self['orientation'] == DGG.HORIZONTAL_INVERTED:
-                            #item.element.setX(item.element.getX() - xShift)
-                            pass
-                        else:
-                            item.element.setX(item.element.getX() + xShift)
-                elif self["itemAlign"] & self.A_Right:
-                    xShift = DGH.getRealWidth(self)
-                    if self['orientation'] == DGG.HORIZONTAL_INVERTED:
-                        xShift = -xShift
-                    for item in self["items"]:
-                        item.element.setX(item.element.getX() + xShift)
-
-            elif self['orientation'] in [DGG.VERTICAL, DGG.VERTICAL_INVERTED]:
-                # update Vertical Align for Horizontally elements
-                if self["itemAlign"] & self.A_Middle:
-                    if self['orientation'] == DGG.VERTICAL_INVERTED:
-                        yShift = DGH.getRealHeight(self)/2 + itemsHeight/2
-                    else:
-                        yShift = DGH.getRealHeight(self)/2 - itemsHeight/2
-                    for item in self["items"]:
-                        item.element.setZ(item.element.getZ() - yShift)
-                elif self["itemAlign"] & self.A_Bottom:
-                    if self['orientation'] == DGG.VERTICAL_INVERTED:
-                        yShift = DGH.getRealHeight(self)/2 + itemsHeight/2
-                    else:
-                        yShift = DGH.getRealHeight(self) - itemsHeight
-                    for item in self["items"]:
-                        item.element.setZ(item.element.getZ() - yShift)
-
-        #TODO: Maybe the item index has to be changed for inverted positioning
-        # store item block edges
-        self.itemsLeft = b_left + (-sizer_pad[0]) + self.getX()
-        self.itemsRight = b_right + sizer_pad[0] + self.getX()
-        self.itemsBottom = b_bottom + (-sizer_pad[1]) # + self.getZ()
-        self.itemsTop = b_top + sizer_pad[1] # + self.getZ()
 
         for item in self["items"]:
             if item.updateFunc is not None:
                 item.updateFunc()
+
+    def __refresh_frame_size(self):
+        if not self["autoUpdateFrameSize"]: return
+
+        width = self.__get_items_width()# + self["pad"][0]*2
+        height = self.__get_items_height()# + self["pad"][1]*2
+
+        # dependent on orientation, start at 0 and extend to the
+        # maximum height or width and keep the respective other
+        # direction centered
+        if self['orientation'] == DGG.HORIZONTAL:
+            self["frameSize"] = (0, width, -height/2, height/2)
+        elif self['orientation'] == DGG.HORIZONTAL_INVERTED:
+            self["frameSize"] = (-width, 0, -height/2, height/2)
+        elif self['orientation'] == DGG.VERTICAL:
+            self["frameSize"] = (-width/2, width/2, -height, 0)
+        elif self['orientation'] == DGG.VERTICAL_INVERTED:
+            self["frameSize"] = (-width/2, width/2, 0, height)
+
+    def __get_items_width(self):
+        '''
+        Get the maximum item width
+        '''
+        width = 0
+        for item in self["items"]:
+            item_width = (
+                DGH.getRealWidth(item.element)
+                + self["itemMargin"][0]   # margin left
+                + self["itemMargin"][1])  # margin right
+            if self['orientation'] in [DGG.VERTICAL, DGG.VERTICAL_INVERTED]:
+                # look for the widest item
+                width = max(width, item_width)
+            else:
+                # add up all item widths
+                width += item_width
+        return width
+
+    def __get_items_height(self):
+        '''
+        Get the maximum item height
+        '''
+        height = 0
+        for item in self["items"]:
+            item_height = (
+                DGH.getRealHeight(item.element)
+                + self["itemMargin"][3]   # margin top
+                + self["itemMargin"][2])  # margin bottom
+            if self['orientation'] in [DGG.HORIZONTAL, DGG.HORIZONTAL_INVERTED]:
+                # look for the talest item
+                height = max(height, item_height)
+            else:
+                # add up all item heights
+                height += item_height
+        return height
+
+    #
+    # ITEM ORDER POSITION REFRESH
+    #
+    # HORIZONTAL
+    def __refresh_horizontal_ltr(self):
+        # Horizontal - Left to Right placement
+        # get the left side of the box sizer frame
+        nextX = DGH.getRealLeft(self)
+
+        # go through all items in the box and place them
+        for item in self["items"]:
+            # place the element and calculate the next x position
+            y = self.__get_vertical_item_alignment(item.element)
+            item.element.setPos(nextX - DGH.getRealLeft(item.element), 0, y)
+            nextX += DGH.getRealWidth(item.element)
+
+
+    def __refresh_horizontal_rtl(self):
+        # Horizontal - Right to Left
+        # get the right side of the box sizer frame
+        nextX = DGH.getRealRight(self)
+
+        # go through all items in the box and place them
+        for item in self["items"]:
+            # place the element and calculate the next x position
+            y = self.__get_vertical_item_alignment(item.element)
+            item.element.setPos(nextX - DGH.getRealRight(item.element), 0, y)
+            nextX -= DGH.getRealWidth(item.element)
+
+    # VERTICAL
+    def __refresh_vertical_ttb(self):
+        # Vertical - Top to Bottom
+        # get the top side of the box sizer frame
+        nextY = DGH.getRealTop(self)
+
+        # go through all items in the box and place them
+        for item in self["items"]:
+            # place the element and calculate the next y position
+            x = self.__get_horizontal_item_alignment(item.element)
+            item.element.setPos(x, 0, nextY - DGH.getRealTop(item.element))
+            nextY -= DGH.getRealHeight(item.element)
+
+    def __refresh_vertical_btt(self):
+        # Vertical - Bottom to Top
+        # get the bottom side of the box sizer frame
+        nextY = DGH.getRealBottom(self)
+
+        # go through all items in the box and place them
+        for item in self["items"]:
+            # place the element and calculate the next y position
+            x = self.__get_horizontal_item_alignment(item.element)
+            item.element.setPos(x, 0, nextY - DGH.getRealBottom(item.element))
+            nextY += DGH.getRealHeight(item.element)
+
+    #
+    # ITEM ALIGN POSITION CALCULATIONS
+    #
+    def __get_horizontal_item_alignment(self, curElem):
+        # Horizontal Alingment
+        if self["itemAlign"] & self.A_Left:
+            # get the left side of the frame
+            x = self["frameSize"][0]
+            # shift x right to be aligned with the items left side
+            x -= DGH.getRealLeft(curElem)
+            return x
+        elif self["itemAlign"] & self.A_Right:
+            # get the right side of the frame
+            x = self["frameSize"][1]
+            # shift x left to be aligned with the items right side
+            x -= DGH.getRealRight(curElem)
+            return x
+        elif self["itemAlign"] & self.A_Center:
+            # aligned by the center of the frame
+            self_l = DGH.getRealLeft(self)
+            self_r = DGH.getRealRight(self)
+            x = (self_l + self_r) / 2
+            # shift x by items center shift
+            item_l = DGH.getRealLeft(curElem)
+            item_r = DGH.getRealRight(curElem)
+            x += (item_l + item_r) / 2
+            return x
+        return 0
+
+    def __get_vertical_item_alignment(self, curElem):
+        # Vertical Alingment
+        if self["itemAlign"] & self.A_Bottom:
+            # Vertical adjustment to the box' size
+            y = DGH.getRealBottom(self)# self["frameSize"][2]
+            # shift y up to be aligned with the items bottom side
+            y += DGH.getRealBottom(curElem)
+            return y
+        elif self["itemAlign"] & self.A_Top:
+            # Items are alligned by their upper edge
+            y = DGH.getRealTop(self)# self["frameSize"][3]
+            # shift y down to be aligned with the items top side
+            y -= DGH.getRealTop(curElem)
+            return y
+        elif self["itemAlign"] & self.A_Middle:
+            # Items are alligned by their center
+            # aligned by the center of the frame
+            self_t = DGH.getRealTop(self)
+            self_b = DGH.getRealBottom(self)
+            y = (self_t + self_b) / 2
+            # shift x by items center shift
+            item_t = DGH.getRealTop(curElem)
+            item_b = DGH.getRealBottom(curElem)
+            y += (item_t + item_b) / 2
+            return y
+        return 0

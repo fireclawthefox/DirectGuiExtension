@@ -96,7 +96,7 @@ class DirectMenuItem(DirectButton):
         self.popupMenu = self.createcomponent('popupMenu', (), None,
                                               DirectBoxSizer,
                                               (self,),
-                                              itemAlign = TextNode.ALeft,
+                                              itemAlign = DirectBoxSizer.A_Left,
                                               orientation = DGG.VERTICAL,
                                               )
         # Make sure it is on top of all the other gui widgets
@@ -132,7 +132,8 @@ class DirectMenuItem(DirectButton):
                     DirectFrame,
                     (self.popupMenu,),
                     frameColor=self["separatorFrameColor"] if self["separatorFrameColor"] else self["frameColor"],
-                    frameSize=(-1, 1, -item.height/2, item.height/2),
+                    # set width to 0, we'll fit it to the width of the box later
+                    frameSize=(0, 0, -item.height/2, item.height/2),
                     pad=item.padding,
                     )
             else:
@@ -147,19 +148,19 @@ class DirectMenuItem(DirectButton):
                     frameColor=self["itemFrameColor"] if self["itemFrameColor"] else self["frameColor"])
 
                 c.bind(DGG.B1RELEASE, self.hidePopupMenu, extraArgs=[True])
-            bounds = c.getBounds()
+            bounds = DGH.getBounds(c)
 
             c.resetFrameSize()
-
-            self.minX = min(self.minX if self.minX else bounds[0], bounds[0])
-            self.maxX = max(self.maxX if self.maxX else bounds[1], bounds[1])
-            self.minZ = min(self.minZ if self.minZ else bounds[2], bounds[2])
-            self.maxZ = max(self.maxZ if self.maxZ else bounds[3], bounds[3])
 
             self.popupMenu.addItem(c)
 
             # accept events only for actual selectable elements
             if type(item) is not DirectMenuSeparator:
+                self.minX = min(self.minX if self.minX else bounds[0], bounds[0])
+                self.maxX = max(self.maxX if self.maxX else bounds[1], bounds[1])
+                self.minZ = min(self.minZ if self.minZ else bounds[2], bounds[2])
+                self.maxZ = max(self.maxZ if self.maxZ else bounds[3], bounds[3])
+
                 # Highlight background when mouse is in item
                 c.bind(DGG.WITHIN,
                           lambda x, item=c: self._highlightItem(item))
@@ -173,19 +174,22 @@ class DirectMenuItem(DirectButton):
             itemIndex += 1
 
         # Calc max width and height
+        if self.minX is None:
+            self.minX = 0
+            self.maxX = 1
+            self.minZ = 0
+            self.maxZ = 1
         self.maxWidth = self.maxX - self.minX
         self.maxHeight = self.maxZ - self.minZ
         # Adjust frame size for each item and bind actions to mouse events
         for i in self.popupMenu["items"]:
             item = i.element
-
             if type(item) is DirectFrame:
                 fs = item["frameSize"]
                 item['frameSize'] = (self.minX, self.maxX, fs[2], fs[3])
             else:
                 # make all entries the same size
                 item['frameSize'] = (self.minX, self.maxX, self.minZ, self.maxZ)
-
 
         # HACK: Set the user defined popup menu relief here so we don't
         # break the bounds calculation.
@@ -198,7 +202,7 @@ class DirectMenuItem(DirectButton):
         self.cancelFrame.bind(DGG.MWDOWN, self.scrollPopUpMenu, [-1])
         self.cancelFrame.bind(DGG.MWUP, self.scrollPopUpMenu, [1])
 
-        self.popupMenu.refresh()
+        #self.popupMenu.refresh()
 
     def showPopupMenu(self, event = None):
         """
@@ -215,22 +219,25 @@ class DirectMenuItem(DirectButton):
         # Show the menu
         self.popupMenu.show()
         # Compute bounds
-        b = self.getBounds()
-        fb = self.popupMenu.getBounds()
-        self.popupMenu["itemAlign"] = TextNode.ALeft
+        b = DGH.getBounds(self) #self.getBounds()
+        fb = DGH.getBounds(self.popupMenu) #self.popupMenu.getBounds()
+        self.popupMenu["itemAlign"] =  DirectBoxSizer.A_Left
 
         if self['popupMenuLocation'] == DGG.RIGHT:
-            # This is the default to not break existing applications
-            # Position menu at midpoint of button
-            xPos = ((b[1] - b[0]) - fb[0]) - self["item_pad"][0]*2
+            # Position menu to the right of the menu
+            self.popupMenu.setX(
+                DGH.getRealRight(self) / self.getScale()[0]
+                + -DGH.getRealLeft(self.popupMenu))
         elif self['popupMenuLocation'] == DGG.LEFT:
             # Position to the left
-            xPos = b[0]
-            self.popupMenu["itemAlign"] = TextNode.ARight
+            # change the item align to right aligned so it will be fitted
+            # to the left of the menu
+            self.popupMenu["itemAlign"] = DirectBoxSizer.A_Right
+            # reposition the popup to the left
+            self.popupMenu.setX(-DGH.getRealRight(self.popupMenu))
         else:
             # position to line up with the left edge if the menu is above or below
-            xPos = b[0]
-        self.popupMenu.setX(self, xPos)
+            self.popupMenu.setX(-DGH.getRealLeft(self.popupMenu))
 
         if self['popupMenuLocation'] == DGG.ABOVE:
             # Try to set height to line up selected item with button
@@ -289,7 +296,7 @@ class DirectMenuItem(DirectButton):
         self.cancelFrame.setPos(render2d, 0, 0, 0)
         self.cancelFrame.setScale(render2d, 1, 1, 1)
 
-        self.popupMenu.refresh()
+        #self.popupMenu.refresh()
 
     def hidePopupMenu(self, event = None, hideParentMenu=False):
         """ Put away popup and cancel frame """
@@ -306,7 +313,7 @@ class DirectMenuItem(DirectButton):
         which must be a nummeric value. A positive value will scroll up
         while a negative value will scroll down. It will only work if
         items are out of bounds of the window """
-        fb = self.popupMenu.getBounds()
+        fb = DGH.getBounds(self.popupMenu)#.getBounds()
         pos = self.popupMenu.getPos(render2d)
         scale = self.popupMenu.getScale(render2d)
 
