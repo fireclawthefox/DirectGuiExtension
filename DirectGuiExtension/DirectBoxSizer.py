@@ -280,7 +280,7 @@ class DirectBoxSizer(DirectFrame):
             self_t = DGH.getRealTop(self)
             self_b = DGH.getRealBottom(self)
             y = (self_t + self_b) / 2
-            # shift x by items center shift
+            # shift y by items center shift
             item_t = DGH.getRealTop(curElem)
             item_b = DGH.getRealBottom(curElem)
             y += (item_t + item_b) / 2
