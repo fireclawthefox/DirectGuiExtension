@@ -154,12 +154,15 @@ class DirectMenuItem(DirectButton):
 
             self.popupMenu.addItem(c)
 
+            bw_w = c["borderWidth"][0] + c["pad"][0]
+            bw_h = c["borderWidth"][1] + c["pad"][1]
+
             # accept events only for actual selectable elements
             if type(item) is not DirectMenuSeparator:
-                self.minX = min(self.minX if self.minX else bounds[0], bounds[0])
-                self.maxX = max(self.maxX if self.maxX else bounds[1], bounds[1])
-                self.minZ = min(self.minZ if self.minZ else bounds[2], bounds[2])
-                self.maxZ = max(self.maxZ if self.maxZ else bounds[3], bounds[3])
+                self.minX = min(self.minX if self.minX else bounds[0]-bw_w, bounds[0]-bw_w)
+                self.maxX = max(self.maxX if self.maxX else bounds[1]+bw_w, bounds[1]+bw_w)
+                self.minZ = min(self.minZ if self.minZ else bounds[2]-bw_h, bounds[2]-bw_h)
+                self.maxZ = max(self.maxZ if self.maxZ else bounds[3]+bw_h, bounds[3]+bw_h)
 
                 # Highlight background when mouse is in item
                 c.bind(DGG.WITHIN,
