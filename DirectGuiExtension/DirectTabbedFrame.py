@@ -88,7 +88,7 @@ class DirectTabbedFrame(DirectFrame):
             self.start_idx += 1
             self.reposition_tabs()
 
-    def add_tab(self, tab_text, content):
+    def add_tab(self, tab_text, content, close_func=None):
         # create the new tab
         tab = self.createcomponent(
             'tab', (), 'tab',
@@ -125,7 +125,7 @@ class DirectTabbedFrame(DirectFrame):
                 pos=x_pos,
                 frameColor=self['unselectedTabColor'],
                 command=self.close_tab,
-                extraArgs=[tab],
+                extraArgs=[tab, close_func],
             )
 
         # add the tab to our list
@@ -150,9 +150,12 @@ class DirectTabbedFrame(DirectFrame):
             other_tab['frameColor'] = self['unselectedTabColor']
         tab['frameColor'] = self['selectedTabColor']
 
-    def close_tab(self, tab):
+    def close_tab(self, tab, close_func=None):
         # get the tabs index
         deleted_tab_idx = self.tab_list.index(tab)
+
+        if close_func:
+            close_func(tab)
 
         # store if it was the currently opened tab
         was_checked = tab['indicatorValue']
