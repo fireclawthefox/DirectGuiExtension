@@ -177,7 +177,7 @@ class DirectTabbedFrame(DirectFrame):
             self.start_idx = len(self.tab_list) - 1
             if len(self.tab_list) > 0 and was_checked:
                 self.select_tab(self.tab_list[-1])
-        elif len(self.tab_list) >= deleted_tab_idx and was_checked:
+        elif len(self.tab_list) > deleted_tab_idx and was_checked:
             # select the new tab at that position, if we have any
             self.select_tab(self.tab_list[deleted_tab_idx])
         elif len(self.tab_list) > 0 and was_checked:
