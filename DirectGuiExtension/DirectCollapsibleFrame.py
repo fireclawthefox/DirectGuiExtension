@@ -61,6 +61,10 @@ class DirectCollapsibleFrame(DirectFrame):
     def toggleCollapsed(self):
         self['collapsed'] = not self['collapsed']
 
+    def setCollapsedTo(self, collapsed):
+        self['collapsed'] = collapsed
+        self.setCollapsed()
+
     def setCollapsed(self):
         # we're probably to early here
         if not hasattr(self, 'originalFrameSize'): return
