@@ -25,6 +25,8 @@ class DirectTabbedFrame(DirectFrame):
             ('tabHeight',                   0.1, None),
             ('showCloseOnTabs',            True, None),
             ('frameSize',           (-1,1,-1,1), None),
+            ('selectedTabColor', (0.95, 0.95, 0.95, 1), None),
+            ('unselectedTabColor', (.8, .8, .8, 1), None)
             )
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
@@ -32,13 +34,10 @@ class DirectTabbedFrame(DirectFrame):
         # Initialize superclasses
         DirectFrame.__init__(self, parent)
 
-        # Call option initialization functions
-        self.initialiseoptions(DirectTabbedFrame)
-
         pos_x = self['frameSize'][0]
         pos_z = self['frameSize'][3]-self['tabHeight']/2
         self.prevTabButton = self.createcomponent(
-            'prevTabButton', (), 'prevTabButton',
+            'prevTabButton', (), None,
             DirectButton,
             (self,),
             text='<',
@@ -54,7 +53,7 @@ class DirectTabbedFrame(DirectFrame):
 
         pos_x = self['frameSize'][1]
         self.nextTabButton = self.createcomponent(
-            'nextTabButton', (), 'nextTabButton',
+            'nextTabButton', (), None,
             DirectButton,
             (self,),
             text='>',
@@ -67,6 +66,9 @@ class DirectTabbedFrame(DirectFrame):
             text_pos=(-0.1, -0.25),
             command=self.show_next_tab,
         )
+
+        # Call option initialization functions
+        self.initialiseoptions(DirectTabbedFrame)
 
         self.tab_index_from = 0
         self.tab_index_to = 0
@@ -96,10 +98,12 @@ class DirectTabbedFrame(DirectFrame):
             text_align=TextNode.ALeft,
             scale=self['tabHeight'],
             boxPlacement='right',
+            frameColor=self['unselectedTabColor'],
             command=self.switch_tab,
             variable=self.selected_content,
             value=[0]
             )
+        tab['extraArgs'] = [tab]
         # hide the radio button indicator
         tab.indicator.hide()
         tab['value'] = [content]
@@ -111,16 +115,18 @@ class DirectTabbedFrame(DirectFrame):
         x_pos = tab.indicator.get_pos()
         x_pos.z = (tab_height - tab['borderWidth'][1]) / 2
 
-        # create the close button
-        closeButton = self.createcomponent(
-            'closeButton', (), 'closeButton',
-            DirectButton,
-            (tab,),
-            text='x',
-            pos=x_pos,
-            command=self.close_tab,
-            extraArgs=[tab],
-        )
+        if self['showCloseOnTabs']:
+            # create the close button
+            closeButton = self.createcomponent(
+                'closeButton', (), 'closeButton',
+                DirectButton,
+                (tab,),
+                text='x',
+                pos=x_pos,
+                frameColor=self['unselectedTabColor'],
+                command=self.close_tab,
+                extraArgs=[tab],
+            )
 
         # add the tab to our list
         self.tab_list.append(tab)
@@ -132,12 +138,17 @@ class DirectTabbedFrame(DirectFrame):
         for other_tab in self.tab_list:
             other_tab.setOthers(self.tab_list)
 
-    def switch_tab(self):
+    def switch_tab(self, tab):
         if self.current_content:
             self.current_content.hide()
         self.current_content = self.selected_content[0]
         if self.current_content:
             self.current_content.show()
+
+        # recolor tabs
+        for other_tab in self.tab_list:
+            other_tab['frameColor'] = self['unselectedTabColor']
+        tab['frameColor'] = self['selectedTabColor']
 
     def close_tab(self, tab):
         # get the tabs index
