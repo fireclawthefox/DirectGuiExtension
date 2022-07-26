@@ -8,6 +8,7 @@ __all__ = ['DirectTabbedFrame']
 
 from uuid import uuid4
 from panda3d.core import *
+from direct.directnotify import DirectNotifyGlobal
 from direct.gui import DirectGuiGlobals as DGG
 from direct.gui.DirectFrame import DirectFrame
 from direct.gui.DirectButton import DirectButton
@@ -18,6 +19,9 @@ class DirectTabbedFrame(DirectFrame):
     """
     A frame with tabs
     """
+
+    notify = DirectNotifyGlobal.directNotify.newCategory('DirectTabbedFrame')
+
     def __init__(self, parent=None, **kw):
         optiondefs = (
             # Define type of DirectGuiWidget
@@ -117,7 +121,7 @@ class DirectTabbedFrame(DirectFrame):
 
         if self['showCloseOnTabs']:
             # create the close button
-            closeButton = self.createcomponent(
+            tab.closeButton = self.createcomponent(
                 'closeButton', (), 'closeButton',
                 DirectButton,
                 (tab,),
@@ -173,8 +177,11 @@ class DirectTabbedFrame(DirectFrame):
 
         # check tab selection
         if self.start_idx >= len(self.tab_list):
-            # last tab was deleted, move forward a bit
+            # last tab from the list was deleted, move forward a bit
             self.start_idx = len(self.tab_list) - 1
+            if self.start_idx < 0:
+                # goodby very last tab
+                self.start_idx = 0
             if len(self.tab_list) > 0 and was_checked:
                 self.select_tab(self.tab_list[-1])
         elif len(self.tab_list) > deleted_tab_idx and was_checked:
@@ -183,6 +190,15 @@ class DirectTabbedFrame(DirectFrame):
         elif len(self.tab_list) > 0 and was_checked:
             # select the last available tab
             self.select_tab(self.tab_list[0])
+            self.start_idx = 0
+
+        # some sanity check
+        if (self.start_idx >= len(self.tab_list) \
+        and self.start_idx != 0) \
+        or self.start_idx < 0:
+            # something must have gone wrong, reset the start tab index
+            self.start_idx = 0
+            self.notify.info('Reset tab display start index')
 
         # reposition the existing tabs
         self.reposition_tabs()
