@@ -142,6 +142,8 @@ class DirectTabbedFrame(DirectFrame):
         for other_tab in self.tab_list:
             other_tab.setOthers(self.tab_list)
 
+        return tab
+
     def switch_tab(self, tab):
         if self.current_content:
             self.current_content.hide()
