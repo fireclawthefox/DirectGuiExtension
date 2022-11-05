@@ -30,6 +30,7 @@ def getBounds(guiItem):
     return guiItem.bounds
 
 def getRealWidth(guiItem):
+    guiItem.resetFrameSize()
     width = guiItem.getWidth()
     if width == 0 and guiItem["frameSize"] is not None:
         width = abs(guiItem["frameSize"][0] - guiItem["frameSize"][1]) + 2 * getBorderSize(guiItem)[0]
@@ -37,6 +38,7 @@ def getRealWidth(guiItem):
     return (guiItem.getWidth() + 2 * getBorderSize(guiItem)[0]) * guiItem.getScale()[0]
 
 def getRealHeight(guiItem):
+    guiItem.resetFrameSize()
     height = guiItem.getHeight()
     if height == 0 and guiItem["frameSize"] is not None:
         height = abs(guiItem["frameSize"][2] - guiItem["frameSize"][3]) + 2 * getBorderSize(guiItem)[0]

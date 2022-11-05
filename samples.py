@@ -9,6 +9,7 @@ from direct.gui.DirectEntry import DirectEntry
 from DirectGuiExtension.DirectBoxSizer import DirectBoxSizer
 from DirectGuiExtension.DirectGridSizer import DirectGridSizer
 from DirectGuiExtension.DirectScrolledWindowFrame import DirectScrolledWindowFrame
+from DirectGuiExtension.DirectMenuBar import DirectMenuBar
 from DirectGuiExtension.DirectMenuItem import DirectMenuItem, DirectMenuItemEntry, DirectMenuItemSubMenu
 from DirectGuiExtension.DirectTooltip import DirectTooltip
 from DirectGuiExtension.DirectSpinBox import DirectSpinBox
@@ -74,11 +75,9 @@ itemList = [
     DirectMenuItemEntry("Help", print, ["Help"])]
 viewMenu = DirectMenuItem(text="View", scale=0.1, item_relief=1, items=itemList)
 
-boxSizer = DirectBoxSizer(itemAlign=DirectBoxSizer.A_Center)
-boxSizer.addItem(fileMenu)
-boxSizer.addItem(viewMenu)
+menuBar = DirectMenuBar(parent=mainBox, menuItems=[fileMenu, viewMenu])
 
-mainBox.addItem(boxSizer)
+mainBox.addItem(menuBar)
 
 # Split frame
 splitSizer = DirectSplitFrame(frameSize=(base.a2dLeft,base.a2dRight,-0.5,0.5), orientation=DGG.HORIZONTAL)
@@ -127,7 +126,10 @@ entry["state"] = DGG.DISABLED
 
 def updateEntry(arg):
     if arg == "=":
-        entry.set(str(eval(entry.get())))
+        try:
+            entry.set(str(eval(entry.get())))
+        except:
+            entry.set("Error")
     elif arg == "c":
         entry.set(entry.get()[:-1])
     elif arg == "CE":
@@ -139,7 +141,6 @@ app.accept("updateEntry", updateEntry)
 
 leftBox.addItem(entry)
 leftBox.addItem(gridSizer)
-leftBox.setX(-DGH.getRealWidth(leftBox)/2)
 leftBox.setZ(DGH.getRealHeight(leftBox)/2)
 
 
@@ -161,7 +162,8 @@ spinAutoSizer = DirectAutoSizer(splitSizer.secondFrame, extendVertical=False, ch
 
 # DIAGRAM
 data = [10, -5, 1, -1, 1, -1, 1, -1, 1, -1]
-height = (1+mainBox.itemsBottom)/2
+height = mainBox.getRemainingSpace()
+
 dd = DirectDiagram(
     data=data,
     numberAreaWidth=0.15,
@@ -171,7 +173,7 @@ dd = DirectDiagram(
     numPosStepsStep=2,
     stepFormat=int,
     numtextScale=0.04,
-    frameSize=(-.25, .25, -height, height))
+    frameSize=(-.25, .25, -height/2, height/2))
 diagramAutoSizer = DirectAutoSizer(parent=mainBox, extendVertical=False, child=dd)
 mainBox.addItem(diagramAutoSizer)
 def updateTask(task):

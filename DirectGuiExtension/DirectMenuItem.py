@@ -35,6 +35,8 @@ class DirectMenuSeparator:
 
 class DirectMenuItem(DirectButton):
     def __init__(self, parent = None, **kw):
+        # this function will be called when the menu gets closed
+        self.onCloseMenuFunc = None
         optiondefs = (
             # List of items to display on the popup menu
             ('items',       [],             self.setItems),
@@ -310,6 +312,9 @@ class DirectMenuItem(DirectButton):
         if hideParentMenu:
             if self['isSubMenu']:
                 self['parentMenu'].hidePopupMenu(hideParentMenu=True)
+
+        if self.onCloseMenuFunc:
+            self.onCloseMenuFunc()
 
     def scrollPopUpMenu(self, direction, event = None):
         """ Scroll the item frame up and down depending on the direction

@@ -75,16 +75,43 @@ class DirectBoxSizer(DirectFrame):
             return
         self.refresh()
 
-    def removeItem(self, element):
+    def removeItem(self, element, refresh=True):
         """
         Remove this item from the panel
         """
         for item in self["items"]:
             if element == item.element:
                 self["items"].remove(item)
-                self.refresh()
+                if refresh:
+                    self.refresh()
                 return 1
         return 0
+
+    def removeAllItems(self, refresh=True):
+        """
+        Remove all items from the panel
+        """
+        for item in self["items"]:
+            self["items"].remove(item)
+        if refresh:
+            self.refresh()
+
+    def getRemainingSpace(self):
+        """
+        Gives the space that is left when all items have been placed in the
+        sizer.
+        """
+        if not hasattr(self, "bounds"): return 0
+
+        if self['orientation'] == DGG.HORIZONTAL \
+        or self['orientation'] == DGG.HORIZONTAL_INVERTED:
+            # Horizontal
+            width = self.__get_items_width()
+            return DGH.getRealWidth(self) - width
+        elif self['orientation'] == DGG.VERTICAL \
+        or self['orientation'] == DGG.VERTICAL_INVERTED:
+            height = self.__get_items_height()
+            return DGH.getRealHeight(self) - height
 
     def refresh(self):
         """
