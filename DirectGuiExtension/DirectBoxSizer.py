@@ -91,7 +91,7 @@ class DirectBoxSizer(DirectFrame):
         """
         Remove all items from the panel
         """
-        for item in self["items"]:
+        for item in list(self["items"]):
             self["items"].remove(item)
         if refresh:
             self.refresh()
@@ -151,7 +151,8 @@ class DirectBoxSizer(DirectFrame):
                 item.updateFunc()
 
     def __refresh_frame_size(self):
-        if not self["autoUpdateFrameSize"]: return
+        if not self["autoUpdateFrameSize"]:
+            return
 
         width = self.__get_items_width()# + self["pad"][0]*2
         height = self.__get_items_height()# + self["pad"][1]*2

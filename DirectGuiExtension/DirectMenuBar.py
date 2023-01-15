@@ -17,19 +17,18 @@ class DirectMenuBar(DirectBoxSizer):
             # List of items to display on the popup menu
             ('menuItems',       [],             self.setItems),
         )
-        self.kw_args_copy = kw.copy()
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
 
         # Initialize superclasses
-        DirectBoxSizer.__init__(self, parent)
+        DirectBoxSizer.__init__(self, parent, **kw)
         # Call option initialization functions
         self.initialiseoptions(DirectMenuBar)
 
         self.selected_menu_item = None
 
         if len(self["menuItems"]) > 0:
-            self.refresh()
+            self.setItems()
 
     def setItems(self):
         self.removeAllItems()
