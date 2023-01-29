@@ -120,7 +120,7 @@ class DirectBoxSizer(DirectFrame):
         """
         if self.skipInitRefresh: return
         # sanity check so we don't get here to early
-        if not hasattr(self, "bounds"): return
+        if not hasattr(self, "bounds") and not self["autoUpdateFrameSize"]: return
         if len(self["items"]) == 0: return
 
         for item in self["items"]:

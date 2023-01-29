@@ -1,6 +1,7 @@
 """Implements a pop-up menu containing multiple clickable options and sub-menus."""
 
-__all__ = ['DirectMenuItem']
+__all__ = ['DirectMenuItem', 'DirectMenuItemEntry', 'DirectMenuItemSubMenu',
+    'DirectMenuSeparator']
 
 from panda3d.core import *
 from direct.gui import DirectGuiGlobals as DGG
