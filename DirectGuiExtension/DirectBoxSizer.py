@@ -87,12 +87,14 @@ class DirectBoxSizer(DirectFrame):
                 return 1
         return 0
 
-    def removeAllItems(self, refresh=True):
+    def removeAllItems(self, refresh=True, removeNodes=False):
         """
         Remove all items from the panel
         """
         for item in list(self["items"]):
             self["items"].remove(item)
+            if removeNodes:
+                item.element.removeNode()
         if refresh:
             self.refresh()
 
