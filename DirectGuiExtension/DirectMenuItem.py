@@ -174,8 +174,8 @@ class DirectMenuItem(DirectButton):
                 fc = self['itemFrameColor'] if self['itemFrameColor'] else c['frameColor']
                 c.bind(DGG.WITHOUT,
                           lambda x, item=c, fc=fc: self._unhighlightItem(item, fc))
-                c.bind(DGG.MWDOWN, self.scrollPopUpMenu, [-1])
-                c.bind(DGG.MWUP, self.scrollPopUpMenu, [1])
+            c.bind(DGG.MWDOWN, self.scrollPopUpMenu, [-1])
+            c.bind(DGG.MWUP, self.scrollPopUpMenu, [1])
 
             itemIndex += 1
 
@@ -304,7 +304,7 @@ class DirectMenuItem(DirectButton):
 
         #self.popupMenu.refresh()
 
-    def hidePopupMenu(self, event = None, hideParentMenu=False):
+    def hidePopupMenu(self, event = None, hideParentMenu=False, callOnClose=True):
         """ Put away popup and cancel frame """
         self.popupMenu.hide()
         self.cancelFrame.hide()
@@ -314,7 +314,7 @@ class DirectMenuItem(DirectButton):
             if self['isSubMenu']:
                 self['parentMenu'].hidePopupMenu(hideParentMenu=True)
 
-        if self.onCloseMenuFunc:
+        if self.onCloseMenuFunc and callOnClose:
             self.onCloseMenuFunc()
 
     def scrollPopUpMenu(self, direction, event = None):
@@ -322,15 +322,23 @@ class DirectMenuItem(DirectButton):
         which must be a nummeric value. A positive value will scroll up
         while a negative value will scroll down. It will only work if
         items are out of bounds of the window """
+
+        #TODO: If the mouse is over a SubMenu, close it to make sure the menu under the mouse is scrolled, not any sub menus
+        #      Also, need to check since we don't want to close the upper levels of menus. (Currently this code closses all)
+        #if self.highlightedItem:
+        #    #if self.highlightedItem.guiItem.get_state() == 2:
+        #    if self.highlightedItem.guiItem.within_region(base.mouseWatcherNode):
+        #        self.hidePopupMenu(callOnClose=False)
+
         fb = DGH.getBounds(self.popupMenu)#.getBounds()
         pos = self.popupMenu.getPos(render2d)
         scale = self.popupMenu.getScale(render2d)
 
         minZ = pos[2] + fb[2] * scale[2]
         maxZ = pos[2] + fb[3] * scale[2]
-        if (minZ < -1.0 and direction > 0) or (maxZ > 1.0 and direction < 0):
+        if (minZ < -1.0 and direction < 0) or (maxZ > 1.0 and direction > 0):
             oldZ = self.popupMenu.getZ()
-            #self.popupMenu.setZ(oldZ + direction * self.maxHeight)
+            self.popupMenu.setZ(oldZ - direction * self.maxHeight)
 
     def _selectHighlighted(self, event=None):
         """
