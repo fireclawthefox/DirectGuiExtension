@@ -37,6 +37,8 @@ class DirectTreeView(DirectBoxSizer):
         # Call option initialization functions
         self.initialiseoptions(DirectTreeView)
 
+        self.refreshTree()
+
     def refreshTree(self):
         for item in self["items"]:
             item.element.destroy()
@@ -65,33 +67,10 @@ class DirectTreeView(DirectBoxSizer):
 
         indentation = self["indentationWidth"] * indent_level
 
-        imgFilter = SamplerState.FT_nearest
-
-        imgCollapse = loader.loadTexture(self["imageCollapse"])
-        imgCollapse.setMagfilter(imgFilter)
-        imgCollapse.setMinfilter(imgFilter)
-
-        imgCollapsed = loader.loadTexture(self["imageCollapsed"])
-        imgCollapsed.setMagfilter(imgFilter)
-        imgCollapsed.setMinfilter(imgFilter)
-
         img_scale = 0.025
 
         if hasChildren:
-            btnC = DirectCheckBox(
-                relief=DGG.FLAT,
-                pos=(img_scale+indentation,0,0.03),
-                frameSize=(-0.1, 0.1, -0.1, 0.1),
-                frameColor=(0,0,0,0),
-                command=self.collapseElement,
-                extraArgs=[element],
-                image=imgCollapsed if element in self.collapsedElements else imgCollapse,
-                uncheckedImage=imgCollapse,
-                checkedImage=imgCollapsed,
-                image_scale=img_scale,
-                isChecked=element in self.collapsedElements,
-                parent=frame)
-            btnC.setTransparency(TransparencyAttrib.M_alpha)
+            self.createCollapseCheckBox(frame, indentation, element, img_scale)
 
         lbl = DirectLabel(
             text=element,
@@ -104,6 +83,32 @@ class DirectTreeView(DirectBoxSizer):
         frame["frameSize"] = (0, img_scale*2+0.02+indentation+DGH.getRealWidth(lbl), DGH.getRealBottom(lbl), DGH.getRealTop(lbl))
 
         return frame
+
+    def createCollapseCheckBox(self, parent, x_pos, element, img_scale=0.025):
+        imgFilter = SamplerState.FT_nearest
+
+        imgCollapse = loader.loadTexture(self["imageCollapse"])
+        imgCollapse.setMagfilter(imgFilter)
+        imgCollapse.setMinfilter(imgFilter)
+
+        imgCollapsed = loader.loadTexture(self["imageCollapsed"])
+        imgCollapsed.setMagfilter(imgFilter)
+        imgCollapsed.setMinfilter(imgFilter)
+
+        btnC = DirectCheckBox(
+            relief=DGG.FLAT,
+            pos=(img_scale+x_pos,0,0.03),
+            frameSize=(-0.1, 0.1, -0.1, 0.1),
+            frameColor=(0,0,0,0),
+            command=self.collapseElement,
+            extraArgs=[element],
+            image=imgCollapsed if element in self.collapsedElements else imgCollapse,
+            uncheckedImage=imgCollapse,
+            checkedImage=imgCollapsed,
+            image_scale=img_scale,
+            isChecked=element in self.collapsedElements,
+            parent=parent)
+        btnC.setTransparency(TransparencyAttrib.M_alpha)
 
     def collapseElement(self, collapse, element):
         if element is not None:
