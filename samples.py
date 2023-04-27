@@ -80,7 +80,10 @@ menuBar = DirectMenuBar(parent=mainBox, menuItems=[fileMenu, viewMenu])
 mainBox.addItem(menuBar)
 
 # Split frame
-splitSizer = DirectSplitFrame(frameSize=(base.a2dLeft,base.a2dRight,-0.5,0.5), orientation=DGG.HORIZONTAL)
+splitSizer = DirectSplitFrame(
+    frameSize=(base.a2dLeft,base.a2dRight,-0.5,0.5),
+    orientation=DGG.HORIZONTAL,
+    secondFrameMinSize=0.75)
 leftBox = DirectBoxSizer(
     parent=splitSizer.firstFrame,
     orientation=DGG.VERTICAL)
@@ -154,7 +157,7 @@ spinBoxSizer = DirectBoxSizer(
     frameSize=(0,0,spinBox["frameSize"][2]*spinBox.getScale()[0]*2,spinBox["frameSize"][3]*spinBox.getScale()[0]*2),
     itemAlign=DirectBoxSizer.A_Center|DirectBoxSizer.A_Middle
     )
-spinerInfo = DirectLabel(text="Change diagram value range: ", scale=0.1)
+spinerInfo = DirectLabel(text="Change diagram\nvalue range: ", scale=0.1)
 spinBoxSizer.addItem(spinerInfo)
 spinBoxSizer.addItem(spinBox)
 spinAutoSizer = DirectAutoSizer(splitSizer.secondFrame, extendVertical=False, child=spinBoxSizer, childUpdateSizeFunc=spinBoxSizer.refresh)
