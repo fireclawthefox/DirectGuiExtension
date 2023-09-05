@@ -1,39 +1,38 @@
 {
     "name":"DirectScrolledWindowFrame",
+    "baseWidget":"DirectScrolledFrame",
     "moduleName":"DirectScrolledWindowFrame",
     "displayName":"Scrolled Window Frame",
     "className":"DirectScrolledWindowFrame",
     "classfilePath":"DirectGuiExtension.DirectScrolledWindowFrame",
-    "enabledProperties":[""],
     "customProperties":[
         {
-            "displayName":"Drag Aea Height",
-            "propertyName":"dragAreaHeight",
-            "propertyType":"float"
+            "visiblename":"Drag Area Height",
+            "internalName":"dragAreaHeight",
+            "editType":"float"
         },
         {
-            "displayName":"Resort z-order on drag",
-            "propertyName":"resortOnDrag",
-            "propertyType":"bool"
+            "visiblename":"Resort z-order on drag",
+            "internalName":"resortOnDrag",
+            "editType":"bool"
         },
         {
-            "displayName":"Show Close Button",
-            "propertyName":"showClose",
-            "propertyType":"bool"
+            "visiblename":"Show Close Button",
+            "internalName":"showClose",
+            "editType":"bool"
         },
         {
-            "displayName":"Close Button Position",
-            "propertyName":"closeButtonPosition",
-            "propertyType":"selection",
-            "customSelectionDict":{"Left":"Left", "Right":"Right"}
-
+            "visiblename":"Close Button Position",
+            "internalName":"closeButtonPosition",
+            "editType":"optionmenu",
+            "valueOptions":{"Left":"Left", "Right":"Right"}
         },
         {
-            "displayName":"Close Button scale",
-            "propertyName":"closeButtonScale",
-            "propertyType":"float"
+            "visiblename":"Close Button scale",
+            "internalName":"closeButtonScale",
+            "editType":"float"
         }],
-    "addItemFunctionName":"",
-    "removeItemFunctionName":"",
+    "//addItemFunctionName":"",
+    "//removeItemFunctionName":"",
     "importPath":"from DirectGuiExtension.DirectScrolledWindowFrame import DirectScrolledWindowFrame"
 }

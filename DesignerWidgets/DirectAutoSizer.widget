@@ -1,56 +1,59 @@
 {
     "name":"DirectAutoSizer",
+    "baseWidget":"DirectFrame",
     "moduleName":"DirectAutoSizer",
     "displayName":"Auto Sizer",
     "className":"DirectAutoSizer",
     "classfilePath":"DirectGuiExtension.DirectAutoSizer",
-    "enabledProperties":[""],
     "customProperties":[
         {
-            "displayName":"Refresh sizer",
-            "propertyName":"refresh",
-            "propertyType":"command",
-            "customCommandName":"refresh"
+            "visiblename":"Refresh sizer",
+            "internalName":"refresh",
+            "internalType":"function",
+            "editType":"command",
+            "valueOptions":"refresh"
         },
         {
-            "displayName":"Extend Horizontal",
-            "propertyName":"extendHorizontal",
-            "propertyType":"bool"
+            "visiblename":"Extend Horizontal",
+            "internalName":"extendHorizontal",
+            "internalType":"bool"
         },
         {
-            "displayName":"Extend Vertical",
-            "propertyName":"extendVertical",
-            "propertyType":"bool"
+            "visiblename":"Extend Vertical",
+            "internalName":"extendVertical",
+            "internalType":"bool"
         },
         {
-            "displayName":"Update on window resize",
-            "propertyName":"updateOnWindowResize",
-            "propertyType":"bool"
+            "visiblename":"Update on window resize",
+            "internalName":"updateOnWindowResize",
+            "internalType":"bool"
         },
         {
-            "displayName":"Minimum size",
-            "propertyName":"minSize",
-            "propertyType":"vbase4"
+            "visiblename":"Minimum size",
+            "internalName":"minSize",
+            "internalType":"int",
+            "editType":"base4"
         },
         {
-            "displayName":"Maximum size",
-            "propertyName":"maxSize",
-            "propertyType":"vbase4"
+            "visiblename":"Maximum size",
+            "internalName":"maxSize",
+            "internalType":"int",
+            "editType":"base4"
         },
         {
-            "displayName":"Child size update function",
-            "propertyName":"childUpdateSizeFunc",
-            "propertyType":"commandProperty"
+            "visiblename":"Child size update function",
+            "internalName":"childUpdateSizeFunc",
+            "internalType":"function"
         },
         {
-            "displayName":"Function returning the size of the parent",
-            "propertyName":"parentGetSizeFunction",
-            "propertyType":"commandProperty"
+            "visiblename":"Function returning the size of the parent",
+            "internalName":"parentGetSizeFunction",
+            "internalType":"function"
         },
         {
-            "displayName":"Extra arguments for the function returning the size of the parent",
-            "propertyName":"parentGetSizeExtraArgs",
-            "propertyType":"commandProperty"
+            "visiblename":"Extra arguments for the function returning the size of the parent",
+            "internalName":"parentGetSizeExtraArgs",
+            "internalType":"function"
         }],
     "addItemFunctionName":"setChild",
     "removeItemFunctionName":"removeChild",

@@ -44,6 +44,12 @@ class DirectDiagram(DirectFrame):
         # Call option initialization functions
         self.initialiseoptions(DirectDiagram)
 
+    def setData(self, data):
+        self["data"] += [float(value) for value in data]
+        self["numPosSteps"] = max(self["data"])
+        self["numNegSteps"] = min(self["data"])
+        self.refresh()
+
 
     def refresh(self):
         # sanity check so we don't get here to early
@@ -56,9 +62,9 @@ class DirectDiagram(DirectFrame):
         right = DGH.getRealRight(self)
         diagramLeft = left + textLeftSizeArea
 
-        xStep = (DGH.getRealWidth(self) - textLeftSizeArea) / (len(self['data'])-1)
-        posYRes = DGH.getRealTop(self) / (self['numPosSteps'] if self['numPosSteps'] > 0 else max(self['data']))
-        negYRes = DGH.getRealBottom(self) / (-self['numNegSteps'] if self['numNegSteps'] > 0 else min(self['data']))
+        xStep = (DGH.getRealWidth(self) - textLeftSizeArea) / max(1, len(self['data'])-1)
+        posYRes = DGH.getRealTop(self) / (self['numPosSteps'] if self['numPosSteps'] > 0 else int(max(self['data'])))
+        negYRes = DGH.getRealBottom(self) / (-self['numNegSteps'] if self['numNegSteps'] > 0 else int(min(self['data'])))
 
         # remove old content
         if self.lines is not None:

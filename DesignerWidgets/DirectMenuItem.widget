@@ -1,5 +1,6 @@
 {
     "name":"DirectMenuItem",
+    "baseWidget":"DirectButton",
     "moduleName":"DirectMenuItem",
     "displayName":"Menu Item",
     "className":"DirectMenuItem",
@@ -7,17 +8,17 @@
     "enabledProperties":["text"],
     "customProperties":[
         {
-            "displayName":"Popup Location",
-            "propertyName":"popupMenuLocation",
-            "propertyType":"selection",
-            "customSelectionDict":{"Left":"left", "Right":"right", "Above":"above", "Below":"below"}
+            "visiblename":"Popup Location",
+            "internalName":"popupMenuLocation",
+            "editType":"optionmenu",
+            "valueOptions":{"Left":"left", "Right":"right", "Above":"above", "Below":"below"}
         },
         {
-            "displayName":"Highlight Color",
-            "propertyName":"highlightColor",
-            "propertyType":"vbase4"
+            "visiblename":"Highlight Color",
+            "internalName":"highlightColor",
+            "editType":"base4"
         }],
-    "addItemFunctionName":"",
-    "removeItemFunctionName":"",
+    "//addItemFunctionName":"",
+    "//removeItemFunctionName":"",
     "importPath":"from DirectGuiExtension.DirectMenuItem import DirectMenuItem"
 }

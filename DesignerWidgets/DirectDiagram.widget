@@ -1,18 +1,24 @@
 {
-    "name":"",
-    "moduleName":"",
-    "displayName":"",
-    "className":"",
-    "classfilePath":"",
-    "enabledProperties":[""],
+    "name":"DirectDiagram",
+    "baseWidget":"DirectFrame",
+    "moduleName":"DirectDiagram",
+    "displayName":"Diagram",
+    "className":"DirectDiagram",
+    "classfilePath":"DirectGuiExtension.DirectDiagram",
     "customProperties":[
         {
-            "displayName":"Refresh position",
-            "propertyName":"refresh",
-            "propertyType":"command",
-            "customCommandName":"refresh"
+            "visiblename":"Data",
+            "internalName":"data",
+            "editType":"list",
+            "setFunctionName":"setData"
+        },
+        {
+            "visiblename":"Refresh position",
+            "internalName":"refresh",
+            "editType":"command",
+            "valueOptions":"refresh"
         }],
-    "addItemFunctionName":"",
-    "removeItemFunctionName":"",
-    "importPath":"from DirectGuiExtension.Direct import Direct"
+    "//addItemFunctionName":"",
+    "//removeItemFunctionName":"",
+    "importPath":"from DirectGuiExtension.DirectDiagram import DirectDiagram"
 }

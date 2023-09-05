@@ -1,5 +1,6 @@
 {
     "name":"DirectDatePicker",
+    "baseWidget":"DirectGridSizer",
     "moduleName":"DirectDatePicker",
     "displayName":"Calendar",
     "className":"DirectDatePicker",
@@ -7,19 +8,19 @@
     "enabledProperties":[],
     "customProperties":[
         {
-            "displayName":"Year",
-            "propertyName":"year",
-            "propertyType":"int"
+            "visiblename":"Year",
+            "internalName":"year",
+            "editType":"int"
         },
         {
-            "displayName":"Month",
-            "propertyName":"month",
-            "propertyType":"int"
+            "visiblename":"Month",
+            "internalName":"month",
+            "editType":"int"
         },
         {
-            "displayName":"Day",
-            "propertyName":"day",
-            "propertyType":"int"
+            "visiblename":"Day",
+            "internalName":"day",
+            "editType":"int"
         }],
     "addItemFunctionName":"",
     "removeItemFunctionName":"",
