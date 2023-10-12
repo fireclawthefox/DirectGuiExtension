@@ -1,44 +1,64 @@
 {
-    "name":"DirectGridSizer",
-    "baseWidget":"DirectFrame",
-    "moduleName":"DirectGridSizer",
-    "displayName":"Grid Sizer",
-    "className":"DirectGridSizer",
-    "classfilePath":"DirectGuiExtension.DirectGridSizer",
-    "customProperties":[
+    "name": "DirectGridSizer",
+    "baseWidget": "DirectFrame",
+    "moduleName": "DirectGridSizer",
+    "displayName": "Grid Sizer",
+    "className": "DirectGridSizer",
+    "classFilePath": "DirectGuiExtension.DirectGridSizer",
+    "customProperties": [
         {
-            "visiblename":"Align ",
-            "internalName":"boxAlign",
-            "editType":"optionmenu",
-            "valueOptions":{"Left":"left", "Right":"right"}
+            "displayName": "Align",
+            "internalName": "boxAlign",
+            "editType": "optionMenu",
+            "valueOptions": {"Left": "left", "Right": "right"}
         },
         {
-            "visiblename":"Refresh position",
-            "internalName":"refresh",
-            "editType":"command",
-            "valueOptions":"refresh"
+            "displayName": "Refresh position",
+            "internalName": "refresh",
+            "editType": "command",
+            "valueOptions": "refresh"
         },
         {
-            "visiblename":"Item Margin",
-            "internalName":"itemMargin",
-            "editType":"base4"
+            "displayName": "Item Margin",
+            "internalName": "itemMargin",
+            "editType": "base4"
         },
         {
-            "visiblename":"Number of Rows",
-            "internalName":"numRows",
-            "editType":"integer"
+            "displayName": "Number of Rows",
+            "internalName": "numRows",
+            "editType": "int"
         },
         {
-            "visiblename":"Number of Columns",
-            "internalName":"numColumns",
-            "editType":"integer"
+            "displayName": "Number of Columns",
+            "internalName": "numColumns",
+            "editType": "int"
         },
         {
-            "visiblename":"Update Framesize with items",
-            "internalName":"autoUpdateFrameSize",
-            "editType":"bool"
-        }],
-    "addItemFunctionName":"addItem",
-    "removeItemFunctionName":"removeItem",
-    "importPath":"from DirectGuiExtension.DirectGridSizer import DirectGridSizer"
+            "displayName": "Update Framesize with items",
+            "internalName": "autoUpdateFrameSize",
+            "editType": "bool"
+        }
+    ],
+    "addItemFunctionName": "addItem",
+    "//addItemExtraArgs": [1, 1],
+    "addItemExtraArgs": {
+        "row": {
+            "type": "int",
+            "defaultValue": 1
+        },
+        "column": {
+            "type": "int",
+            "defaultValue": 1
+        },
+        "widthInColumns": {
+            "type": "int",
+            "defaultValue": 1
+        },
+        "heightInRows": {
+            "type": "int",
+            "defaultValue": 1
+        }
+    },
+    "removeItemFunctionName": "removeItem",
+    "importPath": "from DirectGuiExtension.DirectGridSizer import DirectGridSizer"
 }

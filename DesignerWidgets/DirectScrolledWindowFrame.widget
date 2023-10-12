@@ -4,35 +4,35 @@
     "moduleName":"DirectScrolledWindowFrame",
     "displayName":"Scrolled Window Frame",
     "className":"DirectScrolledWindowFrame",
-    "classfilePath":"DirectGuiExtension.DirectScrolledWindowFrame",
+    "classFilePath":"DirectGuiExtension.DirectScrolledWindowFrame",
     "customProperties":[
         {
-            "visiblename":"Drag Area Height",
+            "displayName":"Drag Area Height",
             "internalName":"dragAreaHeight",
             "editType":"float"
         },
         {
-            "visiblename":"Resort z-order on drag",
+            "displayName":"Resort z-order on drag",
             "internalName":"resortOnDrag",
             "editType":"bool"
         },
         {
-            "visiblename":"Show Close Button",
+            "displayName":"Show Close Button",
             "internalName":"showClose",
             "editType":"bool"
         },
         {
-            "visiblename":"Close Button Position",
+            "displayName":"Close Button Position",
             "internalName":"closeButtonPosition",
-            "editType":"optionmenu",
+            "editType":"optionMenu",
             "valueOptions":{"Left":"Left", "Right":"Right"}
         },
         {
-            "visiblename":"Close Button scale",
+            "displayName":"Close Button scale",
             "internalName":"closeButtonScale",
             "editType":"float"
-        }],
-    "//addItemFunctionName":"",
-    "//removeItemFunctionName":"",
+        }
+    ],
+    "addItemNode": "canvas",
     "importPath":"from DirectGuiExtension.DirectScrolledWindowFrame import DirectScrolledWindowFrame"
 }

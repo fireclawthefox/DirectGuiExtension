@@ -4,25 +4,38 @@
     "moduleName":"DirectDatePicker",
     "displayName":"Calendar",
     "className":"DirectDatePicker",
-    "classfilePath":"DirectGuiExtension.DirectDatePicker",
-    "enabledProperties":[],
+    "classFilePath":"DirectGuiExtension.DirectDatePicker",
     "customProperties":[
         {
-            "visiblename":"Year",
+            "displayName":"Year",
             "internalName":"year",
             "editType":"int"
         },
         {
-            "visiblename":"Month",
+            "displayName":"Month",
             "internalName":"month",
             "editType":"int"
         },
         {
-            "visiblename":"Day",
+            "displayName":"Day",
             "internalName":"day",
             "editType":"int"
-        }],
-    "addItemFunctionName":"",
-    "removeItemFunctionName":"",
+        },
+        {
+            "displayName":"Normal Day Frame Color",
+            "internalName":"normalDayFrameColor",
+            "editType":"base4"
+        },
+        {
+            "displayName":"Active Day Frame Color",
+            "internalName":"activeDayFrameColor",
+            "editType":"base4"
+        },
+        {
+            "displayName":"Today Frame Color",
+            "internalName":"todayFrameColor",
+            "editType":"base4"
+        }
+    ],
     "importPath":"from DirectGuiExtension.DirectDatePicker import DirectDatePicker"
 }

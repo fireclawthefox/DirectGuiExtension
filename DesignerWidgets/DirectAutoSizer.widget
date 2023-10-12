@@ -4,54 +4,54 @@
     "moduleName":"DirectAutoSizer",
     "displayName":"Auto Sizer",
     "className":"DirectAutoSizer",
-    "classfilePath":"DirectGuiExtension.DirectAutoSizer",
+    "classFilePath":"DirectGuiExtension.DirectAutoSizer",
     "customProperties":[
         {
-            "visiblename":"Refresh sizer",
+            "displayName":"Refresh sizer",
             "internalName":"refresh",
             "internalType":"function",
             "editType":"command",
             "valueOptions":"refresh"
         },
         {
-            "visiblename":"Extend Horizontal",
+            "displayName":"Extend Horizontal",
             "internalName":"extendHorizontal",
             "internalType":"bool"
         },
         {
-            "visiblename":"Extend Vertical",
+            "displayName":"Extend Vertical",
             "internalName":"extendVertical",
             "internalType":"bool"
         },
         {
-            "visiblename":"Update on window resize",
+            "displayName":"Update on window resize",
             "internalName":"updateOnWindowResize",
             "internalType":"bool"
         },
         {
-            "visiblename":"Minimum size",
+            "displayName":"Minimum size",
             "internalName":"minSize",
             "internalType":"int",
             "editType":"base4"
         },
         {
-            "visiblename":"Maximum size",
+            "displayName":"Maximum size",
             "internalName":"maxSize",
             "internalType":"int",
             "editType":"base4"
         },
         {
-            "visiblename":"Child size update function",
+            "displayName":"Child size update function",
             "internalName":"childUpdateSizeFunc",
             "internalType":"function"
         },
         {
-            "visiblename":"Function returning the size of the parent",
+            "displayName":"Function returning the size of the parent",
             "internalName":"parentGetSizeFunction",
             "internalType":"function"
         },
         {
-            "visiblename":"Extra arguments for the function returning the size of the parent",
+            "displayName":"Extra arguments for the function returning the size of the parent",
             "internalName":"parentGetSizeExtraArgs",
             "internalType":"function"
         }],

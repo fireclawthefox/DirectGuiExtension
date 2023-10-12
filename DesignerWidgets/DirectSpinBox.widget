@@ -1,64 +1,69 @@
 {
     "name":"DirectSpinBox",
-    "baseWidget":"DirectFrame",
     "moduleName":"DirectSpinBox",
     "displayName":"Spinner",
     "className":"DirectSpinBox",
-    "classfilePath":"DirectGuiExtension.DirectSpinBox",
+    "classFilePath":"DirectGuiExtension.DirectSpinBox",
+    "baseWidget": "DirectFrame",
     "customProperties":[
     {
-        "visiblename":"Value",
-        "internalName":"value",
-        "editType":"integer",
-        "setFunctionName":"setValue"
+        "displayName":"Step Size",
+        "internalName":"stepSize",
+        "editType":"float"
     },
     {
-        "visiblename":"Reset Position",
+        "displayName":"Reset Position",
         "internalName":"",
         "editType":"command",
         "valueOptions":"resetPosition"
     },
     {
-        "visiblename":"Recalculate Frame Size",
+        "displayName":"Recalculate Frame Size",
         "internalName":"",
         "editType":"command",
+        "internalType":"function",
         "valueOptions":"recalcFrameSize"
     },
     {
-        "visiblename":"Text format",
+        "displayName":"Text format",
         "internalName":"textFormat",
         "editType":"text"
     },
     {
-        "visiblename":"Minimum value",
+        "displayName":"value Type",
+        "internalName":"valueType",
+        "editType":"optionMenu",
+        "valueOptions":{"int":"int", "float":"float"},
+        "loaderFunc": "eval(value)",
+        "addToExtraOptions": true,
+        "canGetValueFromElement": false
+    },
+    {
+        "displayName":"Minimum value",
         "internalName":"minValue",
-        "editType":"integer"
+        "editType":"int"
     },
     {
-        "visiblename":"Maximum value",
+        "displayName":"Maximum value",
         "internalName":"maxValue",
-        "editType":"integer"
+        "editType":"int"
     },
     {
-        "visiblename":"Step Size",
-        "internalName":"stepSize",
-        "editType":"integer"
-    },
-    {
-        "visiblename":"Button repeat delay",
+        "displayName":"Button repeat delay",
         "internalName":"repeatdelay",
         "editType":"float"
     },
     {
-        "visiblename":"Button repeat start delay",
+        "displayName":"Button repeat start delay",
         "internalName":"repeatStartdelay",
         "editType":"float"
     },
     {
-        "visiblename":"Button Orientation",
+        "displayName":"Button Orientation",
         "internalName":"buttonOrientation",
-        "editType":"optionmenu",
-        "valueOptions":{"Vertical":"vertical", "Vertical Inverted":"vertical_inverted", "Horizontal":"horizontal", "Horizontal Inverted":"horizontal_inverted"}
+        "editType":"optionMenu",
+        "valueOptions":{"Vertical":"vertical", "Horizontal":"horizontal"},
+        "postProcessFunctionName":"resetPosition"
     }],
-    "importPath":"from customWidgetSample.DirectSpinBox import DirectSpinBox"
+    "importPath":"from DirectGuiExtension.DirectSpinBox import DirectSpinBox"
 }

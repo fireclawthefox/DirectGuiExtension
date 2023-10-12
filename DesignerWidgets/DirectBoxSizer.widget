@@ -4,35 +4,35 @@
     "moduleName":"DirectBoxSizer",
     "displayName":"Box Sizer",
     "className":"DirectBoxSizer",
-    "classfilePath":"DirectGuiExtension.DirectBoxSizer",
+    "classFilePath":"DirectGuiExtension.DirectBoxSizer",
     "customProperties":[
         {
-            "visiblename":"Item Alignment",
+            "displayName":"Item Alignment",
             "internalName":"itemAlign",
             "internalType":"str",
-            "editType":"optionmenu",
+            "editType":"optionMenu",
             "valueOptions":{"Center":1, "Left":2, "Right":4, "Middle":8, "Top":16, "Bottom":32, "Center/Middle":9, "Center/Top":17, "Center/Bottom":33, "Left/Middle":10, "Left/Top":18, "Left/Bottom":34, "Right/Middle":12, "Right/Top":20, "Right/Bottom":36}
         },
         {
-            "visiblename":"Refresh position",
+            "displayName":"Refresh position",
             "internalName":"refresh",
             "editType":"command",
             "valueOptions":"refresh"
         },
         {
-            "visiblename":"Item Margin",
+            "displayName":"Item Margin",
             "internalName":"itemMargin",
             "internalType":"int",
             "editType":"base4"
         },
         {
-            "visiblename":"Orientation",
+            "displayName":"Orientation",
             "internalName":"orientation",
-            "editType":"optionmenu",
+            "editType":"optionMenu",
             "valueOptions":{"Horizontal":"horizontal", "Horizontal Inverted":"horizontal_inverted", "Vertical":"vertical", "Vertical Inverted":"vertical_inverted"}
         },
         {
-            "visiblename":"Update Framesize with items",
+            "displayName":"Update Framesize with items",
             "internalName":"autoUpdateFrameSize",
             "editType":"bool"
         }],

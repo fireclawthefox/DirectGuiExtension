@@ -4,20 +4,37 @@
     "moduleName":"DirectMenuItem",
     "displayName":"Menu Item",
     "className":"DirectMenuItem",
-    "classfilePath":"DirectGuiExtension.DirectMenuItem",
-    "enabledProperties":["text"],
+    "classFilePath":"DirectGuiExtension.DirectMenuItem",
     "customProperties":[
         {
-            "visiblename":"Popup Location",
+            "displayName":"Items",
+            "internalName":"items",
+            "editType":"list",
+            "internalType": "list",
+            "postProcessFunctionName": "setItems"
+        },
+        {
+            "displayName":"Popup Location",
             "internalName":"popupMenuLocation",
-            "editType":"optionmenu",
+            "editType":"optionMenu",
             "valueOptions":{"Left":"left", "Right":"right", "Above":"above", "Below":"below"}
         },
         {
-            "visiblename":"Highlight Color",
+            "displayName":"Highlight Color",
             "internalName":"highlightColor",
             "editType":"base4"
-        }],
+        },
+        {
+            "displayName":"Item Frame Color",
+            "internalName":"itemFrameColor",
+            "editType":"base4"
+        },
+        {
+            "displayName":"Separator Frame Color",
+            "internalName":"separatorFrameColor",
+            "editType":"base4"
+        }
+    ],
     "//addItemFunctionName":"",
     "//removeItemFunctionName":"",
     "importPath":"from DirectGuiExtension.DirectMenuItem import DirectMenuItem"
