@@ -92,7 +92,7 @@ class DirectTabbedFrame(DirectFrame):
             self.start_idx += 1
             self.reposition_tabs()
 
-    def add_tab(self, tab_text, content, close_func=None):
+    def add_tab(self, content, tab_text, close_func=None):
         # create the new tab
         tab = self.createcomponent(
             'tab', (), 'tab',

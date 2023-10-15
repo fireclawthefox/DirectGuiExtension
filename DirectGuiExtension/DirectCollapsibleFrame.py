@@ -21,7 +21,8 @@ class DirectCollapsibleFrame(DirectFrame):
             ('collapsed',           False, self.setCollapsed),
 
             ('collapseText',   'collapse >>', None),
-            ('extendText',     'extend <<', None)
+            ('extendText',     'extend <<', None),
+            ("frameSize",      (-0.5, 0.5, -0.5, 0.5), self.setFrameSize)
             )
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
@@ -57,6 +58,7 @@ class DirectCollapsibleFrame(DirectFrame):
             DGH.getRealLeft(self), DGH.getRealRight(self),
             DGH.getRealTop(self)-self['headerheight'], DGH.getRealTop(self))
         self.originalFrameSize = self['frameSize']
+        self.toggleCollapseButton["text_pos"] = (DGH.getRealLeft(self)+0.02, DGH.getRealTop(self)-self['headerheight']/2.0)
 
     def toggleCollapsed(self):
         self['collapsed'] = not self['collapsed']

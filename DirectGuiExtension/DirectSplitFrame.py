@@ -61,6 +61,7 @@ class DirectSplitFrame(DirectFrame):
             ('secondFrameMinSize', None,    None),
 
             ('suppressMouse',  0,           None),
+            ("frameSize",      (-0.5, 0.5, -0.5, 0.5), self.setFrameSize)
             )
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)

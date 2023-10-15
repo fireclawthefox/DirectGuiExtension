@@ -1,0 +1,46 @@
+{
+    "name":"DirectOptionMenu",
+    "baseWidget":"DirectFrame",
+    "moduleName":"DirectOptionMenu",
+    "displayName":"Option Menu",
+    "className":"DirectOptionMenu",
+    "classFilePath":"DirectGuiExtension.DirectOptionMenu",
+    "customProperties":[
+        {
+            "displayName":"Items",
+            "internalName":"items",
+            "editType":"list",
+            "postProcessFunctionName": "setItems"
+        },
+        {
+            "displayName":"Initial Item",
+            "internalName":"initialitem",
+            "editType":"int",
+            "isInitOption": true
+        },
+        {
+            "displayName":"Popup Marker Border",
+            "internalName":"popupMarkerBorder",
+            "editType":"base2"
+        },
+        {
+            "displayName":"Popup Menu Location",
+            "internalName":"popupMenuLocation",
+            "editType":"optionMenu",
+            "valueOptions":{"Left":"left", "Right":"right", "Above":"above", "Below":"below"}
+        },
+        {
+            "displayName":"Highlight Color",
+            "internalName":"highlightColor",
+            "editType":"base4"
+        },
+        {
+            "displayName":"Highlight Scale",
+            "internalName":"highlightScale",
+            "editType":"base2"
+        }
+    ],
+    "//addItemFunctionName":"add_tab",
+    "//removeItemFunctionName":"close_tab",
+    "importPath":"from DirectGuiExtension.DirectOptionMenu import DirectOptionMenu"
+}
