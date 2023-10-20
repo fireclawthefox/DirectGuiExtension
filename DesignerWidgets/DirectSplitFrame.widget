@@ -22,6 +22,13 @@
             "editType":"float"
         },
         {
+            "displayName":"Orientation",
+            "internalName":"orientation",
+            "editType":"optionMenu",
+            "valueOptions":{"Horizontal":"horizontal", "Vertical":"vertical"},
+            "postProcessFunctionName": "refresh"
+        },
+        {
             "displayName":"Splitter Color",
             "internalName":"splitterColor",
             "editType":"base4"
@@ -54,6 +61,6 @@
     ],
     "//addItemFunctionName":"addItem",
     "//removeItemFunctionName":"removeItem",
-    "addItemNode": "firstFrame",
+    "addItemNode": ["firstFrame", "secondFrame"],
     "importPath":"from DirectGuiExtension.DirectSplitFrame import DirectSplitFrame"
 }

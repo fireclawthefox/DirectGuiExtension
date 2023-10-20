@@ -134,6 +134,7 @@ class DirectSplitFrame(DirectFrame):
 
         if self["orientation"] == DGG.HORIZONTAL:
             self.splitter.setX(self["splitterPos"])
+            self.splitter.setZ(0)
             self.checkMinSIze()
 
             if self["pixel2d"]:
@@ -156,6 +157,7 @@ class DirectSplitFrame(DirectFrame):
 
         elif self["orientation"] == DGG.VERTICAL:
             self.splitter.setZ(self["splitterPos"])
+            self.splitter.setX(0)
             self.checkMinSIze()
 
             if self["pixel2d"]:
