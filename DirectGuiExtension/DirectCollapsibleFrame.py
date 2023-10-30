@@ -22,7 +22,7 @@ class DirectCollapsibleFrame(DirectFrame):
 
             ('collapseText',   'collapse >>', None),
             ('extendText',     'extend <<', None),
-            ("frameSize",      (-0.5, 0.5, -0.5, 0.5), self.setFrameSize)
+            ('frameSize',      (-0.5, 0.5, -0.5, 0.5), self.setFrameSize)
             )
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
@@ -30,12 +30,7 @@ class DirectCollapsibleFrame(DirectFrame):
         # Initialize superclasses
         DirectFrame.__init__(self, parent)
 
-        # Call option initialization functions
-        self.initialiseoptions(DirectCollapsibleFrame)
-
-        self.resetFrameSize()
-
-        self.originalFrameSize = self['frameSize']
+        frameSize = self['frameSize']
 
         # set up the header button to collapse/extend
         self.toggleCollapseButton = self.createcomponent(
@@ -44,14 +39,27 @@ class DirectCollapsibleFrame(DirectFrame):
             text=self['extendText'] if self['collapsed'] else self['collapseText'],
             text_scale=0.05,
             text_align=TextNode.ALeft,
-            text_pos=(DGH.getRealLeft(self)+0.02, DGH.getRealTop(self)-self['headerheight']/2.0),
+            text_pos=(frameSize[0]+0.02, frameSize[3]-self['headerheight']/2.0),
             borderWidth=(0.02, 0.02),
             relief=DGG.FLAT,
             pressEffect=False,
             frameSize = (
-                DGH.getRealLeft(self), DGH.getRealRight(self),
-                DGH.getRealTop(self)-self['headerheight'], DGH.getRealTop(self)),
+                frameSize[0], frameSize[1],
+                frameSize[3]-self['headerheight'], frameSize[3]),
             command=self.toggleCollapsed)
+
+        # Call option initialization functions
+        self.initialiseoptions(DirectCollapsibleFrame)
+
+        self.resetFrameSize()
+        self.updateFrameSize()
+
+        self.originalFrameSize = self['frameSize']
+
+    def addItem(self, element, *args):
+        print(element)
+        for arg in args:
+            print(type(arg), arg)
 
     def updateFrameSize(self):
         self.toggleCollapseButton['frameSize'] = (

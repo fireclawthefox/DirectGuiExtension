@@ -44,7 +44,7 @@ class DirectSplitFrame(DirectFrame):
             ('state',          DGG.NORMAL,  None),
             ('borderWidth',    (0, 0),      self.setBorderWidth),
             ('orientation', DGG.HORIZONTAL, self.refresh),
-            ('framesize',      (-1,1,-1,1), None),
+            ('frameSize',      (-1,1,-1,1), None),
 
             # TODO: Change this. This only works for certain circumstances
             ('pixel2d',        False,       self.refresh),
@@ -60,17 +60,13 @@ class DirectSplitFrame(DirectFrame):
             ('firstFrameMinSize', None,     None),
             ('secondFrameMinSize', None,    None),
 
-            ('suppressMouse',  0,           None),
-            ("frameSize",      (-0.5, 0.5, -0.5, 0.5), self.setFrameSize)
+            ('suppressMouse',  0,           None)
             )
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
 
         # Initialize superclasses
         DirectFrame.__init__(self, parent)
-
-        # Call option initialization functions
-        self.initialiseoptions(DirectSplitFrame)
 
         self.resetFrameSize()
 
@@ -99,6 +95,10 @@ class DirectSplitFrame(DirectFrame):
             text_scale = 0.05,
             text_align = TextNode.ACenter,
             state = 'normal')
+
+        # Call option initialization functions
+        self.initialiseoptions(DirectSplitFrame)
+
         self.splitter.bind(DGG.ENTER, self.enter)
         self.splitter.bind(DGG.EXIT, self.exit)
         self.splitter.bind(DGG.B1PRESS, self.dragStart)
