@@ -10,7 +10,8 @@
             "displayName":"Header Height",
             "internalName":"headerheight",
             "editType":"float",
-            "postProcessFunctionName": "setCollapsed"
+            "postProcessFunctionName": "setCollapsed",
+            "defaultPixel": 20
         },
         {
             "displayName":"Collapsed",
@@ -34,6 +35,10 @@
             "internalName":"updateFrameSize",
             "editType":"command",
             "valueOptions": "updateFrameSize"
+        },
+        {
+        "internalName": "frameSize",
+        "defaultPixel": [-100, 100, -100, 100]
         }
     ],
     "//addItemFunctionName":"addItem",

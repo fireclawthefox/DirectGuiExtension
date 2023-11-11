@@ -44,11 +44,11 @@
     "addItemExtraArgs": {
         "row": {
             "type": "int",
-            "defaultValue": 1
+            "defaultValue": 0
         },
         "column": {
             "type": "int",
-            "defaultValue": 1
+            "defaultValue": 0
         },
         "widthInColumns": {
             "type": "int",

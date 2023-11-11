@@ -31,6 +31,10 @@
             "internalName":"reposition_tabs",
             "editType":"command",
             "valueOptions": "reposition_tabs"
+        },
+        {
+        "internalName": "scale",
+        "defaultPixel": 100
         }
     ],
     "addItemFunctionName":"add_tab",

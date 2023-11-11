@@ -1,5 +1,5 @@
 {
-    "name":"DirectOptionMenu",
+    "/name":"DirectOptionMenu",
     "baseWidget":"DirectFrame",
     "moduleName":"DirectOptionMenu",
     "displayName":"Option Menu",
@@ -10,7 +10,8 @@
             "displayName":"Items",
             "internalName":"items",
             "editType":"list",
-            "postProcessFunctionName": "setItems"
+            "postProcessFunctionName": "setItems",
+            "defaultValue": ["Item1"]
         },
         {
             "displayName":"Initial Item",

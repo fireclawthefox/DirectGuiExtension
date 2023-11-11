@@ -31,6 +31,10 @@
             "displayName":"Close Button scale",
             "internalName":"closeButtonScale",
             "editType":"float"
+        },
+        {
+        "internalName": "scale",
+        "defaultPixel": 200
         }
     ],
     "addItemNode": "canvas",

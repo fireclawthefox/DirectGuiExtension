@@ -64,6 +64,12 @@
         "editType":"optionMenu",
         "valueOptions":{"Vertical":"vertical", "Horizontal":"horizontal"},
         "postProcessFunctionName":"resetPosition"
-    }],
+    },
+    {
+        "internalName": "scale",
+        "defaultAspect": 0.1,
+        "defaultPixel": 100
+    }
+    ],
     "importPath":"from DirectGuiExtension.DirectSpinBox import DirectSpinBox"
 }

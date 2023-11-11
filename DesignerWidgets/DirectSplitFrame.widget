@@ -7,6 +7,11 @@
     "classFilePath":"DirectGuiExtension.DirectSplitFrame",
     "customProperties":[
         {
+            "displayName":"Pixel 2d",
+            "internalName":"pixel2d",
+            "editType":"bool"
+        },
+        {
             "displayName":"Show Splitter",
             "internalName":"showSplitter",
             "editType":"bool"
@@ -19,7 +24,8 @@
         {
             "displayName":"Splitter Width",
             "internalName":"splitterWidth",
-            "editType":"float"
+            "editType":"float",
+            "defaultPixel": 8
         },
         {
             "displayName":"Orientation",
@@ -57,6 +63,10 @@
             "displayName":"Second Frame Min Size",
             "internalName":"secondFrameMinSize",
             "editType":"float"
+        },
+        {
+        "internalName": "frameSize",
+        "defaultPixel": [-100, 100, -100, 100]
         }
     ],
     "//addItemFunctionName":"addItem",

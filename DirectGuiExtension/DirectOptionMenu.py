@@ -221,7 +221,9 @@ class DirectOptionMenu(DirectButton):
         # Needed attributes (such as minZ) won't be set unless the user has specified
         # items to display. Let's assert that we've given items to work with.
         items = self['items']
-        assert items and len(items) > 0, 'Cannot show an empty popup menu! You must add items!'
+        # assert items and len(items) > 0, 'Cannot show an empty popup menu! You must add items!'
+        if not items:
+            return
 
         # Show the menu
         self.popupMenu.show()

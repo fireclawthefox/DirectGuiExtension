@@ -35,6 +35,10 @@
             "displayName":"Today Frame Color",
             "internalName":"todayFrameColor",
             "editType":"base4"
+        },
+        {
+        "internalName": "scale",
+        "defaultPixel": 200
         }
     ],
     "importPath":"from DirectGuiExtension.DirectDatePicker import DirectDatePicker"

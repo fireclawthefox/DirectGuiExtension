@@ -17,6 +17,11 @@
             "internalName": "hide",
             "editType": "command",
             "valueOptions": "hide"
+        },
+        {
+            "internalName": "scale",
+            "defaultAspect": 0.1,
+            "defaultPixel": 100
         }
     ],
     "//addItemFunctionName": "addItem",
