@@ -24,7 +24,7 @@ class DirectDatePicker(DirectGridSizer):
             ('normalDayFrameColor', None, None),
             ('activeDayFrameColor', None, None),
             ('todayFrameColor', None, None),
-
+            ('frameSize',       (-1, 1, -1, 1),  self.setFrameSize)
             # Define type of DirectGuiWidget
             )
         # Merge keyword options with default options
@@ -32,9 +32,6 @@ class DirectDatePicker(DirectGridSizer):
 
         # Initialize superclasses
         DirectGridSizer.__init__(self, parent, numRows=7, numColumns=8, autoUpdateFrameSize=True, itemMargin=[0.005, 0.005, 0.005, 0.005])
-
-        # Call option initialization functions
-        self.initialiseoptions(DirectDatePicker)
 
         # set up the calendar
         self.cal = calendar.Calendar()
@@ -91,9 +88,6 @@ class DirectDatePicker(DirectGridSizer):
                 self.addItem(btn, row, column)
                 day += 1
 
-        self.ll = Point3(self["frameSize"][0], self["frameSize"][2])
-        self.ur = Point3(self["frameSize"][1], self["frameSize"][3])
-
         # the year picker
         self.yearPicker = self.createcomponent(
             'yearPicker', (), None,
@@ -110,10 +104,6 @@ class DirectDatePicker(DirectGridSizer):
             decButtonCallback=self.__changedYear,
             command=self.__changedYear)
         self.yearPicker.resetFrameSize()
-        self.yearPicker.setPos(
-            DGH.getRealLeft(self) + DGH.getRealWidth(self.yearPicker)/2,
-            0,
-            DGH.getRealTop(self) - DGH.getRealBottom(self.yearPicker))
 
         self.monthPicker = self.createcomponent(
             'monthPicker', (), None,
@@ -124,11 +114,21 @@ class DirectDatePicker(DirectGridSizer):
             relief=DGG.FLAT)
         self.monthPicker.resetFrameSize()
 
+        # Call option initialization functions
+        self.initialiseoptions(DirectDatePicker)
+
+        self.ll = Point3(self["frameSize"][0], self["frameSize"][2])
+        self.ur = Point3(self["frameSize"][1], self["frameSize"][3])
+
+        self.yearPicker.setPos(
+            DGH.getRealLeft(self) + DGH.getRealWidth(self.yearPicker) / 2,
+            0,
+            DGH.getRealTop(self) - DGH.getRealBottom(self.yearPicker))
+
         self.monthPicker.setPos(
             DGH.getRealRight(self) - DGH.getRealWidth(self.monthPicker),
             0,
             DGH.getRealTop(self) - DGH.getRealBottom(self.monthPicker) / 2)
-
 
         # set the current date if none is given at initialization
         self['year'] = now.year if self['year'] is None else self['year']

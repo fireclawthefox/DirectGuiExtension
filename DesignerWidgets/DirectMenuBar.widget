@@ -1,0 +1,20 @@
+{
+    "name":"DirectMenuBar",
+    "baseWidget":"DirectBoxSizer",
+    "moduleName":"DirectMenuBar",
+    "displayName":"Menu Bar",
+    "className":"DirectMenuBar",
+    "classFilePath":"DirectGuiExtension.DirectMenuBar",
+    "customProperties":[
+        {
+            "displayName":"Menu Items",
+            "internalName":"menuItems",
+            "editType":"list",
+            "postProcessFunctionName": "setItems"
+        }
+    ],
+    "addItemFunctionName":"addItem",
+    "removeItemFunctionName":"removeItem",
+    "//addItemNode": "firstFrame",
+    "importPath":"from DirectGuiExtension.DirectMenuBar import DirectMenuBar"
+}

@@ -1,27 +1,45 @@
 {
     "name":"DirectDatePicker",
+    "baseWidget":"DirectGridSizer",
     "moduleName":"DirectDatePicker",
     "displayName":"Calendar",
     "className":"DirectDatePicker",
-    "classfilePath":"DirectGuiExtension.DirectDatePicker",
-    "enabledProperties":[],
+    "classFilePath":"DirectGuiExtension.DirectDatePicker",
     "customProperties":[
         {
             "displayName":"Year",
-            "propertyName":"year",
-            "propertyType":"int"
+            "internalName":"year",
+            "editType":"int"
         },
         {
             "displayName":"Month",
-            "propertyName":"month",
-            "propertyType":"int"
+            "internalName":"month",
+            "editType":"int"
         },
         {
             "displayName":"Day",
-            "propertyName":"day",
-            "propertyType":"int"
-        }],
-    "addItemFunctionName":"",
-    "removeItemFunctionName":"",
+            "internalName":"day",
+            "editType":"int"
+        },
+        {
+            "displayName":"Normal Day Frame Color",
+            "internalName":"normalDayFrameColor",
+            "editType":"base4"
+        },
+        {
+            "displayName":"Active Day Frame Color",
+            "internalName":"activeDayFrameColor",
+            "editType":"base4"
+        },
+        {
+            "displayName":"Today Frame Color",
+            "internalName":"todayFrameColor",
+            "editType":"base4"
+        },
+        {
+        "internalName": "scale",
+        "defaultPixel": 200
+        }
+    ],
     "importPath":"from DirectGuiExtension.DirectDatePicker import DirectDatePicker"
 }

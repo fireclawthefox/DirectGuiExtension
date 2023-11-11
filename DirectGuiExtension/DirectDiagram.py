@@ -15,10 +15,10 @@ class DirectDiagram(DirectFrame):
     def __init__(self, parent = None, **kw):
         optiondefs = (
             # Define type of DirectGuiWidget
-            ('data',           [],          self.refresh),
-            ('numPosSteps',     0,          self.refresh),
+            ('data',           [1, -2, 3],  self.refresh),
+            ('numPosSteps',     4,          self.refresh),
             ('numPosStepsStep', 1,          self.refresh),
-            ('numNegSteps',     0,          self.refresh),
+            ('numNegSteps',     4,          self.refresh),
             ('numNegStepsStep', 1,          self.refresh),
             ('numtextScale',    0.05,       self.refresh),
             ('showDataNumbers', False,      self.refresh),
@@ -28,6 +28,7 @@ class DirectDiagram(DirectFrame):
             ('numberAreaWidth', 0.15,          self.refresh),
             #('numStates',      1,           None),
             #('state',          DGG.NORMAL,  None),
+            ("frameSize",       (-0.5, 0.5, -0.5, 0.5), self.setFrameSize)
             )
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
@@ -44,6 +45,11 @@ class DirectDiagram(DirectFrame):
         # Call option initialization functions
         self.initialiseoptions(DirectDiagram)
 
+        self.refresh()
+
+    def setData(self, data):
+        self["data"] = [float(value) for value in data]
+        self.refresh()
 
     def refresh(self):
         # sanity check so we don't get here to early
@@ -56,9 +62,9 @@ class DirectDiagram(DirectFrame):
         right = DGH.getRealRight(self)
         diagramLeft = left + textLeftSizeArea
 
-        xStep = (DGH.getRealWidth(self) - textLeftSizeArea) / (len(self['data'])-1)
-        posYRes = DGH.getRealTop(self) / (self['numPosSteps'] if self['numPosSteps'] > 0 else max(self['data']))
-        negYRes = DGH.getRealBottom(self) / (-self['numNegSteps'] if self['numNegSteps'] > 0 else min(self['data']))
+        xStep = (DGH.getRealWidth(self) - textLeftSizeArea) / max(1, len(self['data'])-1)
+        posYRes = DGH.getRealTop(self) / (self['numPosSteps'] if self['numPosSteps'] > 0 else int(max(self['data'])))
+        negYRes = DGH.getRealBottom(self) / (-self['numNegSteps'] if self['numNegSteps'] > 0 else int(min(self['data'])))
 
         # remove old content
         if self.lines is not None:

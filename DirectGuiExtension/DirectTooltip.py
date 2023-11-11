@@ -93,15 +93,18 @@ class DirectTooltip(DirectLabel):
             if self.getParent() == base.pixel2d:
                 x = base.win.getPointer(0).getX()
                 y = -base.win.getPointer(0).getY()
+                # set the text to the current mouse position
+                self.setPos(x + self.textXShift,
+                            0,
+                            y + self.textYShift)
             else:
                 x = (base.mouseWatcherNode.getMouseX()*aspX)
                 y = (base.mouseWatcherNode.getMouseY()*aspY)
-
-            # set the text to the current mouse position
-            self.setPos(
-                x + self.textXShift,
-                0,
-                y + self.textYShift)
+                # set the text to the current mouse position
+                self.setPos(base.aspect2d,
+                            x + self.textXShift,
+                            0,
+                            y + self.textYShift)
 
             bounds = self.getBounds()
             # bounds = left, right, bottom, top

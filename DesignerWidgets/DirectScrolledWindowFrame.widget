@@ -1,39 +1,42 @@
 {
     "name":"DirectScrolledWindowFrame",
+    "baseWidget":"DirectScrolledFrame",
     "moduleName":"DirectScrolledWindowFrame",
     "displayName":"Scrolled Window Frame",
     "className":"DirectScrolledWindowFrame",
-    "classfilePath":"DirectGuiExtension.DirectScrolledWindowFrame",
-    "enabledProperties":[""],
+    "classFilePath":"DirectGuiExtension.DirectScrolledWindowFrame",
     "customProperties":[
         {
-            "displayName":"Drag Aea Height",
-            "propertyName":"dragAreaHeight",
-            "propertyType":"float"
+            "displayName":"Drag Area Height",
+            "internalName":"dragAreaHeight",
+            "editType":"float"
         },
         {
             "displayName":"Resort z-order on drag",
-            "propertyName":"resortOnDrag",
-            "propertyType":"bool"
+            "internalName":"resortOnDrag",
+            "editType":"bool"
         },
         {
             "displayName":"Show Close Button",
-            "propertyName":"showClose",
-            "propertyType":"bool"
+            "internalName":"showClose",
+            "editType":"bool"
         },
         {
             "displayName":"Close Button Position",
-            "propertyName":"closeButtonPosition",
-            "propertyType":"selection",
-            "customSelectionDict":{"Left":"Left", "Right":"Right"}
-
+            "internalName":"closeButtonPosition",
+            "editType":"optionMenu",
+            "valueOptions":{"Left":"Left", "Right":"Right"}
         },
         {
             "displayName":"Close Button scale",
-            "propertyName":"closeButtonScale",
-            "propertyType":"float"
-        }],
-    "addItemFunctionName":"",
-    "removeItemFunctionName":"",
+            "internalName":"closeButtonScale",
+            "editType":"float"
+        },
+        {
+        "internalName": "scale",
+        "defaultPixel": 200
+        }
+    ],
+    "addItemNode": "canvas",
     "importPath":"from DirectGuiExtension.DirectScrolledWindowFrame import DirectScrolledWindowFrame"
 }

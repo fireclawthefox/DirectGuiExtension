@@ -1,34 +1,42 @@
 {
     "name":"DirectBoxSizer",
+    "baseWidget":"DirectFrame",
     "moduleName":"DirectBoxSizer",
     "displayName":"Box Sizer",
     "className":"DirectBoxSizer",
-    "classfilePath":"DirectGuiExtension.DirectBoxSizer",
-    "enabledProperties":["orientation"],
+    "classFilePath":"DirectGuiExtension.DirectBoxSizer",
     "customProperties":[
         {
+            "displayName":"Item Alignment",
+            "internalName":"itemAlign",
+            "internalType":"str",
+            "editType":"optionMenu",
+            "valueOptions":{"Center":1, "Left":2, "Right":4, "Middle":8, "Top":16, "Bottom":32, "Center/Middle":9, "Center/Top":17, "Center/Bottom":33, "Left/Middle":10, "Left/Top":18, "Left/Bottom":34, "Right/Middle":12, "Right/Top":20, "Right/Bottom":36}
+        },
+        {
             "displayName":"Refresh position",
-            "propertyName":"refresh",
-            "propertyType":"command",
-            "customCommandName":"refresh"
+            "internalName":"refresh",
+            "editType":"command",
+            "valueOptions":"refresh"
         },
         {
             "displayName":"Item Margin",
-            "propertyName":"itemMargin",
-            "propertyType":"vbase4"
+            "internalName":"itemMargin",
+            "internalType":"int",
+            "editType":"base4"
         },
         {
-            "displayName":"Item Alignment",
-            "propertyName":"itemAlign",
-            "propertyType":"selection",
-            "customSelectionDict":{"Center":1, "Left":2, "Right":4, "Middle":8, "Top":16, "Bottom":32, "Center/Middle":9, "Center/Top":17, "Center/Bottom":33, "Left/Middle":10, "Left/Top":18, "Left/Bottom":34, "Right/Middle":12, "Right/Top":20, "Right/Bottom":36}
+            "displayName":"Orientation",
+            "internalName":"orientation",
+            "editType":"optionMenu",
+            "valueOptions":{"Horizontal":"horizontal", "Horizontal Inverted":"horizontal_inverted", "Vertical":"vertical", "Vertical Inverted":"vertical_inverted"}
         },
         {
             "displayName":"Update Framesize with items",
-            "propertyName":"autoUpdateFrameSize",
-            "propertyType":"bool"
+            "internalName":"autoUpdateFrameSize",
+            "editType":"bool"
         }],
     "addItemFunctionName":"addItem",
     "removeItemFunctionName":"removeItem",
-    "importPath":"from customWidgetSample.DirectBoxSizer import DirectBoxSizer"
+    "importPath":"from DirectGuiExtension.DirectBoxSizer import DirectBoxSizer"
 }

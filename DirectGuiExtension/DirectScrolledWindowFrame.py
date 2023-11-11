@@ -31,13 +31,10 @@ class DirectScrolledWindowFrame(DirectScrolledFrame):
         # Initialize superclasses
         DirectScrolledFrame.__init__(self, parent)
 
-        # Call option initialization functions
-        self.initialiseoptions(DirectScrolledWindowFrame)
-
         self.dragDropTask = None
 
-        b = self.bounds
-        c = self.createcomponent(
+        b = self["frameSize"]
+        self.dragFrame = self.createcomponent(
             'dragFrame', (), 'dragFrame',
             DirectFrame,
             # set the parent of the frame to this class
@@ -50,8 +47,8 @@ class DirectScrolledWindowFrame(DirectScrolledFrame):
             # set the size
             frameSize=(b[0],b[1],0, self['dragAreaHeight']))
 
-        c.bind(DGG.B1PRESS, self.dragStart)
-        c.bind(DGG.B1RELEASE, self.dragStop)
+        self.dragFrame.bind(DGG.B1PRESS, self.dragStart)
+        self.dragFrame.bind(DGG.B1RELEASE, self.dragStop)
 
         scale = self['closeButtonScale']
         pos = (0,0,self['dragAreaHeight']*0.5)
@@ -59,14 +56,20 @@ class DirectScrolledWindowFrame(DirectScrolledFrame):
             pos = (b[1]-scale*0.5,0,self['dragAreaHeight']*0.5)
         elif self['closeButtonPosition'] == 'Left':
             pos = (b[0]+scale*0.5,0,self['dragAreaHeight']*0.5)
-        closeBtn = self.createcomponent(
+        self.closeButton = self.createcomponent(
             'closeButton', (), 'closeButton',
             DirectButton,
-            (c,),
+            (self.dragFrame,),
             text='x',
             scale=scale,
             pos=pos,
             command=self.destroy)
+
+        # Call option initialization functions
+        self.initialiseoptions(DirectScrolledWindowFrame)
+
+        self.dragFrame.setPos(0, 0, self.bounds[3])
+        self.dragFrame["frameSize"] = (self.bounds[0], self.bounds[1], 0, self['dragAreaHeight'])
 
     def dragStart(self, event):
         """

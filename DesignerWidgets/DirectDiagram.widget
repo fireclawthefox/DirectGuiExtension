@@ -1,18 +1,86 @@
 {
-    "name":"",
-    "moduleName":"",
-    "displayName":"",
-    "className":"",
-    "classfilePath":"",
-    "enabledProperties":[""],
+    "name":"DirectDiagram",
+    "baseWidget":"DirectFrame",
+    "moduleName":"DirectDiagram",
+    "displayName":"Diagram",
+    "className":"DirectDiagram",
+    "classFilePath":"DirectGuiExtension.DirectDiagram",
     "customProperties":[
         {
+            "displayName":"Data",
+            "internalName":"data",
+            "editType":"list",
+            "setFunctionName":"setData"
+        },
+        {
+            "displayName":"Num Pos Steps",
+            "internalName":"numPosSteps",
+            "editType":"int"
+        },
+        {
+            "displayName":"Num Pos Steps Step",
+            "internalName":"numPosStepsStep",
+            "editType":"int"
+        },
+        {
+            "displayName":"Num Neg Steps",
+            "internalName":"numNegSteps",
+            "editType":"int"
+        },
+        {
+            "displayName":"Num Neg Steps Step",
+            "internalName":"numNegStepsStep",
+            "editType":"int"
+        },
+        {
+            "displayName":"Num Text Scale",
+            "internalName":"numtextScale",
+            "editType":"float"
+        },
+        {
+            "displayName":"Show Data Numbers",
+            "internalName":"showDataNumbers",
+            "editType":"bool"
+        },
+        {
+            "displayName":"Data Num Text Scale",
+            "internalName":"dataNumtextScale",
+            "editType":"float"
+        },
+        {
+            "displayName":"Data Num Text Scale",
+            "internalName":"dataNumtextScale",
+            "editType":"float"
+        },
+        {
+            "displayName":"Step Accuracy",
+            "internalName":"stepAccuracy",
+            "editType":"int"
+        },
+        {
+            "displayName":"Step Format",
+            "internalName":"stepFormat",
+            "editType":"optionMenu",
+            "valueOptions":{"int":"int", "float":"float"},
+            "loaderFunc": "eval(value)",
+            "addToExtraOptions": true,
+            "canGetValueFromElement": false
+        },
+        {
+            "displayName":"Number Area Width",
+            "internalName":"numberAreaWidth",
+            "editType":"float"
+        },
+        {
             "displayName":"Refresh position",
-            "propertyName":"refresh",
-            "propertyType":"command",
-            "customCommandName":"refresh"
-        }],
-    "addItemFunctionName":"",
-    "removeItemFunctionName":"",
-    "importPath":"from DirectGuiExtension.Direct import Direct"
+            "internalName":"refresh",
+            "editType":"command",
+            "valueOptions":"refresh"
+        },
+        {
+            "internalName": "frameSize",
+            "defaultPixel": [-100, 100, -100, 100]
+        }
+    ],
+    "importPath":"from DirectGuiExtension.DirectDiagram import DirectDiagram"
 }
