@@ -2,6 +2,8 @@
 
 __all__ = ['DirectTreeView']
 
+import os
+
 from panda3d.core import *
 
 from direct.gui.DirectCheckBox import *
@@ -19,9 +21,10 @@ class DirectTreeView(DirectBoxSizer):
     which must return one widget that will be added as a tree node.
     """
     def __init__(self, parent = None, **kw):
+        root = Filename.fromOsSpecific(os.path.dirname(__file__))
         optiondefs = (
-            ('imageCollapse', "icons/minusnode.gif", DGG.INITOPT),
-            ('imageCollapsed', "icons/plusnode.gif", DGG.INITOPT),
+            ('imageCollapse', f"{root}/data/icons/minusnode.gif", DGG.INITOPT),
+            ('imageCollapsed', f"{root}/data/icons/plusnode.gif", DGG.INITOPT),
             ('tree',    {},   self.refreshTree),
             ('indentationWidth', 0.1, None)
             )

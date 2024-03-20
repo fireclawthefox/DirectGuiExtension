@@ -68,6 +68,8 @@ Options available for this Widget are:
 
 __all__ = ['DirectSpinBox']
 
+import os
+
 from panda3d.core import *
 from direct.gui import DirectGuiGlobals as DGG
 from direct.directnotify import DirectNotifyGlobal
@@ -136,7 +138,8 @@ class DirectSpinBox(DirectFrame):
             self.setValue(0)
 
         # This font contains the up and down arrow
-        shuttle_controls_font = loader.loadFont('shuttle_controls')
+        root = Filename.fromOsSpecific(os.path.dirname(__file__))
+        shuttle_controls_font = loader.loadFont(f'{root}/data/shuttle_controls')
 
         # create the up arrow button
         self.incButton = self.createcomponent(

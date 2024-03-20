@@ -1,0 +1,2 @@
+include DirectGuiExtension/data/*
+recursive-include DirectGuiExtension/data *
