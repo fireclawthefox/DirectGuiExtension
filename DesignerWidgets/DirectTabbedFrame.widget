@@ -37,7 +37,7 @@
         "defaultPixel": 100
         }
     ],
-    "addItemFunctionName":"add_tab",
+    "addItemFunctionName":"_add_tab",
     "//removeItemFunctionName":"close_tab",
     "addItemExtraArgs": {
         "tab_text": {

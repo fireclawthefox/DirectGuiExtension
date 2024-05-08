@@ -15,10 +15,10 @@ class DirectDiagram(DirectFrame):
     def __init__(self, parent = None, **kw):
         optiondefs = (
             # Define type of DirectGuiWidget
-            ('data',           [1, -2, 3],  self.refresh),
-            ('numPosSteps',     4,          self.refresh),
+            ('data',           [],  self.refresh),
+            ('numPosSteps',     1,          self.refresh),
             ('numPosStepsStep', 1,          self.refresh),
-            ('numNegSteps',     4,          self.refresh),
+            ('numNegSteps',     1,          self.refresh),
             ('numNegStepsStep', 1,          self.refresh),
             ('numtextScale',    0.05,       self.refresh),
             ('showDataNumbers', False,      self.refresh),

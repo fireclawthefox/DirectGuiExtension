@@ -62,6 +62,9 @@ class DirectSplitFrame(DirectFrame):
 
             ('suppressMouse',  0,           None)
             )
+
+        self._splitterWidth = 0
+
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
 
@@ -104,21 +107,22 @@ class DirectSplitFrame(DirectFrame):
         self.splitter.bind(DGG.B1PRESS, self.dragStart)
         self.splitter.bind(DGG.B1RELEASE, self.dragStop)
 
-        self.setSplitter(self['splitterWidth'])
+        self.setSplitter()
 
         self.skipInitRefresh = False
         # initialize once at the end
         self.refresh()
 
-    def setSplitter(self, width=0.02):
+    def setSplitter(self):
         if not hasattr(self, "splitter"): return
         if self['showSplitter'] == False:
             self.splitter.hide()
+            self._splitterWidth = self["splitterWidth"]
             self['splitterWidth'] = 0
         else:
             self.splitter.show()
-            self['splitterWidth'] = width
-
+            if self["splitterWidth"] == 0:
+                self['splitterWidth'] = self._splitterWidth
 
     def refresh(self):
         """

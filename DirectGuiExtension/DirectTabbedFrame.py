@@ -92,7 +92,10 @@ class DirectTabbedFrame(DirectFrame):
             self.start_idx += 1
             self.reposition_tabs()
 
-    def add_tab(self, content, tab_text, close_func=None):
+    def _add_tab(self, content, tab_text, close_func=None):  # method used by DirectGuiDesigner to add tabs
+        self.add_tab(tab_text, content, close_func)
+
+    def add_tab(self, tab_text, content, close_func=None):
         # create the new tab
         tab = self.createcomponent(
             'tab', (), 'tab',
