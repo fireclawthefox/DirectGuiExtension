@@ -41,7 +41,5 @@
             "editType":"base2"
         }
     ],
-    "//addItemFunctionName":"add_tab",
-    "//removeItemFunctionName":"close_tab",
     "importPath":"from DirectGuiExtension.DirectOptionMenu import DirectOptionMenu"
 }

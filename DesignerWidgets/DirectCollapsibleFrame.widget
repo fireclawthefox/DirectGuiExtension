@@ -41,7 +41,5 @@
         "defaultPixel": [-100, 100, -100, 100]
         }
     ],
-    "//addItemFunctionName":"addItem",
-    "//removeItemFunctionName":"removeItem",
     "importPath":"from DirectGuiExtension.DirectCollapsibleFrame import DirectCollapsibleFrame"
 }

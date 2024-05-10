@@ -56,11 +56,6 @@ class DirectCollapsibleFrame(DirectFrame):
 
         self.originalFrameSize = self['frameSize']
 
-    def addItem(self, element, *args):
-        print(element)
-        for arg in args:
-            print(type(arg), arg)
-
     def updateFrameSize(self):
         self.toggleCollapseButton['frameSize'] = (
             DGH.getRealLeft(self), DGH.getRealRight(self),

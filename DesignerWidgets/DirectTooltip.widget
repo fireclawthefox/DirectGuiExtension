@@ -24,7 +24,5 @@
             "defaultPixel": 100
         }
     ],
-    "//addItemFunctionName": "addItem",
-    "//removeItemFunctionName": "removeItem",
     "importPath": "from DirectGuiExtension.DirectTooltip import DirectTooltip"
 }

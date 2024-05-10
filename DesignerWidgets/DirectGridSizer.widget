@@ -40,7 +40,6 @@
         }
     ],
     "addItemFunctionName": "addItem",
-    "//addItemExtraArgs": [1, 1],
     "addItemExtraArgs": {
         "row": {
             "type": "int",

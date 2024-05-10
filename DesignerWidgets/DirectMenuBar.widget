@@ -15,6 +15,5 @@
     ],
     "addItemFunctionName":"addItem",
     "removeItemFunctionName":"removeItem",
-    "//addItemNode": "firstFrame",
     "importPath":"from DirectGuiExtension.DirectMenuBar import DirectMenuBar"
 }

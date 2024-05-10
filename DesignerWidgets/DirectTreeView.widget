@@ -30,7 +30,5 @@
             "valueOptions": "refreshTree"
         }
     ],
-    "//addItemFunctionName": "addItem",
-    "//removeItemFunctionName": "removeItem",
     "importPath": "from DirectGuiExtension.DirectTreeView import DirectTreeView"
 }

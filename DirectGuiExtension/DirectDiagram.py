@@ -16,9 +16,9 @@ class DirectDiagram(DirectFrame):
         optiondefs = (
             # Define type of DirectGuiWidget
             ('data',           [],  self.refresh),
-            ('numPosSteps',     1,          self.refresh),
+            ('numPosSteps',     0,          self.refresh),
             ('numPosStepsStep', 1,          self.refresh),
-            ('numNegSteps',     1,          self.refresh),
+            ('numNegSteps',     0,          self.refresh),
             ('numNegStepsStep', 1,          self.refresh),
             ('numtextScale',    0.05,       self.refresh),
             ('showDataNumbers', False,      self.refresh),
@@ -62,9 +62,22 @@ class DirectDiagram(DirectFrame):
         right = DGH.getRealRight(self)
         diagramLeft = left + textLeftSizeArea
 
+        # If there is no data we can not calculate 'numPosSteps' and 'numNegSteps'
+        if not self["data"] and self["numPosSteps"] <= 0:
+            numPosSteps = 5
+        else:
+            numPosSteps = self['numPosSteps']
+
+        if not self["data"] and self["numNegSteps"] <= 0:
+            numNegSteps = 5
+        else:
+            numNegSteps = self['numNegSteps']
+
         xStep = (DGH.getRealWidth(self) - textLeftSizeArea) / max(1, len(self['data'])-1)
-        posYRes = DGH.getRealTop(self) / (self['numPosSteps'] if self['numPosSteps'] > 0 else int(max(self['data'])))
-        negYRes = DGH.getRealBottom(self) / (-self['numNegSteps'] if self['numNegSteps'] > 0 else int(min(self['data'])))
+        posYRes = numPosSteps if numPosSteps > 0 else int(max(self['data']))
+        posYRes = DGH.getRealTop(self) / (posYRes if posYRes != 0 else 1)
+        negYRes = -numNegSteps if numNegSteps > 0 else int(min(self['data']))
+        negYRes = DGH.getRealBottom(self) / (negYRes if negYRes != 0 else 1)
 
         # remove old content
         if self.lines is not None:
@@ -107,7 +120,7 @@ class DirectDiagram(DirectFrame):
 
         # calculate the positive measure lines and add the numbers
         measureLineData = []
-        numSteps = (self['numPosSteps'] if self['numPosSteps'] >0 else math.floor(max(self['data']))) + 1
+        numSteps = (numPosSteps if numPosSteps > 0 else math.floor(max(self['data']))) + 1
         for i in range(1, numSteps, self['numPosStepsStep']):
             measureLineData.append(
                 (
@@ -117,7 +130,7 @@ class DirectDiagram(DirectFrame):
             )
 
             calcBase = 1 / DGH.getRealTop(self)
-            maxData = self['numPosSteps'] if self['numPosSteps'] >0 else max(self['data'])
+            maxData = numPosSteps if numPosSteps > 0 else max(self['data'])
             value = self['stepFormat'](round(i * posYRes * calcBase * maxData, self['stepAccuracy']))
             y = i*posYRes
             self.xDescriptions.append(
@@ -132,7 +145,7 @@ class DirectDiagram(DirectFrame):
                     state = 'normal'))
 
         # calculate the negative measure lines and add the numbers
-        numSteps = (self['numNegSteps'] if self['numNegSteps'] >0 else math.floor(abs(min(self['data'])))) + 1
+        numSteps = (numNegSteps if numNegSteps > 0 else math.floor(abs(min(self['data'])))) + 1
         for i in range(1, numSteps, self['numNegStepsStep']):
             measureLineData.append(
                 (
@@ -142,7 +155,7 @@ class DirectDiagram(DirectFrame):
             )
 
             calcBase = 1 / DGH.getRealBottom(self)
-            maxData = self['numPosSteps'] if self['numPosSteps'] >0 else max(self['data'])
+            maxData = numPosSteps if numPosSteps > 0 else max(self['data'])
             value = self['stepFormat'](round(i * negYRes * calcBase * maxData, self['stepAccuracy']))
             y = -i*negYRes
             self.xDescriptions.append(
