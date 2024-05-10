@@ -1,0 +1,48 @@
+{
+    "name":"DirectTabbedFrame",
+    "baseWidget":"DirectFrame",
+    "moduleName":"DirectTabbedFrame",
+    "displayName":"Tabbed Frame",
+    "className":"DirectTabbedFrame",
+    "classFilePath":"DirectGuiExtension.DirectTabbedFrame",
+    "customProperties":[
+        {
+            "displayName":"Tab Height",
+            "internalName":"tabHeight",
+            "editType":"float"
+        },
+        {
+            "displayName":"Show Close On Tabs",
+            "internalName":"showCloseOnTabs",
+            "editType":"bool"
+        },
+        {
+            "displayName":"Selected Tab Color",
+            "internalName":"selectedTabColor",
+            "editType":"base4"
+        },
+        {
+            "displayName":"Unselected Tab Color",
+            "internalName":"unselectedTabColor",
+            "editType":"base4"
+        },
+        {
+            "displayName":"Reposition Tabs",
+            "internalName":"reposition_tabs",
+            "editType":"command",
+            "valueOptions": "reposition_tabs"
+        },
+        {
+        "internalName": "scale",
+        "defaultPixel": 100
+        }
+    ],
+    "addItemFunctionName":"_add_tab",
+    "addItemExtraArgs": {
+        "tab_text": {
+            "type": "str",
+            "defaultValue": "tab"
+        }
+    },
+    "importPath":"from DirectGuiExtension.DirectTabbedFrame import DirectTabbedFrame"
+}

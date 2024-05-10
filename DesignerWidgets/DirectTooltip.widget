@@ -1,0 +1,28 @@
+{
+    "name": "DirectTooltip",
+    "baseWidget": "DirectLabel",
+    "moduleName": "DirectTooltip",
+    "displayName": "Tooltip",
+    "className": "DirectTooltip",
+    "classFilePath": "DirectGuiExtension.DirectTooltip",
+    "customProperties": [
+        {
+            "displayName": "Show",
+            "internalName": "show",
+            "editType": "command",
+            "valueOptions": "show"
+        },
+        {
+            "displayName": "Hide",
+            "internalName": "hide",
+            "editType": "command",
+            "valueOptions": "hide"
+        },
+        {
+            "internalName": "scale",
+            "defaultAspect": 0.1,
+            "defaultPixel": 100
+        }
+    ],
+    "importPath": "from DirectGuiExtension.DirectTooltip import DirectTooltip"
+}

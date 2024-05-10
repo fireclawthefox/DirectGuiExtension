@@ -1,0 +1,34 @@
+{
+    "name": "DirectTreeView",
+    "baseWidget": "DirectBoxSizer",
+    "moduleName": "DirectTreeView",
+    "displayName": "Tree View",
+    "className": "DirectTreeView",
+    "classFilePath": "DirectGuiExtension.DirectTreeView",
+    "customProperties": [
+        {
+            "displayName": "Image Collapse",
+            "internalName": "imageCollapse",
+            "editType": "str",
+            "isInitOption": true
+        },
+        {
+            "displayName": "Image Collapsed",
+            "internalName": "imageCollapsed",
+            "editType": "str",
+            "isInitOption": true
+        },
+        {
+            "displayName": "Indentation Width",
+            "internalName": "indentationWidth",
+            "editType": "float"
+        },
+        {
+            "displayName": "Refresh Tree",
+            "internalName": "refreshTree",
+            "editType": "command",
+            "valueOptions": "refreshTree"
+        }
+    ],
+    "importPath": "from DirectGuiExtension.DirectTreeView import DirectTreeView"
+}

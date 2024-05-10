@@ -1,43 +1,63 @@
 {
-    "name":"DirectGridSizer",
-    "moduleName":"DirectGridSizer",
-    "displayName":"Grid Sizer",
-    "className":"DirectGridSizer",
-    "classfilePath":"DirectGuiExtension.DirectGridSizer",
-    "enabledProperties":[""],
-    "customProperties":[
+    "name": "DirectGridSizer",
+    "baseWidget": "DirectFrame",
+    "moduleName": "DirectGridSizer",
+    "displayName": "Grid Sizer",
+    "className": "DirectGridSizer",
+    "classFilePath": "DirectGuiExtension.DirectGridSizer",
+    "customProperties": [
         {
-            "displayName":"Refresh position",
-            "propertyName":"refresh",
-            "propertyType":"command",
-            "customCommandName":"refresh"
+            "displayName": "Align",
+            "internalName": "boxAlign",
+            "editType": "optionMenu",
+            "valueOptions": {"Left": "left", "Right": "right"}
         },
         {
-            "displayName":"Item Margin",
-            "propertyName":"itemMargin",
-            "propertyType":"vbase4"
+            "displayName": "Refresh position",
+            "internalName": "refresh",
+            "editType": "command",
+            "valueOptions": "refresh"
         },
         {
-            "displayName":"Number of Rows",
-            "propertyName":"numRows",
-            "propertyType":"int"
+            "displayName": "Item Margin",
+            "internalName": "itemMargin",
+            "editType": "base4"
         },
         {
-            "displayName":"Number of Columns",
-            "propertyName":"numColumns",
-            "propertyType":"int"
+            "displayName": "Number of Rows",
+            "internalName": "numRows",
+            "editType": "int"
         },
         {
-            "displayName":"Update Framesize with items",
-            "propertyName":"autoUpdateFrameSize",
-            "propertyType":"bool"
+            "displayName": "Number of Columns",
+            "internalName": "numColumns",
+            "editType": "int"
         },
         {
-            "displayName":"Align ",
-            "propertyName":"boxAlign",
-            "propertyType":"align"
-        }],
-    "addItemFunctionName":"addItem",
-    "removeItemFunctionName":"removeItem",
-    "importPath":"from customWidgetSample.DirectGridSizer import DirectGridSizer"
+            "displayName": "Update Framesize with items",
+            "internalName": "autoUpdateFrameSize",
+            "editType": "bool"
+        }
+    ],
+    "addItemFunctionName": "addItem",
+    "addItemExtraArgs": {
+        "row": {
+            "type": "int",
+            "defaultValue": 0
+        },
+        "column": {
+            "type": "int",
+            "defaultValue": 0
+        },
+        "widthInColumns": {
+            "type": "int",
+            "defaultValue": 1
+        },
+        "heightInRows": {
+            "type": "int",
+            "defaultValue": 1
+        }
+    },
+    "removeItemFunctionName": "removeItem",
+    "importPath": "from DirectGuiExtension.DirectGridSizer import DirectGridSizer"
 }

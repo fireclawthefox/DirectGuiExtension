@@ -44,7 +44,7 @@ class DirectSplitFrame(DirectFrame):
             ('state',          DGG.NORMAL,  None),
             ('borderWidth',    (0, 0),      self.setBorderWidth),
             ('orientation', DGG.HORIZONTAL, self.refresh),
-            ('framesize',      (-1,1,-1,1), None),
+            ('frameSize',      (-1,1,-1,1), None),
 
             # TODO: Change this. This only works for certain circumstances
             ('pixel2d',        False,       self.refresh),
@@ -60,16 +60,16 @@ class DirectSplitFrame(DirectFrame):
             ('firstFrameMinSize', None,     None),
             ('secondFrameMinSize', None,    None),
 
-            ('suppressMouse',  0,           None),
+            ('suppressMouse',  0,           None)
             )
+
+        self._splitterWidth = 0
+
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
 
         # Initialize superclasses
         DirectFrame.__init__(self, parent)
-
-        # Call option initialization functions
-        self.initialiseoptions(DirectSplitFrame)
 
         self.resetFrameSize()
 
@@ -98,26 +98,31 @@ class DirectSplitFrame(DirectFrame):
             text_scale = 0.05,
             text_align = TextNode.ACenter,
             state = 'normal')
+
+        # Call option initialization functions
+        self.initialiseoptions(DirectSplitFrame)
+
         self.splitter.bind(DGG.ENTER, self.enter)
         self.splitter.bind(DGG.EXIT, self.exit)
         self.splitter.bind(DGG.B1PRESS, self.dragStart)
         self.splitter.bind(DGG.B1RELEASE, self.dragStop)
 
-        self.setSplitter(self['splitterWidth'])
+        self.setSplitter()
 
         self.skipInitRefresh = False
         # initialize once at the end
         self.refresh()
 
-    def setSplitter(self, width=0.02):
+    def setSplitter(self):
         if not hasattr(self, "splitter"): return
         if self['showSplitter'] == False:
             self.splitter.hide()
+            self._splitterWidth = self["splitterWidth"]
             self['splitterWidth'] = 0
         else:
             self.splitter.show()
-            self['splitterWidth'] = width
-
+            if self["splitterWidth"] == 0:
+                self['splitterWidth'] = self._splitterWidth
 
     def refresh(self):
         """
@@ -133,6 +138,7 @@ class DirectSplitFrame(DirectFrame):
 
         if self["orientation"] == DGG.HORIZONTAL:
             self.splitter.setX(self["splitterPos"])
+            self.splitter.setZ(0)
             self.checkMinSIze()
 
             if self["pixel2d"]:
@@ -155,6 +161,7 @@ class DirectSplitFrame(DirectFrame):
 
         elif self["orientation"] == DGG.VERTICAL:
             self.splitter.setZ(self["splitterPos"])
+            self.splitter.setX(0)
             self.checkMinSIze()
 
             if self["pixel2d"]:

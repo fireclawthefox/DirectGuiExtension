@@ -1,0 +1,74 @@
+{
+    "name":"DirectSplitFrame",
+    "baseWidget":"DirectFrame",
+    "moduleName":"DirectSplitFrame",
+    "displayName":"Split Frame",
+    "className":"DirectSplitFrame",
+    "classFilePath":"DirectGuiExtension.DirectSplitFrame",
+    "customProperties":[
+        {
+            "displayName":"Pixel 2d",
+            "internalName":"pixel2d",
+            "editType":"bool"
+        },
+        {
+            "displayName":"Show Splitter",
+            "internalName":"showSplitter",
+            "editType":"bool"
+        },
+        {
+            "displayName":"Splitter Pos",
+            "internalName":"splitterPos",
+            "editType":"float"
+        },
+        {
+            "displayName":"Splitter Width",
+            "internalName":"splitterWidth",
+            "editType":"float",
+            "defaultPixel": 8
+        },
+        {
+            "displayName":"Orientation",
+            "internalName":"orientation",
+            "editType":"optionMenu",
+            "valueOptions":{"Horizontal":"horizontal", "Vertical":"vertical"},
+            "postProcessFunctionName": "refresh"
+        },
+        {
+            "displayName":"Splitter Color",
+            "internalName":"splitterColor",
+            "editType":"base4"
+        },
+        {
+            "displayName":"Splitter Highlight Color",
+            "internalName":"splitterHighlightColor",
+            "editType":"base4"
+        },
+        {
+            "displayName":"First Frame Update Size Func",
+            "internalName":"firstFrameUpdateSizeFunc",
+            "internalType":"function"
+        },
+        {
+            "displayName":"Second Frame Update Size Func",
+            "internalName":"secondFrameUpdateSizeFunc",
+            "internalType":"function"
+        },
+        {
+            "displayName":"First Frame Min Size",
+            "internalName":"firstFrameMinSize",
+            "editType":"float"
+        },
+        {
+            "displayName":"Second Frame Min Size",
+            "internalName":"secondFrameMinSize",
+            "editType":"float"
+        },
+        {
+        "internalName": "frameSize",
+        "defaultPixel": [-100, 100, -100, 100]
+        }
+    ],
+    "addItemNode": ["firstFrame", "secondFrame"],
+    "importPath":"from DirectGuiExtension.DirectSplitFrame import DirectSplitFrame"
+}

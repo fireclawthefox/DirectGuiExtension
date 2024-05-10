@@ -1,0 +1,45 @@
+{
+    "name":"DirectCollapsibleFrame",
+    "baseWidget":"DirectFrame",
+    "moduleName":"DirectCollapsibleFrame",
+    "displayName":"Collapsible Frame",
+    "className":"DirectCollapsibleFrame",
+    "classFilePath":"DirectGuiExtension.DirectCollapsibleFrame",
+    "customProperties":[
+        {
+            "displayName":"Header Height",
+            "internalName":"headerheight",
+            "editType":"float",
+            "postProcessFunctionName": "setCollapsed",
+            "defaultPixel": 20
+        },
+        {
+            "displayName":"Collapsed",
+            "internalName":"collapsed",
+            "editType":"bool"
+        },
+        {
+            "displayName":"Collapse Text",
+            "internalName":"collapseText",
+            "editType":"str",
+            "postProcessFunctionName": "setCollapsed"
+        },
+        {
+            "displayName":"Extend Text",
+            "internalName":"extendText",
+            "editType":"str",
+            "postProcessFunctionName": "setCollapsed"
+        },
+        {
+            "displayName":"Update Frame Size",
+            "internalName":"updateFrameSize",
+            "editType":"command",
+            "valueOptions": "updateFrameSize"
+        },
+        {
+        "internalName": "frameSize",
+        "defaultPixel": [-100, 100, -100, 100]
+        }
+    ],
+    "importPath":"from DirectGuiExtension.DirectCollapsibleFrame import DirectCollapsibleFrame"
+}

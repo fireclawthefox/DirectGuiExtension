@@ -15,7 +15,7 @@ class DirectDiagram(DirectFrame):
     def __init__(self, parent = None, **kw):
         optiondefs = (
             # Define type of DirectGuiWidget
-            ('data',           [],          self.refresh),
+            ('data',           [],  self.refresh),
             ('numPosSteps',     0,          self.refresh),
             ('numPosStepsStep', 1,          self.refresh),
             ('numNegSteps',     0,          self.refresh),
@@ -28,6 +28,7 @@ class DirectDiagram(DirectFrame):
             ('numberAreaWidth', 0.15,          self.refresh),
             #('numStates',      1,           None),
             #('state',          DGG.NORMAL,  None),
+            ("frameSize",       (-0.5, 0.5, -0.5, 0.5), self.setFrameSize)
             )
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
@@ -44,6 +45,11 @@ class DirectDiagram(DirectFrame):
         # Call option initialization functions
         self.initialiseoptions(DirectDiagram)
 
+        self.refresh()
+
+    def setData(self, data):
+        self["data"] = [float(value) for value in data]
+        self.refresh()
 
     def refresh(self):
         # sanity check so we don't get here to early
@@ -56,9 +62,22 @@ class DirectDiagram(DirectFrame):
         right = DGH.getRealRight(self)
         diagramLeft = left + textLeftSizeArea
 
-        xStep = (DGH.getRealWidth(self) - textLeftSizeArea) / (len(self['data'])-1)
-        posYRes = DGH.getRealTop(self) / (self['numPosSteps'] if self['numPosSteps'] > 0 else max(self['data']))
-        negYRes = DGH.getRealBottom(self) / (-self['numNegSteps'] if self['numNegSteps'] > 0 else min(self['data']))
+        # If there is no data we can not calculate 'numPosSteps' and 'numNegSteps'
+        if not self["data"] and self["numPosSteps"] <= 0:
+            numPosSteps = 5
+        else:
+            numPosSteps = self['numPosSteps']
+
+        if not self["data"] and self["numNegSteps"] <= 0:
+            numNegSteps = 5
+        else:
+            numNegSteps = self['numNegSteps']
+
+        xStep = (DGH.getRealWidth(self) - textLeftSizeArea) / max(1, len(self['data'])-1)
+        posYRes = numPosSteps if numPosSteps > 0 else int(max(self['data']))
+        posYRes = DGH.getRealTop(self) / (posYRes if posYRes != 0 else 1)
+        negYRes = -numNegSteps if numNegSteps > 0 else int(min(self['data']))
+        negYRes = DGH.getRealBottom(self) / (negYRes if negYRes != 0 else 1)
 
         # remove old content
         if self.lines is not None:
@@ -101,7 +120,7 @@ class DirectDiagram(DirectFrame):
 
         # calculate the positive measure lines and add the numbers
         measureLineData = []
-        numSteps = (self['numPosSteps'] if self['numPosSteps'] >0 else math.floor(max(self['data']))) + 1
+        numSteps = (numPosSteps if numPosSteps > 0 else math.floor(max(self['data']))) + 1
         for i in range(1, numSteps, self['numPosStepsStep']):
             measureLineData.append(
                 (
@@ -111,7 +130,7 @@ class DirectDiagram(DirectFrame):
             )
 
             calcBase = 1 / DGH.getRealTop(self)
-            maxData = self['numPosSteps'] if self['numPosSteps'] >0 else max(self['data'])
+            maxData = numPosSteps if numPosSteps > 0 else max(self['data'])
             value = self['stepFormat'](round(i * posYRes * calcBase * maxData, self['stepAccuracy']))
             y = i*posYRes
             self.xDescriptions.append(
@@ -126,7 +145,7 @@ class DirectDiagram(DirectFrame):
                     state = 'normal'))
 
         # calculate the negative measure lines and add the numbers
-        numSteps = (self['numNegSteps'] if self['numNegSteps'] >0 else math.floor(abs(min(self['data'])))) + 1
+        numSteps = (numNegSteps if numNegSteps > 0 else math.floor(abs(min(self['data'])))) + 1
         for i in range(1, numSteps, self['numNegStepsStep']):
             measureLineData.append(
                 (
@@ -136,7 +155,7 @@ class DirectDiagram(DirectFrame):
             )
 
             calcBase = 1 / DGH.getRealBottom(self)
-            maxData = self['numPosSteps'] if self['numPosSteps'] >0 else max(self['data'])
+            maxData = numPosSteps if numPosSteps > 0 else max(self['data'])
             value = self['stepFormat'](round(i * negYRes * calcBase * maxData, self['stepAccuracy']))
             y = -i*negYRes
             self.xDescriptions.append(
