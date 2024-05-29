@@ -215,68 +215,74 @@ class DirectBoxSizer(DirectFrame):
         # Horizontal - Left to Right placement
         # get the left side of the box sizer frame
         nextX = DGH.getRealLeft(self)
+        itemMargin = self["itemMargin"]
 
         # go through all items in the box and place them
         for item in self["items"]:
             # place the element and calculate the next x position
             y = self.__get_vertical_item_alignment(item.element)
-            item.element.setPos(nextX - DGH.getRealLeft(item.element), 0, y)
-            nextX += DGH.getRealWidth(item.element)
-
+            item.element.setPos(nextX - DGH.getRealLeft(item.element) + itemMargin[0], 0, y)
+            nextX += DGH.getRealWidth(item.element) + itemMargin[1] + itemMargin[0]
 
     def __refresh_horizontal_rtl(self):
         # Horizontal - Right to Left
         # get the right side of the box sizer frame
         nextX = DGH.getRealRight(self)
+        itemMargin = self["itemMargin"]
 
         # go through all items in the box and place them
         for item in self["items"]:
             # place the element and calculate the next x position
             y = self.__get_vertical_item_alignment(item.element)
-            item.element.setPos(nextX - DGH.getRealRight(item.element), 0, y)
-            nextX -= DGH.getRealWidth(item.element)
+            item.element.setPos(nextX - DGH.getRealRight(item.element) - itemMargin[1], 0, y)
+            nextX -= DGH.getRealWidth(item.element) + itemMargin[1] + itemMargin[0]
 
     # VERTICAL
     def __refresh_vertical_ttb(self):
         # Vertical - Top to Bottom
         # get the top side of the box sizer frame
         nextY = DGH.getRealTop(self)
+        itemMargin = self["itemMargin"]
 
         # go through all items in the box and place them
         for item in self["items"]:
             # place the element and calculate the next y position
             x = self.__get_horizontal_item_alignment(item.element)
-            item.element.setPos(x, 0, nextY - DGH.getRealTop(item.element))
-            nextY -= DGH.getRealHeight(item.element)
+            item.element.setPos(x, 0, nextY - DGH.getRealTop(item.element) - itemMargin[3])
+            nextY -= DGH.getRealHeight(item.element) + itemMargin[2] + itemMargin[3]
 
     def __refresh_vertical_btt(self):
         # Vertical - Bottom to Top
         # get the bottom side of the box sizer frame
         nextY = DGH.getRealBottom(self)
+        itemMargin = self["itemMargin"]
 
         # go through all items in the box and place them
         for item in self["items"]:
             # place the element and calculate the next y position
             x = self.__get_horizontal_item_alignment(item.element)
-            item.element.setPos(x, 0, nextY - DGH.getRealBottom(item.element))
-            nextY += DGH.getRealHeight(item.element)
+            item.element.setPos(x, 0, nextY - DGH.getRealBottom(item.element) + itemMargin[2])
+            nextY += DGH.getRealHeight(item.element) + itemMargin[2] + itemMargin[3]
 
     #
     # ITEM ALIGN POSITION CALCULATIONS
     #
     def __get_horizontal_item_alignment(self, curElem):
+        itemMargin = self["itemMargin"]
         # Horizontal Alingment
         if self["itemAlign"] & self.A_Left:
             # get the left side of the frame
             x = self["frameSize"][0]
             # shift x right to be aligned with the items left side
             x -= DGH.getRealLeft(curElem)
+            x += itemMargin[0]
             return x
         elif self["itemAlign"] & self.A_Right:
             # get the right side of the frame
             x = self["frameSize"][1]
             # shift x left to be aligned with the items right side
             x -= DGH.getRealRight(curElem)
+            x -= itemMargin[0]
             return x
         elif self["itemAlign"] & self.A_Center:
             # aligned by the center of the frame
@@ -287,10 +293,12 @@ class DirectBoxSizer(DirectFrame):
             item_l = DGH.getRealLeft(curElem)
             item_r = DGH.getRealRight(curElem)
             x += (item_l + item_r) / 2
+            x -= itemMargin[0]
             return x
         return 0
 
     def __get_vertical_item_alignment(self, curElem):
+        itemMargin = self["itemMargin"]
         # Vertical Alingment
         if self["itemAlign"] & self.A_Bottom:
             # Vertical adjustment to the box' size
@@ -303,6 +311,7 @@ class DirectBoxSizer(DirectFrame):
             y = DGH.getRealTop(self)# self["frameSize"][3]
             # shift y down to be aligned with the items top side
             y -= DGH.getRealTop(curElem)
+            y -= itemMargin[3]
             return y
         elif self["itemAlign"] & self.A_Middle:
             # Items are alligned by their center

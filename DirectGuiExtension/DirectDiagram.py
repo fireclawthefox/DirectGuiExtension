@@ -11,6 +11,7 @@ from . import DirectGuiHelper as DGH
 from direct.directtools.DirectGeometry import LineNodePath
 
 class DirectDiagram(DirectFrame):
+    DefDynGroups = ('value',)
 
     def __init__(self, parent = None, **kw):
         optiondefs = (
@@ -31,7 +32,7 @@ class DirectDiagram(DirectFrame):
             ("frameSize",       (-0.5, 0.5, -0.5, 0.5), self.setFrameSize)
             )
         # Merge keyword options with default options
-        self.defineoptions(kw, optiondefs)
+        self.defineoptions(kw, optiondefs, dynamicGroups=self.DefDynGroups)
 
         self.lines = None
         self.measureLines = None
@@ -109,7 +110,7 @@ class DirectDiagram(DirectFrame):
 
         self.xDescriptions.append(
             self.createcomponent(
-                'value0', (), None,
+                'value0', (), "value",
                 DirectLabel, (self,),
                 text = "0",
                 text_scale = self['numtextScale'],
@@ -135,7 +136,7 @@ class DirectDiagram(DirectFrame):
             y = i*posYRes
             self.xDescriptions.append(
                 self.createcomponent(
-                    'value{}'.format(value), (), None,
+                    'value{}'.format(value), (), "value",
                     DirectLabel, (self,),
                     text = str(value),
                     text_scale = self['numtextScale'],
@@ -160,7 +161,7 @@ class DirectDiagram(DirectFrame):
             y = -i*negYRes
             self.xDescriptions.append(
                 self.createcomponent(
-                    'value{}'.format(value), (), None,
+                    'value{}'.format(value), (), "value",
                     DirectLabel, (self,),
                     text = str(value),
                     text_scale = self['numtextScale'],
@@ -191,7 +192,7 @@ class DirectDiagram(DirectFrame):
                 value = round(self['data'][i-1], self['stepAccuracy'])
                 self.points.append(
                     self.createcomponent(
-                        'value{}'.format(value), (), None,
+                        'value{}'.format(value), (), "value",
                         DirectLabel, (self,),
                         text = str(value),
                         text_scale = self['dataNumtextScale'],

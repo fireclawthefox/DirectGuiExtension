@@ -21,9 +21,9 @@ class DirectDatePicker(DirectGridSizer):
             ('month',   None,   self.refreshPicker),
             ('day',     None,   self.refreshPicker),
 
-            ('normalDayFrameColor', None, None),
-            ('activeDayFrameColor', None, None),
-            ('todayFrameColor', None, None),
+            ('normalDayFrameColor', None, self.refreshPicker),
+            ('activeDayFrameColor', None, self.refreshPicker),
+            ('todayFrameColor', None, self.refreshPicker),
             ('frameSize',       (-1, 1, -1, 1),  self.setFrameSize)
             # Define type of DirectGuiWidget
             )
@@ -65,6 +65,7 @@ class DirectDatePicker(DirectGridSizer):
 
         # add the week header
         weekDays = calendar.weekheader(2).split(" ")
+        self._weekNumber = -1
         self.headers = []
         for i in range(1, 8):
             lbl = self.createLabel(str(weekDays[i-1]))
@@ -100,9 +101,7 @@ class DirectDatePicker(DirectGridSizer):
             buttonOrientation=DGG.HORIZONTAL,
             valueEntry_text_align=TextNode.ACenter,
             borderWidth=(.1,.1),
-            incButtonCallback=self.__changedYear,
-            decButtonCallback=self.__changedYear,
-            command=self.__changedYear)
+            valueChangeCallback=self.__changedYear)
         self.yearPicker.resetFrameSize()
 
         self.monthPicker = self.createcomponent(
@@ -142,7 +141,7 @@ class DirectDatePicker(DirectGridSizer):
 
     def createDateButton(self, day, enabled=True):
         return self.createcomponent(
-            'day{}'.format(day), (), None,
+            'day{}'.format(day), (), "day",
             DirectButton, (self,),
             text=str(day),
             text_scale=0.05,
@@ -155,8 +154,9 @@ class DirectDatePicker(DirectGridSizer):
             extraArgs=[day])
 
     def createLabel(self, txt):
+        self._weekNumber += 1
         return self.createcomponent(
-            'weekNumber', (), None,
+            f'weekNumber{self._weekNumber}', (), "weekNumber",
             DirectLabel, (self,),
             text=txt,
             text_scale=0.05,
@@ -237,7 +237,7 @@ class DirectDatePicker(DirectGridSizer):
             if isToday:
                 # the current day
                 btn["frameColor"] = self['todayFrameColor']
-            if self['day'] == date.day:
+            if self['day'] == date.day and self['month'] == date.month:
                 # the selected one
                 btn["frameColor"] = self['activeDayFrameColor']
             elif not isToday:

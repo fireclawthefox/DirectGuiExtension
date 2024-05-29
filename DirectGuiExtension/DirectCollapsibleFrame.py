@@ -17,11 +17,11 @@ class DirectCollapsibleFrame(DirectFrame):
     def __init__(self, parent = None, **kw):
         self.skipInitRefresh = True
         optiondefs = (
-            ('headerheight',           0.1, None),
+            ('headerheight',           0.1, self.setCollapsed),
             ('collapsed',           False, self.setCollapsed),
 
-            ('collapseText',   'collapse >>', None),
-            ('extendText',     'extend <<', None),
+            ('collapseText',   'collapse >>', self.setCollapsed),
+            ('extendText',     'extend <<', self.setCollapsed),
             ('frameSize',      (-0.5, 0.5, -0.5, 0.5), self.setFrameSize)
             )
         # Merge keyword options with default options
@@ -55,6 +55,9 @@ class DirectCollapsibleFrame(DirectFrame):
         self.updateFrameSize()
 
         self.originalFrameSize = self['frameSize']
+
+        # Make sure we are in the correct state
+        self.setCollapsed()
 
     def updateFrameSize(self):
         self.toggleCollapseButton['frameSize'] = (

@@ -52,13 +52,13 @@ class DirectSplitFrame(DirectFrame):
             ('showSplitter',   True,        self.setSplitter),
             ('splitterPos',    0,           self.refresh),
             ('splitterWidth',  0.02,        self.refresh),
-            ('splitterColor', (.7, .7, .7, 1), None),
+            ('splitterColor', (.7, .7, .7, 1), self.__splitterColor),
             ('splitterHighlightColor', (.9, .9, .9, 1), None),
 
             ('firstFrameUpdateSizeFunc', None,  None),
             ('secondFrameUpdateSizeFunc', None, None),
-            ('firstFrameMinSize', None,     None),
-            ('secondFrameMinSize', None,    None),
+            ('firstFrameMinSize', None,     self.refresh),
+            ('secondFrameMinSize', None,    self.refresh),
 
             ('suppressMouse',  0,           None)
             )
@@ -112,6 +112,9 @@ class DirectSplitFrame(DirectFrame):
         self.skipInitRefresh = False
         # initialize once at the end
         self.refresh()
+
+    def __splitterColor(self):
+        self.splitter["frameColor"] = self['splitterColor']
 
     def setSplitter(self):
         if not hasattr(self, "splitter"): return
