@@ -120,14 +120,14 @@ class DirectDatePicker(DirectGridSizer):
         self.ur = Point3(self["frameSize"][1], self["frameSize"][3])
 
         self.yearPicker.setPos(
-            DGH.getRealLeft(self) + DGH.getRealWidth(self.yearPicker) / 2,
+            DGH.getRealLeft(self) / self.getScale().x + DGH.getRealWidth(self.yearPicker) / 2,
             0,
-            DGH.getRealTop(self) - DGH.getRealBottom(self.yearPicker))
+            DGH.getRealTop(self) / self.getScale().z - DGH.getRealBottom(self.yearPicker))
 
         self.monthPicker.setPos(
-            DGH.getRealRight(self) - DGH.getRealWidth(self.monthPicker),
+            DGH.getRealRight(self) / self.getScale().x - DGH.getRealWidth(self.monthPicker),
             0,
-            DGH.getRealTop(self) - DGH.getRealBottom(self.monthPicker) / 2)
+            DGH.getRealTop(self) / self.getScale().z - DGH.getRealBottom(self.monthPicker) / 2)
 
         # set the current date if none is given at initialization
         self['year'] = now.year if self['year'] is None else self['year']

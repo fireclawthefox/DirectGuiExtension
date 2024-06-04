@@ -35,7 +35,8 @@
         {
             "displayName":"Num Text Scale",
             "internalName":"numtextScale",
-            "editType":"float"
+            "editType":"float",
+            "defaultPixel": 10.0
         },
         {
             "displayName":"Show Data Numbers",
@@ -69,7 +70,8 @@
         {
             "displayName":"Number Area Width",
             "internalName":"numberAreaWidth",
-            "editType":"float"
+            "editType":"float",
+            "defaultPixel": 20
         },
         {
             "displayName":"Refresh position",
@@ -80,6 +82,10 @@
         {
             "internalName": "frameSize",
             "defaultPixel": [-100, 100, -100, 100]
+        },
+        {
+            "internalName": "dataNumtextScale",
+            "defaultPixel": 10
         }
     ],
     "importPath":"from DirectGuiExtension.DirectDiagram import DirectDiagram"

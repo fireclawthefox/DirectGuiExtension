@@ -33,8 +33,28 @@
             "editType":"float"
         },
         {
-        "internalName": "scale",
-        "defaultPixel": 200
+        "internalName": "dragAreaHeight",
+        "defaultPixel": 30
+        },
+        {
+        "internalName": "frameSize",
+        "defaultPixel": [-150, 150, -150, 150]
+        },
+        {
+        "internalName": "canvasSize",
+        "defaultPixel": [-300,300,-300,300]
+        },
+        {
+        "internalName": "scrollBarWidth",
+        "defaultPixel": 20
+        },
+        {
+        "internalName": "borderWidth",
+        "defaultPixel": [2, 2]
+        },
+        {
+        "internalName": "closeButtonScale",
+        "defaultPixel": 20
         }
     ],
     "addItemNode": "canvas",

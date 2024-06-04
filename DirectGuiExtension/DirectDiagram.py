@@ -59,8 +59,8 @@ class DirectDiagram(DirectFrame):
 
         textLeftSizeArea = self['numberAreaWidth']
         # get the left and right edge of our frame
-        left = DGH.getRealLeft(self)
-        right = DGH.getRealRight(self)
+        left = DGH.getRealLeft(self) / self.getScale().x
+        right = DGH.getRealRight(self) / self.getScale().x
         diagramLeft = left + textLeftSizeArea
 
         # If there is no data we can not calculate 'numPosSteps' and 'numNegSteps'
@@ -74,11 +74,11 @@ class DirectDiagram(DirectFrame):
         else:
             numNegSteps = self['numNegSteps']
 
-        xStep = (DGH.getRealWidth(self) - textLeftSizeArea) / max(1, len(self['data'])-1)
+        xStep = (DGH.getRealWidth(self) / self.getScale().x - textLeftSizeArea) / max(1, len(self['data'])-1)
         posYRes = numPosSteps if numPosSteps > 0 else int(max(self['data']))
-        posYRes = DGH.getRealTop(self) / (posYRes if posYRes != 0 else 1)
+        posYRes = DGH.getRealTop(self) / self.getScale().z / (posYRes if posYRes != 0 else 1)
         negYRes = -numNegSteps if numNegSteps > 0 else int(min(self['data']))
-        negYRes = DGH.getRealBottom(self) / (negYRes if negYRes != 0 else 1)
+        negYRes = DGH.getRealBottom(self) / self.getScale().z / (negYRes if negYRes != 0 else 1)
 
         # remove old content
         if self.lines is not None:

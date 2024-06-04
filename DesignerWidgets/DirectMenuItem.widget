@@ -27,12 +27,22 @@
         {
             "displayName":"Item Frame Color",
             "internalName":"itemFrameColor",
+            "defaultValue": [0.8, 0.8, 0.8, 1],
             "editType":"base4"
         },
         {
             "displayName":"Separator Frame Color",
             "internalName":"separatorFrameColor",
             "editType":"base4"
+        },
+        {
+            "internalName": "scale",
+            "defaultAspect": 0.1,
+            "defaultPixel": 24
+        },
+        {
+            "internalName": "text",
+            "defaultValue": "Menu Item"
         }
     ],
     "importPath":"from DirectGuiExtension.DirectMenuItem import DirectMenuItem"

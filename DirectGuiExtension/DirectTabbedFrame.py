@@ -174,7 +174,7 @@ class DirectTabbedFrame(DirectFrame):
         # get some details for the close button
         tab_height = DGH.getRealHeight(tab)
         x_pos = tab.indicator.get_pos()
-        x_pos.z = (tab_height - tab['borderWidth'][1]) / 2
+        # x_pos.z = (tab_height - tab['borderWidth'][1]) / 2  # causes issues in pixel2d mode
 
         # create the close button
         tab.closeButton = self.createcomponent(

@@ -33,8 +33,12 @@
             "valueOptions": "reposition_tabs"
         },
         {
-        "internalName": "scale",
-        "defaultPixel": 100
+        "internalName": "frameSize",
+        "defaultPixel": [-150, 150, -150, 150]
+        },
+        {
+        "internalName": "tabHeight",
+        "defaultPixel": 20
         }
     ],
     "addItemFunctionName":"_add_tab",
