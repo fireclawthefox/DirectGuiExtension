@@ -33,6 +33,7 @@ class DirectTabbedFrame(DirectFrame):
             ('selectedTabColor', (0.95, 0.95, 0.95, 1), self.__tabColor),
             ('unselectedTabColor', (.8, .8, .8, 1), self.__tabColor)
             )
+        self.kw_args_copy = kw.copy()
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs, dynamicGroups=self.DefDynGroups)
 
@@ -150,6 +151,17 @@ class DirectTabbedFrame(DirectFrame):
         self.add_tab(tab_text, content, close_func)
 
     def add_tab(self, tab_text, content, close_func=None):
+        # Make sure to include any options set earlier
+        itemKW = {}
+        for i in self.kw_args_copy:
+            if i.startswith("tab_"):
+                itemKW[i.removeprefix("tab_")] = self.kw_args_copy[i]
+
+        toRemove = ["text", "text_align", "scale", "boxPlacement", "frameColor", "command", "variable", "value"]
+        for r in toRemove:
+            if r in itemKW:
+                del itemKW[r]
+
         # create the new tab
         tab = self.createcomponent(
             f'tab{self._tab_number}', (), 'tab',
@@ -162,8 +174,9 @@ class DirectTabbedFrame(DirectFrame):
             frameColor=self['unselectedTabColor'],
             command=self.switch_tab,
             variable=self.selected_content,
-            value=[0]
-            )
+            value=[0],
+            **itemKW
+        )
         tab['extraArgs'] = [tab]
         # hide the radio button indicator
         tab.indicator.hide()
@@ -176,6 +189,17 @@ class DirectTabbedFrame(DirectFrame):
         x_pos = tab.indicator.get_pos()
         # x_pos.z = (tab_height - tab['borderWidth'][1]) / 2  # causes issues in pixel2d mode
 
+        # Make sure to include any options set earlier
+        itemKW = {}
+        for i in self.kw_args_copy:
+            if i.startswith("closeButton_"):
+                itemKW[i.removeprefix("closeButton_")] = self.kw_args_copy[i]
+
+        toRemove = ["text", "pos", "frameColor", "command", "extraArgs"]
+        for r in toRemove:
+            if r in itemKW:
+                del itemKW[r]
+
         # create the close button
         tab.closeButton = self.createcomponent(
             f'closeButton{self._tab_number}', (), 'closeButton',
@@ -186,6 +210,7 @@ class DirectTabbedFrame(DirectFrame):
             frameColor=self['unselectedTabColor'],
             command=self.close_tab,
             extraArgs=[tab, close_func],
+            **itemKW
         )
         if not self['showCloseOnTabs']:
             tab.closeButton.hide()

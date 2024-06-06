@@ -65,17 +65,18 @@ class DirectDatePicker(DirectGridSizer):
 
         # add the week header
         weekDays = calendar.weekheader(2).split(" ")
-        self._weekNumber = -1
+        self._dayNumber = -1
         self.headers = []
         for i in range(1, 8):
-            lbl = self.createLabel(str(weekDays[i-1]))
+            lbl = self.createDayLabel(str(weekDays[i-1]))
             self.headers.append(lbl)
             self.addItem(lbl, 0, i)
 
         # add dummy week numbers
+        self._weekNumber = -1
         self.weekNumbers = []
         for i in range(1, 7):
-            lbl = self.createLabel("--")
+            lbl = self.createWeekLabel("--")
             self.weekNumbers.append(lbl)
             self.addItem(lbl, i, 0)
 
@@ -153,10 +154,21 @@ class DirectDatePicker(DirectGridSizer):
             command=self.setDay,
             extraArgs=[day])
 
-    def createLabel(self, txt):
+    def createWeekLabel(self, txt):
         self._weekNumber += 1
         return self.createcomponent(
             f'weekNumber{self._weekNumber}', (), "weekNumber",
+            DirectLabel, (self,),
+            text=txt,
+            text_scale=0.05,
+            frameColor=(0,0,0,0),
+            frameSize=(-0.05,0.05,-0.035,0.0625)
+        )
+
+    def createDayLabel(self, txt):
+        self._dayNumber += 1
+        return self.createcomponent(
+            f'dayLabel{self._dayNumber}', (), "dayLabel",
             DirectLabel, (self,),
             text=txt,
             text_scale=0.05,
