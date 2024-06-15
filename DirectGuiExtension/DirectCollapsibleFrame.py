@@ -60,11 +60,15 @@ class DirectCollapsibleFrame(DirectFrame):
         self.setCollapsed()
 
     def updateFrameSize(self):
+        left = DGH.getRealLeft(self) / self.getScale().x
+        right = DGH.getRealRight(self) / self.getScale().x
+        top = DGH.getRealTop(self) / self.getScale().z
+
         self.toggleCollapseButton['frameSize'] = (
-            DGH.getRealLeft(self), DGH.getRealRight(self),
-            DGH.getRealTop(self)-self['headerheight'], DGH.getRealTop(self))
+            left, right,
+            top-self['headerheight'], top)
         self.originalFrameSize = self['frameSize']
-        self.toggleCollapseButton["text_pos"] = (DGH.getRealLeft(self)+0.02, DGH.getRealTop(self)-self['headerheight']/2.0)
+        self.toggleCollapseButton["text_pos"] = (left+0.02, top-self['headerheight']/2.0)
 
     def toggleCollapsed(self):
         self['collapsed'] = not self['collapsed']

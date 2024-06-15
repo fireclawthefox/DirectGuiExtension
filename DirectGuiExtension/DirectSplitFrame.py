@@ -136,8 +136,8 @@ class DirectSplitFrame(DirectFrame):
         if self.skipInitRefresh: return
         if not hasattr(self, "bounds"): return
 
-        width = DGH.getRealWidth(self)
-        height = DGH.getRealHeight(self)
+        width = DGH.getRealWidth(self) / self.getScale().x
+        height = DGH.getRealHeight(self) / self.getScale().z
 
         if self["orientation"] == DGG.HORIZONTAL:
             self.splitter.setX(self["splitterPos"])

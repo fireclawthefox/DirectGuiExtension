@@ -1,6 +1,6 @@
 """This module contains the DirectBoxSizer class."""
 
-__all__ = ['DirectGridSizer']
+__all__ = ['DirectDatePicker']
 
 import calendar
 import datetime
