@@ -35,7 +35,8 @@
         {
             "displayName":"Num Text Scale",
             "internalName":"numtextScale",
-            "editType":"float"
+            "editType":"float",
+            "defaultPixel": 10.0
         },
         {
             "displayName":"Show Data Numbers",
@@ -50,7 +51,8 @@
         {
             "displayName":"Data Num Text Scale",
             "internalName":"dataNumtextScale",
-            "editType":"float"
+            "editType":"float",
+            "defaultPixel": 10
         },
         {
             "displayName":"Step Accuracy",
@@ -69,7 +71,14 @@
         {
             "displayName":"Number Area Width",
             "internalName":"numberAreaWidth",
-            "editType":"float"
+            "editType":"float",
+            "defaultPixel": 20
+        },
+        {
+            "displayName":"Number Area Pad",
+            "internalName":"numberAreaPad",
+            "editType":"float",
+            "defaultPixel": 10
         },
         {
             "displayName":"Refresh position",
@@ -80,6 +89,10 @@
         {
             "internalName": "frameSize",
             "defaultPixel": [-100, 100, -100, 100]
+        },
+        {
+            "internalName": "pad",
+            "defaultPixel": [10, 10]
         }
     ],
     "importPath":"from DirectGuiExtension.DirectDiagram import DirectDiagram"

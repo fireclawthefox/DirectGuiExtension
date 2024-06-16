@@ -19,11 +19,11 @@ class DirectScrolledWindowFrame(DirectScrolledFrame):
         optiondefs = (
             # Define type of DirectGuiWidget
             # The height of the area to drag the widget around
-            ('dragAreaHeight',              0.1, None),
+            ('dragAreaHeight',              0.1, self.__updateDragAreaHeight),
             ('resortOnDrag',               True, None),
-            ('showClose',                  True, None),
-            ('closeButtonPosition',     'Right', None),
-            ('closeButtonScale',           0.05, None)
+            ('showClose',                  True, self.__showClose),
+            ('closeButtonPosition',     'Right', self.__updateCloseButton),
+            ('closeButtonScale',           0.05, self.__updateCloseButton)
             )
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
@@ -115,3 +115,29 @@ class DirectScrolledWindowFrame(DirectScrolledFrame):
         """
         # kill the drag and drop task
         taskMgr.remove(self.dragDropTask)
+
+    def __showClose(self):
+        if self["showClose"]:
+            self.closeButton.show()
+        else:
+            self.closeButton.hide()
+
+    def __updateCloseButton(self):
+        b = self["frameSize"]
+        scale = self['closeButtonScale']
+        pos = (0, 0, self['dragAreaHeight'] * 0.5)
+        if self['closeButtonPosition'] == 'Right':
+            pos = (b[1] - scale * 0.5, 0, self['dragAreaHeight'] * 0.5)
+        elif self['closeButtonPosition'] == 'Left':
+            pos = (b[0] + scale * 0.5, 0, self['dragAreaHeight'] * 0.5)
+
+        self.closeButton.setPos(pos)
+        self.closeButton.setScale(scale)
+
+    def __updateDragAreaHeight(self):
+        if not hasattr(self, "bounds"):  # We are here too early
+            return
+
+        self.dragFrame.setPos(0, 0, self.bounds[3])
+        self.dragFrame["frameSize"] = (self.bounds[0], self.bounds[1], 0, self['dragAreaHeight'])
+        self.__updateCloseButton()

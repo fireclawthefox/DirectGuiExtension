@@ -136,7 +136,7 @@ class DirectGridSizer(DirectFrame):
             for i in range(c):
                 x += columnWidths[i]
 
-            item.element.setPos(pad_x + x + margin_left, 0, pad_y + z + margin_top)
+            item.element.setPos(pad_x + x + margin_left - DGH.getRealLeft(item.element), 0, pad_y + z + margin_top - DGH.getRealTop(item.element))
 
         if self["autoUpdateFrameSize"]:
 

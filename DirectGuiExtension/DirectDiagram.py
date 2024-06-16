@@ -11,6 +11,7 @@ from . import DirectGuiHelper as DGH
 from direct.directtools.DirectGeometry import LineNodePath
 
 class DirectDiagram(DirectFrame):
+    DefDynGroups = ('value', 'dataNum')
 
     def __init__(self, parent = None, **kw):
         optiondefs = (
@@ -25,13 +26,16 @@ class DirectDiagram(DirectFrame):
             ('dataNumtextScale',0.05,       self.refresh),
             ('stepAccuracy',    2,          self.refresh),
             ('stepFormat',      float,      self.refresh),
-            ('numberAreaWidth', 0.15,          self.refresh),
+            ('numberAreaWidth', 0.1,        self.refresh),
+            ('numberAreaPad',   0.05,       self.refresh),
             #('numStates',      1,           None),
             #('state',          DGG.NORMAL,  None),
-            ("frameSize",       (-0.5, 0.5, -0.5, 0.5), self.setFrameSize)
+            ("frameSize",       (-0.5, 0.5, -0.5, 0.5), self.setFrameSize),
+            ('pad',             (0.05, 0.05), self.__pad)
             )
+        self.kw_args_copy = kw.copy()
         # Merge keyword options with default options
-        self.defineoptions(kw, optiondefs)
+        self.defineoptions(kw, optiondefs, dynamicGroups=self.DefDynGroups)
 
         self.lines = None
         self.measureLines = None
@@ -47,6 +51,10 @@ class DirectDiagram(DirectFrame):
 
         self.refresh()
 
+    def __pad(self):
+        self.resetFrameSize()
+        self.refresh()
+
     def setData(self, data):
         self["data"] = [float(value) for value in data]
         self.refresh()
@@ -57,10 +65,11 @@ class DirectDiagram(DirectFrame):
         self.frameInitialiseFunc()
 
         textLeftSizeArea = self['numberAreaWidth']
+        numberAreaPad = self["numberAreaPad"]
         # get the left and right edge of our frame
-        left = DGH.getRealLeft(self)
-        right = DGH.getRealRight(self)
-        diagramLeft = left + textLeftSizeArea
+        left = DGH.getRealLeft(self) / self.getScale().x + self["pad"][0]
+        right = DGH.getRealRight(self) / self.getScale().x - self["pad"][0]
+        diagramLeft = left + textLeftSizeArea + numberAreaPad
 
         # If there is no data we can not calculate 'numPosSteps' and 'numNegSteps'
         if not self["data"] and self["numPosSteps"] <= 0:
@@ -73,11 +82,11 @@ class DirectDiagram(DirectFrame):
         else:
             numNegSteps = self['numNegSteps']
 
-        xStep = (DGH.getRealWidth(self) - textLeftSizeArea) / max(1, len(self['data'])-1)
+        xStep = (DGH.getRealWidth(self) / self.getScale().x - textLeftSizeArea - numberAreaPad - self["pad"][0]*2) / max(1, len(self['data'])-1)
         posYRes = numPosSteps if numPosSteps > 0 else int(max(self['data']))
-        posYRes = DGH.getRealTop(self) / (posYRes if posYRes != 0 else 1)
+        posYRes = (DGH.getRealTop(self) / self.getScale().z - self["pad"][1]) / (posYRes if posYRes != 0 else 1)
         negYRes = -numNegSteps if numNegSteps > 0 else int(min(self['data']))
-        negYRes = DGH.getRealBottom(self) / (negYRes if negYRes != 0 else 1)
+        negYRes = (DGH.getRealBottom(self) / self.getScale().z + self["pad"][1]) / (negYRes if negYRes != 0 else 1)
 
         # remove old content
         if self.lines is not None:
@@ -107,16 +116,30 @@ class DirectDiagram(DirectFrame):
         self.centerLine.drawLines([((diagramLeft, 0, 0), (right, 0, 0))])
         self.centerLine.create()
 
+        # Make sure to include any options set earlier
+        itemKW = {}
+        for i in self.kw_args_copy:
+            if i.startswith("value_"):
+                itemKW[i.removeprefix("value_")] = self.kw_args_copy[i]
+
+        toRemove = ["text", "text_scale", "text_align", "pos", "relief", "state"]
+        for r in toRemove:
+            if r in itemKW:
+                del itemKW[r]
+
         self.xDescriptions.append(
             self.createcomponent(
-                'value0', (), None,
+                'value0', (), "value",
                 DirectLabel, (self,),
                 text = "0",
                 text_scale = self['numtextScale'],
                 text_align = TextNode.ARight,
-                pos = (diagramLeft, 0, -0.01),
+                pos = (diagramLeft - numberAreaPad, 0, -0.01),
                 relief = None,
-                state = 'normal'))
+                state = 'normal',
+                **itemKW
+            )
+        )
 
         # calculate the positive measure lines and add the numbers
         measureLineData = []
@@ -129,23 +152,31 @@ class DirectDiagram(DirectFrame):
                 )
             )
 
-            calcBase = 1 / DGH.getRealTop(self)
+            calcBase = 1 / (DGH.getRealTop(self) / self.getScale().z - self["pad"][1])
             maxData = numPosSteps if numPosSteps > 0 else max(self['data'])
             value = self['stepFormat'](round(i * posYRes * calcBase * maxData, self['stepAccuracy']))
             y = i*posYRes
             self.xDescriptions.append(
                 self.createcomponent(
-                    'value{}'.format(value), (), None,
+                    'value{}'.format(value), (), "value",
                     DirectLabel, (self,),
                     text = str(value),
                     text_scale = self['numtextScale'],
                     text_align = TextNode.ARight,
-                    pos = (diagramLeft, 0, y-0.025),
+                    pos = (diagramLeft - numberAreaPad, 0, y-0.025),
                     relief = None,
-                    state = 'normal'))
+                    state = 'normal',
+                    **itemKW
+                )
+            )
 
         # calculate the negative measure lines and add the numbers
-        numSteps = (numNegSteps if numNegSteps > 0 else math.floor(abs(min(self['data'])))) + 1
+        if numNegSteps > 0:
+            numSteps = numNegSteps + 1
+        elif min(self["data"]) >= 0:
+            numSteps = 1
+        else:
+            numSteps = math.floor(abs(min(self['data']))) + 1
         for i in range(1, numSteps, self['numNegStepsStep']):
             measureLineData.append(
                 (
@@ -154,51 +185,69 @@ class DirectDiagram(DirectFrame):
                 )
             )
 
-            calcBase = 1 / DGH.getRealBottom(self)
-            maxData = numPosSteps if numPosSteps > 0 else max(self['data'])
+            calcBase = 1 / (DGH.getRealBottom(self) / self.getScale().z + self["pad"][1])
+            maxData = numNegSteps if numNegSteps > 0 else abs(min(self['data']))
             value = self['stepFormat'](round(i * negYRes * calcBase * maxData, self['stepAccuracy']))
             y = -i*negYRes
             self.xDescriptions.append(
                 self.createcomponent(
-                    'value{}'.format(value), (), None,
+                    'value{}'.format(value), (), "value",
                     DirectLabel, (self,),
                     text = str(value),
                     text_scale = self['numtextScale'],
                     text_align = TextNode.ARight,
-                    pos = (diagramLeft, 0, y+0.01),
+                    pos = (diagramLeft - numberAreaPad, 0, y+0.01),
                     relief = None,
-                    state = 'normal'))
+                    state = 'normal',
+                    **itemKW
+                )
+            )
 
         # Draw the lines
         self.measureLines.reset()
         self.measureLines.drawLines(measureLineData)
         self.measureLines.create()
 
+        # Make sure to include any options set earlier in dataNum components
+        itemKW = {}
+        for i in self.kw_args_copy:
+            if i.startswith("dataNum_"):
+                itemKW[i.removeprefix("dataNum_")] = self.kw_args_copy[i]
+
+        toRemove = ["text", "text_scale", "text_align", "pos", "relief", "state"]
+        for r in toRemove:
+            if r in itemKW:
+                del itemKW[r]
+
         lineData = []
-        for i in range(1, len(self['data'])):
-            yResA = posYRes if self['data'][i-1] >= 0 else negYRes
+        for i in range(len(self['data'])):
             yResB = posYRes if self['data'][i] >= 0 else negYRes
-            lineData.append(
-                (
-                    # Point A
-                    (diagramLeft+(i-1)*xStep, 0, self['data'][i-1] * yResA),
-                    # Point B
-                    (diagramLeft+i*xStep, 0, self['data'][i] * yResB)
+            if i > 0:
+                yResA = posYRes if self['data'][i-1] >= 0 else negYRes
+                lineData.append(
+                    (
+                        # Point A
+                        (diagramLeft+(i-1)*xStep, 0, self['data'][i-1] * yResA),
+                        # Point B
+                        (diagramLeft+i*xStep, 0, self['data'][i] * yResB)
+                    )
                 )
-            )
 
             if (self['showDataNumbers']):
-                value = round(self['data'][i-1], self['stepAccuracy'])
+                value = round(self['data'][i], self['stepAccuracy'])
                 self.points.append(
                     self.createcomponent(
-                        'value{}'.format(value), (), None,
+                        'dataLabel{}'.format(i), (), "dataLabel",
                         DirectLabel, (self,),
                         text = str(value),
                         text_scale = self['dataNumtextScale'],
                         text_align = TextNode.ARight,
-                        pos = (diagramLeft+(i-1)*xStep, 0, self['data'][i-1] * yResA),
+                        pos = (diagramLeft + i * xStep, 0, self['data'][i] * yResB),
                         relief = None,
-                        state = 'normal'))
+                        state = 'normal',
+                        **itemKW
+                    )
+                )
 
         # Draw the lines
         self.lines.reset()

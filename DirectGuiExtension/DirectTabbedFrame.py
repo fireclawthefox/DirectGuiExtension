@@ -19,6 +19,7 @@ class DirectTabbedFrame(DirectFrame):
     """
     A frame with tabs
     """
+    DefDynGroups = ('tab', 'closeButton')
 
     notify = DirectNotifyGlobal.directNotify.newCategory('DirectTabbedFrame')
 
@@ -26,20 +27,26 @@ class DirectTabbedFrame(DirectFrame):
         optiondefs = (
             # Define type of DirectGuiWidget
             # The height of the area to drag the widget around
-            ('tabHeight',                   0.1, None),
-            ('showCloseOnTabs',            True, None),
+            ('tabHeight',                   0.1, self.__tabHeight),
+            ('showCloseOnTabs',            True, self.__showCloseOnTabs),
             ('frameSize',           (-1,1,-1,1), None),
-            ('selectedTabColor', (0.95, 0.95, 0.95, 1), None),
-            ('unselectedTabColor', (.8, .8, .8, 1), None)
+            ('selectedTabColor', (0.95, 0.95, 0.95, 1), self.__tabColor),
+            ('unselectedTabColor', (.8, .8, .8, 1), self.__tabColor)
             )
+        self.kw_args_copy = kw.copy()
         # Merge keyword options with default options
-        self.defineoptions(kw, optiondefs)
+        self.defineoptions(kw, optiondefs, dynamicGroups=self.DefDynGroups)
 
         # Initialize superclasses
         DirectFrame.__init__(self, parent)
 
+        try:
+            bw = kw["tab_borderWidth"]
+        except KeyError:
+            bw = (.1, .1)
+
         pos_x = self['frameSize'][0]
-        pos_z = self['frameSize'][3]-self['tabHeight']/2
+        pos_z = self['frameSize'][3]-self['tabHeight']/2 - bw[1]*self['tabHeight']
         self.prevTabButton = self.createcomponent(
             'prevTabButton', (), None,
             DirectButton,
@@ -78,9 +85,57 @@ class DirectTabbedFrame(DirectFrame):
         self.tab_index_to = 0
 
         self.tab_list = []
+        self._tab_number = 0
         self.selected_content = [None]
         self.current_content = None
+        self.current_tab = None
         self.start_idx = 0
+
+    def __tabHeight(self):
+        if not hasattr(self, "tab_list"):  # We are here too early
+            return
+
+        try:
+            bw = self["tab_borderWidth"]
+        except KeyError:
+            bw = (.1, .1)
+
+        pos_x = self['frameSize'][0]
+        pos_z = self['frameSize'][3] - self['tabHeight'] / 2 - bw[1]*self['tabHeight']
+        self.prevTabButton.setScale(self["tabHeight"])
+        self.prevTabButton.setPos(pos_x, 0, pos_z)
+
+        pos_x = self['frameSize'][1]
+        self.nextTabButton.setScale(self["tabHeight"])
+        self.nextTabButton.setPos(pos_x, 0, pos_z)
+
+        for tab in self.tab_list:
+            tab.setScale(self["tabHeight"])
+
+        self.reposition_tabs()
+
+    def __tabColor(self):
+        if not hasattr(self, "tab_list"):  # We are here too early
+            return
+
+        for other_tab in self.tab_list:
+            other_tab['frameColor'] = self['unselectedTabColor']
+            other_tab.closeButton['frameColor'] = self['unselectedTabColor']
+
+        if self.current_tab is not None:
+            self.current_tab['frameColor'] = self['selectedTabColor']
+            self.current_tab.closeButton['frameColor'] = self['selectedTabColor']
+
+    def __showCloseOnTabs(self):
+        if not hasattr(self, "tab_list"):  # We are here too early
+            return
+
+        if self["showCloseOnTabs"]:
+            for tab in self.tab_list:
+                tab.closeButton.show()
+        else:
+            for tab in self.tab_list:
+                tab.closeButton.hide()
 
     def show_prev_tab(self):
         if self.start_idx > 0:
@@ -96,9 +151,20 @@ class DirectTabbedFrame(DirectFrame):
         self.add_tab(tab_text, content, close_func)
 
     def add_tab(self, tab_text, content, close_func=None):
+        # Make sure to include any options set earlier
+        itemKW = {}
+        for i in self.kw_args_copy:
+            if i.startswith("tab_"):
+                itemKW[i.removeprefix("tab_")] = self.kw_args_copy[i]
+
+        toRemove = ["text", "text_align", "scale", "boxPlacement", "frameColor", "command", "variable", "value"]
+        for r in toRemove:
+            if r in itemKW:
+                del itemKW[r]
+
         # create the new tab
         tab = self.createcomponent(
-            'tab', (), 'tab',
+            f'tab{self._tab_number}', (), 'tab',
             DirectRadioButton,
             (self,),
             text=tab_text,
@@ -108,8 +174,9 @@ class DirectTabbedFrame(DirectFrame):
             frameColor=self['unselectedTabColor'],
             command=self.switch_tab,
             variable=self.selected_content,
-            value=[0]
-            )
+            value=[0],
+            **itemKW
+        )
         tab['extraArgs'] = [tab]
         # hide the radio button indicator
         tab.indicator.hide()
@@ -120,23 +187,37 @@ class DirectTabbedFrame(DirectFrame):
         # get some details for the close button
         tab_height = DGH.getRealHeight(tab)
         x_pos = tab.indicator.get_pos()
-        x_pos.z = (tab_height - tab['borderWidth'][1]) / 2
+        # x_pos.z = (tab_height - tab['borderWidth'][1]) / 2  # causes issues in pixel2d mode
 
-        if self['showCloseOnTabs']:
-            # create the close button
-            tab.closeButton = self.createcomponent(
-                'closeButton', (), 'closeButton',
-                DirectButton,
-                (tab,),
-                text='x',
-                pos=x_pos,
-                frameColor=self['unselectedTabColor'],
-                command=self.close_tab,
-                extraArgs=[tab, close_func],
-            )
+        # Make sure to include any options set earlier
+        itemKW = {}
+        for i in self.kw_args_copy:
+            if i.startswith("closeButton_"):
+                itemKW[i.removeprefix("closeButton_")] = self.kw_args_copy[i]
+
+        toRemove = ["text", "pos", "frameColor", "command", "extraArgs"]
+        for r in toRemove:
+            if r in itemKW:
+                del itemKW[r]
+
+        # create the close button
+        tab.closeButton = self.createcomponent(
+            f'closeButton{self._tab_number}', (), 'closeButton',
+            DirectButton,
+            (tab,),
+            text='x',
+            pos=x_pos,
+            frameColor=self['unselectedTabColor'],
+            command=self.close_tab,
+            extraArgs=[tab, close_func],
+            **itemKW
+        )
+        if not self['showCloseOnTabs']:
+            tab.closeButton.hide()
 
         # add the tab to our list
         self.tab_list.append(tab)
+        self._tab_number += 1
 
         # reposition all tabs
         self.reposition_tabs()
@@ -154,10 +235,10 @@ class DirectTabbedFrame(DirectFrame):
         if self.current_content:
             self.current_content.show()
 
+        self.current_tab = tab
+
         # recolor tabs
-        for other_tab in self.tab_list:
-            other_tab['frameColor'] = self['unselectedTabColor']
-        tab['frameColor'] = self['selectedTabColor']
+        self.__tabColor()
 
     def close_tab(self, tab, close_func=None):
         # get the tabs index
@@ -221,7 +302,8 @@ class DirectTabbedFrame(DirectFrame):
 
         # move through all tabs, starting from the desired start index
         for tab in self.tab_list[self.start_idx:]:
-            border_width = tab['borderWidth'][0]*tab['scale']
+            border_width_x = tab['borderWidth'][0]*tab.getScale().x
+            border_width_z = tab['borderWidth'][1]*tab.getScale().z
             tab_bottom = DGH.getRealBottom(tab)
             tab_width = DGH.getRealWidth(tab)
 
@@ -238,9 +320,9 @@ class DirectTabbedFrame(DirectFrame):
             tab.show()
             # calculate the new position and place it there
             tab_pos = (
-                fs[0]+next_x+border_width,
+                fs[0]+next_x+border_width_x,
                 0,
-                fs[3]-tab_bottom-self['tabHeight'])
+                fs[3]-tab_bottom-self['tabHeight']-2*border_width_z)
             tab.set_pos(tab_pos)
 
             # calculate the X start position shift for the next tab

@@ -9,14 +9,12 @@
         {
             "displayName": "Image Collapse",
             "internalName": "imageCollapse",
-            "editType": "str",
-            "isInitOption": true
+            "editType": "text"
         },
         {
             "displayName": "Image Collapsed",
             "internalName": "imageCollapsed",
-            "editType": "str",
-            "isInitOption": true
+            "editType": "text"
         },
         {
             "displayName": "Indentation Width",

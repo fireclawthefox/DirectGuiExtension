@@ -135,15 +135,7 @@ class DirectAutoSizer(DirectFrame):
         if childSize is None:
             childSize = DGH.getBounds(self.child)
 
-        if type(self.child["scale"]) == LVecBase3f:
-            childScale = self.child["scale"]
-        elif self.child["scale"] is not None:
-            try:
-                childScale = LVecBase3f(self.child["scale"])
-            except:
-                childScale = self.child["scale"]
-        else:
-            childScale = LVecBase3f(1.0)
+        childScale = self.child.getScale()
 
         if not self['extendHorizontal']:
             l = childSize[0] * childScale.getX()
@@ -173,7 +165,7 @@ class DirectAutoSizer(DirectFrame):
 
         # actual resizing of our child element
         self.child["frameSize"] = [l/childScale.getX(),r/childScale.getX(),b/childScale.getZ(),t/childScale.getZ()]
-        self["frameSize"] = self.child["frameSize"]
+        self["frameSize"] = [l, r, b, t]
 
         base.messenger.send(self.getUpdateSizeEvent())
         if self['childUpdateSizeFunc'] is not None:
@@ -185,3 +177,4 @@ class DirectAutoSizer(DirectFrame):
     def destroy(self):
         self.ignoreAll()
         self.removeChild()
+        DirectFrame.destroy(self)

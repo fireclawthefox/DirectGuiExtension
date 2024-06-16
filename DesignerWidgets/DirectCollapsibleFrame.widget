@@ -10,7 +10,6 @@
             "displayName":"Header Height",
             "internalName":"headerheight",
             "editType":"float",
-            "postProcessFunctionName": "setCollapsed",
             "defaultPixel": 20
         },
         {
@@ -21,14 +20,12 @@
         {
             "displayName":"Collapse Text",
             "internalName":"collapseText",
-            "editType":"str",
-            "postProcessFunctionName": "setCollapsed"
+            "editType":"text"
         },
         {
             "displayName":"Extend Text",
             "internalName":"extendText",
-            "editType":"str",
-            "postProcessFunctionName": "setCollapsed"
+            "editType":"text"
         },
         {
             "displayName":"Update Frame Size",

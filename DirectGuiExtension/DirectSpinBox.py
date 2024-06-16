@@ -89,15 +89,16 @@ class DirectSpinBox(DirectFrame):
 
     def __init__(self, parent = None, **kw):
         assert self.notify.debugStateCall(self)
+        self.__valueChangeCallback = None
 
         # Inherits from DirectFrame
         optiondefs = (
             # Define type of DirectGuiWidget
-            ('value',              0,         None),
-            ('textFormat',         '{:0d}',   None),
+            ('value',              0,         self.setValue),
+            ('textFormat',         '{:0d}',   self.setValue),
             ('stepSize',           1,         None),
-            ('minValue',           0,         None),
-            ('maxValue',           100,       None),
+            ('minValue',           0,         self.__updateMinMax),
+            ('maxValue',           100,       self.__updateMinMax),
             ('valueType',          int,       None),
             ('repeatdelay',        0.125,     None),
             ('repeatStartdelay',   0.25,      None),
@@ -105,7 +106,8 @@ class DirectSpinBox(DirectFrame):
             ('extraArgs',          [],        None),
             ('incButtonCallback',  None,      self.setIncButtonCallback),
             ('decButtonCallback',  None,      self.setDecButtonCallback),
-            ('buttonOrientation',  DGG.VERTICAL, None),
+            ('valueChangeCallback', None,     self.setValueChangeCallback),
+            ('buttonOrientation',  DGG.VERTICAL, self.__buttonOrientation),
             ('state',          DGG.NORMAL, None),
             # set default border width to 0
             ('borderWidth',        (0,0),     None),
@@ -182,6 +184,22 @@ class DirectSpinBox(DirectFrame):
         if self['valueEntry_pos'] is not None:
             self.valueEntry.setPos(self['valueEntry_pos'])
 
+    def __buttonOrientation(self):
+        self.incButton["text"] = '5' if self['buttonOrientation'] == DGG.VERTICAL else '4'
+        if self.incButton["frameSize"] is None:
+            self.incButton.resetFrameSize()
+        self.decButton["text"] = '6' if self['buttonOrientation'] == DGG.VERTICAL else '3'
+        if self.decButton["frameSize"] is None:
+            self.decButton.resetFrameSize()
+
+        # Set the spiners elements position
+        self.resetPosition()
+        self.recalcFrameSize()
+
+        if self['incButton_pos'] is not None:
+            self.incButton.setPos(self['incButton_pos'])
+        if self['decButton_pos'] is not None:
+            self.decButton.setPos(self['decButton_pos'])
 
     def resetPosition(self):
         '''
@@ -325,7 +343,7 @@ class DirectSpinBox(DirectFrame):
         assert self.notify.debugStateCall(self)
         return self['value']
 
-    def setValue(self, newValue):
+    def setValue(self, newValue=None):
         '''
         Set a new value for the spinbox to display. newValue can be any type which
         can be converted by the function set in valueType
@@ -337,8 +355,17 @@ class DirectSpinBox(DirectFrame):
             return False
 
         self.valueEntry.enterText(self['textFormat'].format(value))
-        self['value'] = value
+        if newValue is not None:
+            self['value'] = value
+
+        if self.__valueChangeCallback:
+            self.__valueChangeCallback(*([self['value']] + self['extraArgs']))
+
         return True
+
+    def __updateMinMax(self):
+        value = self.__checkValue(self["value"])
+        self.setValue(value)
 
     def focusOutCommand(self):
         assert self.notify.debugStateCall(self)
@@ -351,6 +378,10 @@ class DirectSpinBox(DirectFrame):
     def setDecButtonCallback(self):
         assert self.notify.debugStateCall(self)
         self.__decButtonCallback = self['decButtonCallback']
+
+    def setValueChangeCallback(self):
+        assert self.notify.debugStateCall(self)
+        self.__valueChangeCallback = self['valueChangeCallback']
 
 '''
 from direct.showbase.ShowBase import ShowBase

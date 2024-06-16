@@ -35,6 +35,8 @@ class DirectMenuSeparator:
         self.padding = padding
 
 class DirectMenuItem(DirectButton):
+    DefDynGroups = ('popupMenu', 'item', 'separator')
+
     def __init__(self, parent = None, **kw):
         # this function will be called when the menu gets closed
         self.onCloseMenuFunc = None
@@ -47,7 +49,7 @@ class DirectMenuItem(DirectButton):
             # Background color to use to highlight popup menu items
             ('highlightColor', (.5, .5, .5, 1), None),
             # Background color of unhighlighted menu items
-            ('itemFrameColor', None, None),
+            ('itemFrameColor', None, self.setItems),
             # Alignment to use for text on popup menu button
             # Changing this breaks button layout
             ('text_align',  TextNode.ALeft, None),
@@ -56,11 +58,11 @@ class DirectMenuItem(DirectButton):
             ('isSubMenu',       False,      None),
             ('parentMenu',      None,       None),
             # color of the separator line
-            ('separatorFrameColor', (.2, .2, .2, 1),   None),
+            ('separatorFrameColor', (.2, .2, .2, 1),   self.setItems),
            )
         self.kw_args_copy = kw.copy()
         # Merge keyword options with default options
-        self.defineoptions(kw, optiondefs)
+        self.defineoptions(kw, optiondefs, dynamicGroups=self.DefDynGroups)
         # Initialize superclasses
         DirectButton.__init__(self, parent)
         # This is created when you set the menu's items
@@ -95,13 +97,25 @@ class DirectMenuItem(DirectButton):
         # Remove old component if it exits
         if self.popupMenu != None:
             self.destroycomponent('popupMenu')
+
+        # Make sure to include any options set earlier
+        itemKW = {}
+        for i in self.kw_args_copy:
+            if i.startswith("popupMenu_"):
+                itemKW[i.removeprefix("popupMenu_")] = self.kw_args_copy[i]
+
+        toRemove = ["itemAlign", "orientation"]
+        for r in toRemove:
+            if r in itemKW:
+                del itemKW[r]
+
         # Create new component
         self.popupMenu = self.createcomponent('popupMenu', (), None,
                                               DirectBoxSizer,
                                               (self,),
                                               itemAlign = DirectBoxSizer.A_Left,
                                               orientation = DGG.VERTICAL,
-                                              )
+                                              **itemKW)
         # Make sure it is on top of all the other gui widgets
         self.popupMenu.setBin('gui-popup', 0)
         if not self['items']:
@@ -112,7 +126,16 @@ class DirectMenuItem(DirectButton):
         self.minX = self.maxX = self.minZ = self.maxZ = None
         for item in self['items']:
             if type(item) is DirectMenuItemSubMenu:
+                # Make sure to include any options set earlier
                 subMenuKW = self.kw_args_copy.copy()
+                kwToAdd = {}
+                for i in subMenuKW:
+                    if i.startswith("item_"):
+                        new_i = i.removeprefix("item_")
+                        if new_i not in subMenuKW:
+                            kwToAdd[new_i] = subMenuKW[i]
+                subMenuKW.update(kwToAdd)
+
                 toRemove = ["text", "popupMenuLocation", "items", "isSubMenu", "parentMenu", "frameSize", "scale"]
                 for r in toRemove:
                     if r in subMenuKW:
@@ -128,8 +151,19 @@ class DirectMenuItem(DirectButton):
                     isSubMenu=True,
                     parentMenu=self,
                     **subMenuKW,
-                    )
+                )
             elif type(item) is DirectMenuSeparator:
+                # Make sure to include any options set earlier
+                separatorKW = {}
+                for i in self.kw_args_copy:
+                    if i.startswith("separator_"):
+                        separatorKW[i.removeprefix("separator_")] = self.kw_args_copy[i]
+
+                toRemove = ["frameColor", "frameSize", "scale", "pad"]
+                for r in toRemove:
+                    if r in separatorKW:
+                        del separatorKW[r]
+
                 c = self.createcomponent(
                     'separator%d' % itemIndex, (), 'separator',
                     DirectFrame,
@@ -138,8 +172,20 @@ class DirectMenuItem(DirectButton):
                     # set width to 0, we'll fit it to the width of the box later
                     frameSize=(0, 0, -item.height/2, item.height/2),
                     pad=item.padding,
-                    )
+                    **separatorKW
+                )
             else:
+                # Make sure to include any options set earlier
+                itemKW = {}
+                for i in self.kw_args_copy:
+                    if i.startswith("item_"):
+                        itemKW[i.removeprefix("item_")] = self.kw_args_copy[i]
+
+                toRemove = ["text", "text_align", "command", "extraArgs", "frameColor", "frameSize", "scale"]
+                for r in toRemove:
+                    if r in itemKW:
+                        del itemKW[r]
+
                 c = self.createcomponent(
                     'item%d' % itemIndex, (), 'item',
                     DirectButton,
@@ -148,7 +194,9 @@ class DirectMenuItem(DirectButton):
                     text_align=TextNode.ALeft,
                     command=item.command,
                     extraArgs=item.extraArgs,
-                    frameColor=self["itemFrameColor"] if self["itemFrameColor"] else self["frameColor"])
+                    frameColor=self["itemFrameColor"] if self["itemFrameColor"] else self["frameColor"],
+                    **itemKW
+                )
 
                 c.bind(DGG.B1RELEASE, self.hidePopupMenu, extraArgs=[True])
             bounds = DGH.getBounds(c)
@@ -220,7 +268,9 @@ class DirectMenuItem(DirectButton):
         # Needed attributes (such as minZ) won't be set unless the user has specified
         # items to display. Let's assert that we've given items to work with.
         items = self['items']
-        assert items and len(items) > 0, 'Cannot show an empty popup menu! You must add items!'
+        # assert items and len(items) > 0, 'Cannot show an empty popup menu! You must add items!'
+        if not items:
+            return
 
         # Show the menu
         self.popupMenu.show()
@@ -233,7 +283,7 @@ class DirectMenuItem(DirectButton):
             # Position menu to the right of the menu
             self.popupMenu.setX(
                 DGH.getRealRight(self) / self.getScale()[0]
-                + -DGH.getRealLeft(self.popupMenu))
+                + -DGH.getRealLeft(self.popupMenu) + self.popupMenu["itemMargin"][0])
         elif self['popupMenuLocation'] == DGG.LEFT:
             # Position to the left
             # change the item align to right aligned so it will be fitted
@@ -256,7 +306,7 @@ class DirectMenuItem(DirectButton):
         else:
             # Try to set height to line up selected item with button
             self.popupMenu.setZ(
-                self, self.maxZ)
+                self, self.maxZ + self.popupMenu["itemMargin"][3])
         # Make sure the whole popup menu is visible
         pos = self.popupMenu.getPos(render2d)
         scale = self.popupMenu.getScale(render2d)

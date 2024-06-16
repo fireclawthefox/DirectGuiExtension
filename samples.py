@@ -169,7 +169,7 @@ height = mainBox.getRemainingSpace()
 
 dd = DirectDiagram(
     data=data,
-    numberAreaWidth=0.15,
+    numberAreaWidth=0.05,
     numNegSteps=20,
     numPosSteps=20,
     numNegStepsStep=2,

@@ -23,10 +23,10 @@ class DirectTreeView(DirectBoxSizer):
     def __init__(self, parent = None, **kw):
         root = Filename.fromOsSpecific(os.path.dirname(__file__))
         optiondefs = (
-            ('imageCollapse', f"{root}/data/icons/minusnode.gif", DGG.INITOPT),
-            ('imageCollapsed', f"{root}/data/icons/plusnode.gif", DGG.INITOPT),
+            ('imageCollapse', f"{root}/data/icons/minusnode.gif", self.refreshTree),
+            ('imageCollapsed', f"{root}/data/icons/plusnode.gif", self.refreshTree),
             ('tree',    {},   self.refreshTree),
-            ('indentationWidth', 0.1, None)
+            ('indentationWidth', 0.1, self.refreshTree)
             )
         # Merge keyword options with default options
         self.defineoptions(kw, optiondefs)
