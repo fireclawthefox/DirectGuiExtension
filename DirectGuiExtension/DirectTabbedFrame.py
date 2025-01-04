@@ -111,18 +111,16 @@ class DirectTabbedFrame(DirectFrame):
             value=[0]
             )
         tab['extraArgs'] = [tab]
+        tab.resetFrameSize()
         # hide the radio button indicator
-        tab.indicator.hide()
+        #tab.indicator.hide()
         tab['value'] = [content]
         # hide the tabs content by default
         content.hide()
 
-        # get some details for the close button
-        tab_height = DGH.getRealHeight(tab)
-        x_pos = tab.indicator.get_pos()
-        x_pos.z = (tab_height - tab['borderWidth'][1]) / 2
 
         if self['showCloseOnTabs']:
+            x_pos = tab.indicator.get_pos()
             # create the close button
             tab.closeButton = self.createcomponent(
                 'closeButton', (), 'closeButton',
