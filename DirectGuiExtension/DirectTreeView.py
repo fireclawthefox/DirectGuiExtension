@@ -3,6 +3,8 @@
 __all__ = ['DirectTreeView']
 
 import os
+import uuid
+import logging
 
 from panda3d.core import *
 
@@ -12,6 +14,15 @@ from direct.gui.DirectFrame import *
 from .DirectBoxSizer import DirectBoxSizer
 from . import DirectGuiHelper as DGH
 from direct.gui import DirectGuiGlobals as DGG
+#from dataclasses import dataclass
+
+class DirectTreeEntry:
+    name = ""
+    uuid = uuid.uuid4()
+    def __init__(self, name, uuid=None):
+        self.name = name
+        if uuid:
+            self.uuid = uuid
 
 class DirectTreeView(DirectBoxSizer):
     """
@@ -25,6 +36,9 @@ class DirectTreeView(DirectBoxSizer):
         optiondefs = (
             ('imageCollapse', f"{root}/data/icons/minusnode.gif", DGG.INITOPT),
             ('imageCollapsed', f"{root}/data/icons/plusnode.gif", DGG.INITOPT),
+            ('collapseImageScale', 0.025, self.refreshTree),
+            ('collapseFrameSize', (-0.05, 0.05, -0.05, 0.05), self.refreshTree),
+            ('treeTextScale', 0.1, self.refreshTree),
             ('tree',    {},   self.refreshTree),
             ('indentationWidth', 0.1, None)
             )
@@ -70,14 +84,16 @@ class DirectTreeView(DirectBoxSizer):
 
         indentation = self["indentationWidth"] * indent_level
 
-        img_scale = 0.025
+        img_scale = self["collapseImageScale"]
 
         if hasChildren:
             self.createCollapseCheckBox(frame, indentation, element, img_scale)
 
+        element_name = self.getElementName(element)
+
         lbl = DirectLabel(
-            text=element,
-            scale=0.1,
+            text=element_name,
+            scale=self["treeTextScale"],
             text_align=TextNode.ALeft,
             pos=(img_scale*2+0.02+indentation,0,0),
             parent=frame
@@ -86,6 +102,15 @@ class DirectTreeView(DirectBoxSizer):
         frame["frameSize"] = (0, img_scale*2+0.02+indentation+DGH.getRealWidth(lbl), DGH.getRealBottom(lbl), DGH.getRealTop(lbl))
 
         return frame
+
+    def getElementName(self, element):
+        if hasattr(element, "name"):
+            return element.name
+        elif type(element) == str:
+            return element
+        else:
+            logging.warning(f"Unknow element type {type(element)} for {element}")
+        return ""
 
     def createCollapseCheckBox(self, parent, x_pos, element, img_scale=0.025):
         imgFilter = SamplerState.FT_nearest
@@ -101,7 +126,7 @@ class DirectTreeView(DirectBoxSizer):
         btnC = DirectCheckBox(
             relief=DGG.FLAT,
             pos=(img_scale+x_pos,0,0.03),
-            frameSize=(-0.1, 0.1, -0.1, 0.1),
+            frameSize=self["collapseFrameSize"],
             frameColor=(0,0,0,0),
             command=self.collapseElement,
             extraArgs=[element],
@@ -115,9 +140,10 @@ class DirectTreeView(DirectBoxSizer):
 
     def collapseElement(self, collapse, element):
         if element is not None:
+            base.messenger.send(f"beforeRefreshTreeView-{id(self)}")
             if collapse:
                 self.collapsedElements.append(element)
             else:
                 self.collapsedElements.remove(element)
-            base.messenger.send(f"refreshTreeView-{self.id}")
             self.refreshTree()
+            base.messenger.send(f"afterRefreshTreeView-{id(self)}")
